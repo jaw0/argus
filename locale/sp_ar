@@ -1,0 +1,261 @@
+
+# set the character set that the language uses
+
+charset		"iso-8859-1"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"sp_ar"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Dom Lu Ma Mi Ju Vi Sa		
+months	Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic	
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "TRANSITION"
+msgstr "TRANSICIÓN"
+
+msgid "days"
+msgstr "días"
+
+msgid "samples"
+msgstr "muestras"
+
+msgid "expires"
+msgstr "expira"
+
+msgid "user"
+msgstr "usuario"
+
+msgid "text"
+msgstr "texto"
+
+msgid "time"
+msgstr "tiempo"
+
+msgid "mode"
+msgstr "modo"
+
+msgid "remove override"
+msgstr "dejar de obviar"
+
+msgid "Remove Override"
+msgstr "Dejar de obviar"
+
+msgid "hours"
+msgstr "horas"
+
+msgid "hours"
+msgstr "horas"
+
+msgid "top"
+msgstr "raíz"
+
+msgid "Top"
+msgstr "Raíz"
+
+msgid "Today"
+msgstr "Hoy"
+
+msgid "This Month"
+msgstr "Este Mes"
+
+msgid "This Year"
+msgstr "Este Año"
+
+msgid "Yesterday"
+msgstr "Ayer"
+
+msgid "Last Month"
+msgstr "Último mes"
+
+msgid "Last Year"
+msgstr "Último Año"
+
+msgid "2 Days Ago"
+msgstr "Hace 2 días"
+
+msgid "2 Months Ago"
+msgstr "Hace 2 meses"
+
+msgid "3 Days Ago"
+msgstr "Hace 3 días"
+
+msgid "3 Months Ago"
+msgstr "Hace 3 meses"
+
+msgid "Annotate"
+msgstr "Tomar nota"
+
+msgid "Annotation"
+msgstr "Anotación"
+
+msgid "Comment"
+msgstr "Comentario"
+
+msgid "Debugging"
+
+msgid "Display Config"
+msgstr "Mostrar Configuración"
+
+msgid "Down"
+msgstr "Caída"
+
+msgid "Error Log"
+msgstr "Error de registro"
+
+msgid "Expires"
+msgstr "Expira"
+
+msgid "Flush Cache"
+msgstr "Vaciar temporal"
+
+msgid "Hush Siren"
+msgstr "Silenciar Sirena"
+
+msgid "Login"
+msgstr "Validar"
+
+msgid "Logout"
+msgstr "Salir"
+
+msgid "Mode"
+msgstr "Modo"
+
+msgid "Name"
+msgstr "Nombre"
+
+msgid "Notifications"
+msgstr "Notificaciones"
+
+msgid "Notifies"
+msgstr "Notificados"
+
+msgid "Override"
+msgstr "Suspender"
+
+msgid "Password"
+msgstr "Clave"
+
+msgid "Please log in"
+msgstr "Valídese por favor"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Un-Acked Notifies"
+
+msgid "Up"
+msgstr "Activo"
+
+msgid "User"
+msgstr "Usuario"
+
+msgid "Username"
+msgstr "Nombre del Usuario"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "Modo automático - dejará de Obviarse cuando se active el enlace"
+
+msgid "because"
+msgstr "Debido"
+
+msgid "command"
+msgstr "comando"
+
+msgid "down since"
+msgstr "caído desde"
+
+msgid "down"
+msgstr "caído"
+
+msgid "elapsed time"
+msgstr "Tiempo tomado"
+
+msgid "flags"
+msgstr "Bandera"
+
+msgid "hostname"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "Modo manual - requiere que se retire del estado 'abviado' manualmente"
+
+msgid "name"
+msgstr "Nombre:"
+
+msgid "override"
+msgstr "suspendido"
+
+msgid "port"
+msgstr "puerto"
+
+msgid "start"
+msgstr "empieza"
+
+msgid "status"
+msgstr "Estado:"
+
+msgid "times down"
+msgstr "cantidad de caídas"
+
+msgid "up since"
+msgstr "activo desde"
+
+msgid "up"
+msgstr "activo"
+
+msgid "Authentication Failed"
+msgstr "Falla de autenticación"
+
+msgid "ERROR"
+
+msgid "Ack Checked"
+
+msgid "Ack All"
+
+msgid "There are no un-acked notifications"
+
+msgid "There are no notifications"
+msgstr "No hay notificaciónes"
+
+msgid "Unacked Notifications"
+
+msgid "Broken Alias"
+
+msgid "is down"
+msgstr "Está caída"
+
+msgid "zone"
+msgstr "Zona"
+
+msgid "info"
+msgstr "Información: "
+
+msgid "note"
+msgstr "notas"
+
+msgid "comment"
+msgstr "comentario"
+
+msgid "annotation"
+msgstr "anotación"
+
+msgid "details"
+msgstr "detalles"
+

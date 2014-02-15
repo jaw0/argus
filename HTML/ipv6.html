@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - IPv6</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>IPv6</H1>
+<P><DIV CLASS=TECHNOTE><B>
+IPv6 support was added in version 3.2
+</B></DIV></P>
+
+<H2>Additional Prerequisites</H2>
+<UL>
+	<LI>	Socket6.pm
+	<LI>	fping6<BR><P>
+		the standard fping will only do IPv4. the fping
+		from fping.com can be compiled to do either v4
+		or v6, it cannot do both in one binary. you must
+		install one fping for v4 and one for v6.</P>
+	<LI>	an operating system with IPv6 support.
+</UL>
+
+<H2>Configuring</H2>
+<P>Basically, do nothing.</P>
+<P>If the address you specify is an IPv6 address, or resolves
+to an IPv6 address, IPv6 will be used. There is nothing
+to configure differently.
+</P>
+
+<H2>IPv4 or IPv6</H2>
+<p>If you specify a <span class=param>hostname</span> that has both A and AAAA records,
+by default, argus will try the IPv4 address first, and if it is unreachable,
+switch to the IPv6 addresses. You can tell argus to use only IPv4, only IPv6,
+or a preferred order using the <span class=param>ipversion</span> parameter:
+<pre>
+        ipversion:      4
+        ipversion:      6
+        ipversion:      4 6
+        ipversion:      6 4
+</pre>
+<DIV CLASS=TECHNOTE>
+the <span class=param>ipversion</span> parameter was added in version 3.7
+</DIV>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: ipv6.html,v 1.3 2012/10/12 02:17:21 jaw Exp $ -->
+</HTML>

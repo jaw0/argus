@@ -1,0 +1,31 @@
+Group "Test" {
+
+	Host "rfc2100.example.com" {
+		type:	w2k workstation
+		service: Ping {
+			sendpage:	no
+		}
+	}
+	Host "rfc1178.example.com" {
+		type:	NetBSD workstation
+		service: Ping {
+			sendpage:	no
+		}
+	}
+	Host "rocher.example.com"
+		type:	Win2k Dev Server
+		service: UDP/DNS {
+			sendpage:	no
+		}
+	}
+
+	Host "ns.example.com" {
+		Service	UDP/Domain/example.com
+		Service	UDP/Domain/example.net
+		Service	UDP/Domain/example.org
+	}
+		
+}
+
+############################################################
+

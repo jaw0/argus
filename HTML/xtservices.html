@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Extended Testing</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Extended Service Tests</H1>
+
+<DIV CLASS=TECHNOTE>
+Extended testing support was added in version 3.2
+</DIV>
+
+<DIV CLASS=TECHNOTE>
+Extended testing is an advanced feature. If you are just starting out with argus
+it is recommended that you stick to the standard built-in service tests as
+described in <A HREF="services.html">services</A>
+</DIV>
+
+<P>In previous versions, most services could be tested only with an
+<TT>expect</TT> regular expression, except for SNMP tests which could
+have minimum or maximum value tests, etc.</P>
+
+<P>Now, most services (those places where it makes sense) can use
+all of the tests that used to be available only for SNMP. Such as</P>
+<UL>
+	<LI>	<B>expect</B>	- a regular expression to expect
+	<LI>	<B>nexpect</B>	- a regular expression to not expect
+	<LI>	<B>eqvalue</B>	- value must be equal to this
+	<LI>	<B>nevalue</B>	- value must not be equal to this
+	<LI>	<B>minvalue</B>	- value must be this or more
+	<LI>	<B>maxvalue</B>	- value must be this or less
+</UL>
+
+<P>There are also several pre-processing and calculations
+that can be performed before testing</P>
+<UL>
+	<LI>	<B>pluck</B>	- a regular expression used to pull a value out of some content.
+	<LI>	<B>unpack</B>	- an unpack expression to pull a value from a binary packet
+	<LI>	<B>calc</B>	- perform a calculation, such as averaging, or rate
+	<LI>	<B>scale</B>	- apply a scale factor
+</UL>
+<P>for example</P>
+<PRE>
+	Service TCP {
+		uname:		disk-space
+		messagedn:	/home is nearly full
+		port:		6543
+		send:		/home
+		pluck:		\s(\d+)%
+		maxvalue:	90
+	}
+	Service UDP/NTP {
+		uname:		dispersion
+		messagedn:	clock has drifted too far
+		unpack:		x8 N
+		scale:		65536
+		maxvalue:	2
+	}
+	Service UDP/DNS/Serial/example.com {
+		minvalue:	2002010100
+		maxvalue:	2004123100
+	}
+</PRE>
+
+
+<h2>Aberrant Behavior Detection</h2>
+<p>Services can be checked for values outside of 
+the predicted range using <a href="hwab.html">Holt Winters</a></p>
+
+<H2>Graphing</H2>
+<P>All services which can make use of the extended tests can have the
+resulting value graphed. See the documentation on 
+<a href="graphing.html">graphing</a>.</P>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: xtservices.html,v 1.6 2012/10/12 02:17:21 jaw Exp $ -->
+</HTML>

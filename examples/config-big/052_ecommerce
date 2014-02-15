@@ -1,0 +1,36 @@
+
+Group "eCommerce Sites" {
+	overridable:		no
+	frequency:	3600
+	retries:	2
+	timeout:	45
+
+	Host "www.example.com" {
+		service: TCP/URL {
+			uname:		SQL
+			url:		http://www.example.com/store/dept.asp?dept%5Fid=9999
+			expect:		Netreach Test
+		}
+
+		service: TCP/URL {
+			uname:		AFFILIATE
+			url:		http://www.example.com/store/affiliate.asp?affiliatecode=netreachtest&jumppage=affiliate_monitor.asp
+			expect:		success
+		}
+
+		service: TCP/URL {
+			uname:		LINKSHARE
+			url:		http://www.example.com/store/linkshare_monitor.asp?mscssid=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+			expect:		success
+		}
+	}
+
+	Host "www.example2.com" {
+		service: TCP/URL {
+			uname:		SQL
+			url:		http://www.example2.com/bookstore/whatsup.asp
+			expect:		Success
+		}
+	}
+}
+

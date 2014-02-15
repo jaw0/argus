@@ -1,0 +1,100 @@
+
+# examples of using remote argus agent
+
+# NB: argus-agent must be installed on remote hosts
+# and configured in inetd.conf
+
+# set default agent port
+agent_port:	4321
+
+# graphs of network usage
+Group "Network" {
+	graph:	yes
+
+	Host "astoria.example.com" {
+		label:	astoria
+		Service Agent/netstat {
+			arg:	hme0 in
+			calc:	ave-rate-bits
+			label:	hme0-in
+		}
+		Service Agent/netstat {
+			arg:	hme0 out
+			calc:	ave-rate-bits
+			label:	hme0-out
+		}
+	}
+
+	Host "waldorf.example.com" {
+		label:	waldorf
+		Service Agent/netstat {
+			arg:	eth0 in
+			calc:	ave-rate-bits
+			label:	eth0-in
+		}
+		Service Agent/netstat {
+			arg:	eth0 out
+			calc:	ave-rate-bits
+			label:	eth0-out
+		}
+	}
+}
+
+
+# graphs of disk usage
+# alert when disk reaches 85% full
+Group "Disk" {
+	graph:		yes
+
+	Host "astoria.example.com" {
+		label:	astoria
+		Service Agent/disk {
+			arg:		/home/astoria
+			label:		disk-home
+			maxvalue:	85
+		}
+		Service Agent/disk {
+			arg:		/
+			label:		disk-root
+			maxvalue:	85
+		}
+		Service Agent/disk {
+			arg:		/var
+			label:		disk-var
+			maxvalue:	85
+		}
+	}
+
+	Host "waldorf.example.com" {
+		label:	waldorf
+		Service Agent/disk {
+			arg:		/
+			label:		disk-root
+			maxvalue:	85
+		}
+	}
+}
+
+# graph load average
+# alert if it reaches 10
+
+Group "Load" {
+	graph:	yes
+
+	Host "astoria.example.com" {
+		label:	astoria
+		Service Agent/load {
+			label:		load
+			maxvalue:	10
+		}
+	}
+
+	Host "waldorf.example.com" {
+		label:	waldorf
+		Service Agent/load {
+			label:		load
+			maxvalue:	10
+		}
+	}
+}
+

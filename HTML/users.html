@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Users</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Users File</H1>
+<P>To control access, argus wants to know who is permitted to access what.
+Associated with every valid user is:</P><UL>
+<LI>	username
+<LI>	password
+<LI>	home object (like a unix home directory)
+<LI>	list of access control groups
+</UL>
+<P>As distributed, argus gets this data from a text file called <TT>users</TT>
+in the data directory.</P>
+
+<DIV CLASS=TECHNOTE>
+The code argus uses is designed to be modular and easily replaced
+with other schemes for authentication. The source tarball comes
+with a <TT>web_auth_prog</TT> file as an example of using an external
+program to do this. The author is also aware of some sites that have
+written code to query a SQL database.
+</DIV>
+
+<P>The format of the users file is:</P>
+<PRE>
+username  encrypted_password  home_obj  groups...
+</PRE>
+<P>as an example:</P>
+<PRE>
+anonymous       any             Top     user
+joe		xraO.jc8wztJQ	Top	staff
+bobby		UtDsk/kLoJ/HU	Top:Customers:YoYoDyne	yoyo
+</PRE>
+
+<P>
+The password field is encrypted using your systems standard passwd
+<TT>crypt()</TT> function. The special value <TT>any</TT> will permit
+any password.
+</P>
+
+<P>
+The home_object field specifies the name of the object for the
+user's default page. This is what the user will see when they
+first log in to argus. It is just like a unix home directory.
+</P>
+<DIV CLASS=TECHNOTE>
+Also, just like a unix home directory, the user can do the equivalent
+of <TT>cd ..</TT> to visit other pages. To prevent the user from seeing
+other pages adjust the access control parameters appropriately.
+</DIV>
+
+<P>
+The groups field is a white-space separated list of access control
+groups. Access control groups are documented further somewhere else.
+</P>
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: users.html,v 1.6 2012/10/12 02:17:21 jaw Exp $ -->
+</HTML>

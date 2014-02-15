@@ -1,0 +1,231 @@
+
+#german translation -- Matevz Sernc
+#ms@euhost.net
+
+# set the character set that the language uses
+
+charset		"iso-8859-1"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"de_DE"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Son Mon Die Mit Don Fre Sam
+months	Jan Feb Mär Apr Mai Jun Jul Aug Sep Okt Nov Dez
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Heute"
+
+msgid "This Month"
+msgstr "Dieser Monat"
+
+msgid "This Year"
+msgstr "Dieses Jahr"
+
+msgid "Yesterday"
+msgstr "Gestern"
+
+msgid "Last Month"
+msgstr "Letzten Monat"
+
+msgid "Last Year"
+msgstr "Letztes Jahr"
+
+msgid "2 Days Ago"
+msgstr "Vor 2 Tagen"
+
+msgid "2 Months Ago"
+msgstr "Vor 2 Monaten"
+
+msgid "3 Days Ago"
+msgstr "Vor 3 Tagten"
+
+msgid "3 Months Ago"
+msgstr "Vor 3 Monaten"
+
+msgid "Annotate"
+msgstr "Anmerken"
+
+msgid "Annotation"
+msgstr "Anmerkung"
+
+msgid "Comment"
+msgstr "Kommentar"
+
+msgid "Debugging"
+msgstr "Fehlersuche"
+
+msgid "Display Config"
+msgstr "Konfigurationsdatei anzeigen"
+
+msgid "Down"
+msgstr "Unten"
+
+msgid "Error Log"
+msgstr "Fehlerprotokoll"
+
+msgid "Expires"
+msgstr "Verfällt"
+
+msgid "Flush Cache"
+msgstr "Cache leeren"
+
+msgid "Hush Siren"
+msgstr "stiller Alarm"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Logout"
+msgstr "Abmelden"
+
+msgid "Mode"
+msgstr "Betrieb"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+msgid "Notifies"
+msgstr "Meldungen"
+
+msgid "Override"
+msgstr "Fehler zurückstellen"
+
+msgid "Password"
+msgstr "Kennwort"
+
+msgid "Please log in"
+msgstr "Bitte einloggen"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Un-Acked Notifies"
+msgstr "Noch nicht bestätigte Meldungen"
+
+msgid "Up"
+msgstr "Hoch"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "Auto Pilot: Fehler automatisch als OK markieren, wenn Status auf Hoch gesetzt wird"
+
+msgid "because"
+msgstr "weil"
+
+msgid "command"
+msgstr "Befehl"
+
+msgid "down since"
+msgstr "unten seit"
+
+msgid "down"
+msgstr "unten"
+
+msgid "elapsed time"
+msgstr "vergangene Zeit"
+
+msgid "flags"
+msgstr "Schalter"
+
+msgid "hostname"
+msgstr "hostname"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "Manueller Betrieb: Fehler müssen manuell bestätigt werden"
+
+msgid "name"
+msgstr "Name"
+
+msgid "override"
+msgstr "überbrücken"
+
+msgid "port"
+msgstr "Port"
+
+msgid "start"
+msgstr "Beginn"
+
+msgid "status"
+msgstr "Status"
+
+msgid "times down"
+msgstr "mal unten"
+
+msgid "up since"
+msgstr "oben seit"
+
+msgid "up"
+msgstr "oben"
+
+msgid "Authentication Failed"
+msgstr "Anmeldung fehlerhaft"
+
+msgid "ERROR"
+msgstr "FEHLER"
+
+msgid "Ack Checked"
+msgstr "Bestätige markierte"
+
+msgid "Ack All"
+msgstr "Bestätige alle"
+
+msgid "There are no un-acked notifications"
+msgstr "Es sind keine unbestätigten Meldungen vorhanden"
+
+msgid "There are no notifications"
+msgstr "Es sind keine Meldungen vorhanden"
+
+msgid "Unacked Notifications"
+msgstr "Unbestätigte Meldungen"
+
+msgid "Broken Alias"
+msgstr "Fehlerhafte Alias-Zuweisung"
+
+msgid "is down"
+msgstr "ist unten"
+
+msgid "zone"
+msgstr "Zone"
+
+msgid "info"
+msgstr "Information"
+
+msgid "note"
+msgstr "Notiz"
+
+msgid "comment"
+msgstr "Kommentar"
+
+msgid "annotation"
+msgstr "Anmerkung"
+
+msgid "details"
+msgstr "Weitere Angaben"
+

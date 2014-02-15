@@ -1,0 +1,39 @@
+#!/usr/local/bin/perl
+# -*- perl -*-
+
+# install override
+# argusctl must be in the path
+
+use Getopt::Std;
+getopts("e:hmqr");
+
+if( $opt_h ){
+    print STDERR <<USAGE;
+usage:
+    override [options] object message
+options:
+    -e t    specify expire time in seconds from now. eg. -e 3600
+    -m      a manual override
+    -q      quiet, argus should not put noise in the logs
+    -r      remove override
+USAGE
+    ;
+
+    exit;
+}
+
+$object = shift;
+$text   = join(' ', @ARGV);
+
+@args = ("object=$object", "text=$text",
+	 'user='. ($ENV{USER} || $ENV{LOGNAME} || 'unknown'));
+
+if( $opt_r ){
+    push @args, "remove=yes";
+}else{
+    push @args, $opt_m ? 'mode=manual' : 'mode=auto';
+    push @args, 'expires=' . ($^T + $opt_e) if $opt_e;
+    push @args, 'quiet=1' if $opt_q;
+}
+
+exec( 'argusctl', 'override', @args ) || die "argusctl failed: $!\n";

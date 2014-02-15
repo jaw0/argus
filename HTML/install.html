@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Installing</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Installing</H1>
+
+<OL>
+
+<LI>    verify that you have the prerequisites installed
+        <UL>
+
+        <LI>    <P><TT>perl</TT><BR>
+                the software has been tested with 5.6.1 and should work
+                with most other versions of perl 5 as well.<BR>
+		Find perl at <A HREF="http://www.perl.org">www.perl.org</A></P>
+
+		<P>Note: there are issues with some versions of perl on some operating systems,
+		see <A HREF="bugs.html">bugs.html</A> for additional details.</P>
+
+
+        <LI>    <P><TT>sendmail</TT> and <TT>qpage</TT>
+                are recommended. either or both can be used to send
+                notifications.<BR>
+		Find sendmail at <A HREF="http://www.sendmail.org">www.sendmail.org</A><BR>
+		Find qpage at <A HREF="http://www.qpage.org">www.qpage.org</A></P>
+
+		<P>Note: this does not need to be the real sendmail, as long
+		as it looks and smells like sendmail. ie. <TT>qmail</TT>'s
+		sendmail compatible <TT>sendmail</TT> program will be just fine.</P>
+
+        <LI>    <P><TT>fping</TT> is used by the Ping Monitoring module
+                for ping tests. While this is not required, it is
+                <B>highly</B> recommended.<BR>
+		Find fping at <A HREF="http://www.fping.com">www.fping.com</A></P>
+		
+        <LI>    <P>a cgi capable web server, such as apache.<BR>
+		Find apache at <A HREF="http://httpd.apache.org">httpd.apache.org</A><BR>
+
+	<LI>	<P><TT>Berkeley DB</TT> and perl <TT>DB_File</TT><BR>
+		Find DB at <A HREF="http://www.sleepycat.com/download.html">www.sleepycat.com</A><BR>
+		DB_File ships with perl.</P>
+		<P>Alternatively, ndbm, odbm, sdbm, or gdbm can be used, but they
+		have not been extensively tested.</P>
+
+	<LI>	<P>an understanding of UNIX file permissions and how to use
+		and operate your web server.</P>
+
+        </UL>
+
+	some additional modules that may be useful are listed in the
+	<A HREF="install2.html">advanced installation</A> section.
+
+<LI>    unbundle the tarball
+
+<LI>    run <FONT COLOR=blue><TT>./Configure</TT></FONT><BR>
+	if upgrading from 3.2 or later, you can run <FONT COLOR=blue><TT>./Configure --upgrade</TT></FONT>
+
+<LI>    answer any questions it asks
+
+<LI>    run <FONT COLOR=blue><TT>make</TT></FONT>
+
+<LI>    as root, run <FONT COLOR=blue><TT>make install</TT></FONT>
+
+<LI>	create 2 files in the data directory: <OL>
+	<LI><A HREF="config.html">config</A>
+	<LI><A HREF="users.html">users</A>
+	</OL>
+	in addition to the documentation, the tarball contains examples
+	in the 'examples' directory.
+
+<LI>	configure your web server
+	<UL>
+	<LI>	be sure that $datadir is writable by the www user
+		(or whatever uid your web server runs as)
+
+	<LI>	copy icons to somewhere accessible by your web server
+		(these locations get specified in config file, above)
+		or feel free to replace them with your own icons,
+		or no icons at all.
+
+<!-- not needed any longer
+	<LI>	create a symlink in your cgi-bin directory to the arguscgi program
+-->
+
+	</UL>
+
+<LI>	start the argus server by running <FONT COLOR=blue><TT>argusd</TT></FONT><BR>
+	or install the <FONT COLOR=blue><TT>rc.argusd</TT></FONT> script
+	as appropriate for your system.
+
+<LI>	check the argus log file ($datadir/log) and/or your syslog logs to
+	verify that argus is operating correctly.
+
+<LI>	load the argus cgi interface in your web browser, and verify that
+	everything is configured correctly.
+
+<LI>	perform any optional advanced configuration described in the
+	<A HREF="install2.html">advanced installation</A> section.
+
+<LI>	you are finished, sing a happy song, or, <I>optionally</I>, send in a bug report
+	or <A HREF="survey.html">survey</A> report
+
+</OL>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: install.html,v 1.25 2007/01/08 05:30:05 jaw Exp $ -->
+</HTML>

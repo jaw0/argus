@@ -1,0 +1,50 @@
+#!__PERL__
+# -*- perl -*-
+
+# Copyright (c) 2003 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Date: 2003-Feb-13 15:09 (EST)
+# Function: spit out config parameters
+#
+# $Id: argus-config,v 1.3 2011/11/03 02:13:41 jaw Exp $
+
+# You write with ease to show your breeding
+#   -- Richard Brinsley Sheridan, Clio's Protest
+
+use lib('__LIBDIR__');
+require "conf.pl";
+use Getopt::Long;
+
+die "$0 is from the wrong version of argus\n"
+    unless $VERSION eq '__VERSION__';
+
+$ok = 0;
+GetOptions( 'sbindir'	=> sub {print "__SBINDIR__\n";   $ok++},
+	    'bindir'	=> sub {print "__BINDIR__\n";    $ok++},
+	    'libdir'	=> sub {print "__LIBDIR__\n";    $ok++},
+	    'datadir'	=> sub {print "__DATADIR__\n";   $ok++},
+	    'cgidir'    => sub {print "__CGIDIR__\n";    $ok++},
+            'wwwdir'	=> sub {print "__WWWDIR__\n";    $ok++},
+	    'authfile'  => sub {print "__AUTH_FILE__\n"; $ok++},
+	    'version'	=> sub {print "__VERSION__\n";   $ok++},
+	    'url'	=> sub {print "$ARGUS_URL\n";    $ok++},
+	    'help'	=> sub {},
+	    );
+exit if $ok;
+
+print <<USAGE;
+usage: $0 [options]
+    --sbindir	print location of installed administrative binaries
+    --bindir	print location of installed user binaries
+    --libdir	print location of argus libraries
+    --datadir	print location of argus data
+    --cgidir    print location of argus cgi
+    --wwwdir    print location of www files
+    --authfile  print web authentication module in use
+    --url	print argus URL
+    --version	print version of installed argus
+    --help	print a message similar to this one
+USAGE
+    ;
+
+exit -1;

@@ -1,0 +1,28 @@
+#!/usr/local/bin/perl
+
+# usage: check_diskspace filesystem maxpercent
+# config:
+#	Service Prog {
+#		command:    check_disk_space /home 90
+#		label:      /home
+#		messagedn:  /home almost full
+#	}
+
+
+$fs  = shift @ARGV;
+$max = shift @ARGV;
+
+die "invalid usage\n" unless( $fs && $max );
+
+$df = `df $fs`;
+($pc) = $df =~ /(\d+)%/;
+
+if( $pc > $max ){
+	print "WARNING: $fs is $pc% full\n";
+	exit -1;
+}else{
+	print "OK: $fs is $pc% full\n";
+	exit 0;
+}
+
+

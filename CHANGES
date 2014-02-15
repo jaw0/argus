@@ -1,0 +1,171 @@
+
+* Version 3.7 [2013 Feb 14]
+  holt-winters aberrant behavior detection
+  work around bug in some versions of mod_perl
+  TCP/Freeswitch
+  Ticket system integration
+  better/faster resolver
+  custom dashboards
+  style, css
+  schedules
+  bugfixes
+
+* Version 3.6 [2008 Oct 27]
+  SNMP interface auto-discovery (oid: ifInOctets[POS1/0])
+  better handling of solaris low descriptor limit
+  faster startup
+  correctly count aliases
+  new severity features
+  new data directory structure
+  show test results on webpage
+  overview webpage
+  friendlier notification messages
+  compute service
+  bugfixes
+    => some config file changes may be needed
+
+* Version 3.5 [2007 June 14]
+  SNMPv2c
+  SNMP get-bulk
+  UDP bug fixes
+  faster startup/shutdown
+  faster graphs
+  faster with large configs
+  Resolv in displayed config
+  checknow button
+  notification %O fix
+  notification conditional text
+  DARP (Failover and Redundancy)
+  acl simplification
+  detect GD at runtime
+  can specify units for time duration parameters
+  web page changes
+  data archiving interface
+  various config parameter inheritance changes
+    => some config file changes may be needed
+
+* Version 3.4 [2005 May 14]
+  perl 5.00503 fix
+  added TCP/DNS
+  added TCP/Rwhois
+  added TCP/SIP, UDP/SIP, UDP/IAX2, TCP/Asterisk
+  added TCP/RPC, UDP/RPC
+  added asynchronous resolver
+  radius fix
+  code reorganization
+  configurable ip options: TTL, TOS, LSRR, SSRR
+  support for web_auth_none
+  scheduler adjustment
+  http redirect loop detection fix
+  argusctl checknow added
+  notification %O fix
+  database testing enhancements
+  added remote monitoring agent
+  faster SSL failure detection
+  enhanced performance
+
+* Version 3.3 [2004 Mar 23]
+  perl 5.8.1 Encode conflict workaround
+  support for databases that do not require a username
+  added tests TCP/NFS and TCP/NFSv3
+  improved SSL support
+  added tests TCP/HTTPS TCP/IMAPS TCP/POPS
+  added https support to TCP/URL
+  nolotsmsgs supported per method
+  notifyaudit for audit trail via notification method
+  additional notification message % sequences
+  user configurable cron functions
+  severity levels
+  user written perl extensions
+  support for alternate languages
+  support for SNMPv3
+  siren fix
+  radius fix
+  fix for Socket6 version > 0.10
+  remote testing TCP test port
+  improved handling of config file errors
+  support for DARP - Failover and Redundancy
+  various changes to notification system
+    => some changes may be needed to get exactly the same messages
+
+* Version 3.2.1 [2003 Jul 15]
+  perl 5.6.0 syslog bug workaround
+  qtime parameter extended
+  nolotsmsgs parameter added
+  notifyalso parameter added
+  \# in config files
+  IPv4/IPv6 mismatched src address fix
+  ackonup fix
+  Configure --upgrade
+
+* Version 3.2   [2003 Apr 14]
+  Graphing capabilities
+  IPv6 support
+  extended testing capabilities
+  extended DNS testing
+  database testing
+  slight change in override/notification interaction
+  user configurable notification methods
+  other notification system changes
+  dependencies
+  locale aware date/time strings
+  include file support in config files
+  other config file improvements
+  HTML 4.01 Transitional compliance
+  argus-config program
+  changes to 'make install'
+  correct various spelling errors
+  ping scalability issues
+  ability to monitor several internal values
+  export various data to environment
+
+  CONFIG FILE INCOMPAT:
+    snmpcalc has been renamed calc
+    targets of some aliases may need to be modified
+
+
+* Version 3.1.3 [2002 Dec 2]
+  minor scheduling issue fixed
+  added -u -g options
+  additional checking for some common user errors
+
+* Version 3.1.2 [2002 Nov 8]
+  mod_perl issue fixed
+  problem logging typo fixed
+
+* Version 3.1.1 [2002 Oct 31]
+  misc cleanup
+  TCP connect error reporting
+  possible Ping issue fixed
+  SNMP rate overflow fixed
+  Solaris waitpid portability issue fixed
+
+* Version 3.1   [2002 Oct 20]
+  new user authentication code
+  access control
+  user views
+  config file typo detection
+  bug fixes
+
+  CONFIG FILE INCOMPAT:
+    escalate parameter is now in minutes
+
+* Version 3.0.1
+  bug fixes
+  faster startup
+
+* Version 3 [2001]
+  complete rewrite
+  too many changes to count
+
+* Version 2 [2000 - 2001]
+  complete rewrite
+  extensive TCP, UDP, and program testing capabilities
+  notifications via text pages (via qpage)
+  web front-end
+
+* Version 1 [1996 - 1999]
+  collection of perl and shell scripts
+  ping and limited SNMP capabilities
+  notifications via coded numeric paging
+

@@ -1,0 +1,98 @@
+
+2 modes:
+	outbound notification
+	call in and browse
+
+================================================================
+
+notification:
+
+	Argus Alert!
+	NAME1 is DOWN
+	NAME2 is DOWN
+	...
+	To ack these 2 alerts, press 1.
+	To ack all current alerts, press 2.
+	For additional detail, press 3.
+	To listen again, press *.
+
+  1) + 2)
+	Acknowledged.
+	To return to the main menu, press *.
+	Press # to hangup.
+
+  3)
+	For NAME1, press 1
+	For NAME2, press 2
+	To return to the main menu, press *.
+
+  3.1)
+	ID Number: 73487.
+	NAME1 became DOWN at 15:39, today.
+
+	To ack this alert, press 1.
+	To override, press 2.
+	To listen again, press 3.
+	To return to the main menu, press *.
+================================================================
+
+browse:
+	require authentication
+
+	Group NAME1 is DOWN
+	7 children are DOWN, 2 are UP
+
+	1 - Details Menu
+	2 - Goto Parent
+	3 - List Children
+
+
+	# - Previous Menu
+	0 - Top
+	* - Notifications
+
+
+  1)
+	NAME1 became DOWN at 15:39 today
+	vxml_description
+	because REASON
+
+	1 - Today's stats
+	2 - Yesterday
+	...
+
+
+  #)
+	there are 7 unacked alerts
+	1 - list all unacked alerts
+	2 - enter a specific idno
+	
+
+================================================================
+
+*** text:  Alert 73509.
+    73509 TCP_5432_telemachus.tcp4me.com is DOWN - 12/Dec 00:52.
+    Top:Test:TCP_5432_telemachus.tcp4me.com became acked at 00:52 December 12
+
+    To ack this alert, press 1. For the main menu, press 0. For the Alerts menu, press pound.
+
+
+================================================================
+
+
+
+
+================================================================
+VOXEO:
+    
+    Direct Local #	(347) 741-8735	     
+    PIN Access	(800) 289-5570 then PIN: 9990027618	 
+    PIN Access	(407) 386-2174 then PIN: 9990027618	 
+    Skype VoIP	+99000936 9990027618	 
+    FWD VoIP	**86919990027618	 
+    SIP VoIP	sip:9990027618@sip.voxeo.net
+
+
+VS:
+    866-656-5824
+

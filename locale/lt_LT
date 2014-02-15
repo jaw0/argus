@@ -1,0 +1,248 @@
+
+# set the character set that the language uses
+
+charset		"utf-8"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"lt_LT"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Sk Pr An Tr Kt Pn Št
+months	Sau Vas Kov Bal Geg Bir Lie Rgp Rgs Spa Lap Gru
+
+# date format
+
+datefmt "%F %H:%M:%S"
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Šiandien"
+
+msgid "This Month"
+msgstr "Šį mėnesį"
+
+msgid "This Year"
+msgstr "Šiemet"
+
+msgid "Yesterday"
+msgstr "Vakar"
+
+msgid "Last Month"
+msgstr "Praėjusį mėnesį"
+
+msgid "Last Year"
+msgstr "Praėjusiais metais"
+
+msgid "2 Days Ago"
+msgstr "Prieš 2 dienas"
+
+msgid "2 Months Ago"
+msgstr "Prieš 2 mėnesius"
+
+msgid "2 Years Ago"
+msgstr "Prieš 2 metus"
+
+msgid "3 Days Ago"
+msgstr "Prieš 3 dienas"
+
+msgid "3 Months Ago"
+msgstr "Prieš 3 mėnesius"
+
+msgid "3 Years Ago"
+msgstr "Prieš 3 metus"
+
+msgid "Annotate"
+msgstr "Anotuoti"
+
+msgid "Annotation"
+msgstr "Anotacija"
+
+msgid "Remove Annotation"
+msgstr "Pašalinti anotaciją"
+
+msgid "Remove Override"
+msgstr "Pašalinti tvarkymą"
+
+msgid "Comment"
+msgstr "Komentaras"
+
+msgid "Debugging"
+msgstr "Klaidų paieška"
+
+msgid "Display Config"
+msgstr "Rodyti konfigūraciją"
+
+msgid "Down"
+msgstr "Neveikia"
+
+msgid "Error Log"
+msgstr "Sisteminis žurnalas"
+
+msgid "Expires"
+msgstr "Galioja iki"
+
+msgid "Flush Cache"
+msgstr "Pašalinti kešą"
+
+msgid "Hush Siren"
+msgstr "Užkišti sireną"
+
+msgid "Login"
+msgstr "Prisijungti"
+
+msgid "Logout"
+msgstr "Atsijungti"
+
+msgid "Mode"
+msgstr "Režimas"
+
+msgid "Name"
+msgstr "Pavadinimas"
+
+msgid "Notifications"
+msgstr "Pranešimai"
+
+msgid "Notifies"
+msgstr "Pranešimai"
+
+msgid "Override"
+msgstr "Tvarkyti"
+
+msgid "Password"
+msgstr "Slaptažodis"
+
+msgid "Please log in"
+msgstr "Prašome prisijungti"
+
+msgid "Status"
+msgstr "Būklė"
+
+msgid "Un-Acked Notifies"
+msgstr "Neatsakyti pranešimai"
+
+msgid "Up"
+msgstr "Veikia"
+
+msgid "User"
+msgstr "Vartotojas"
+
+msgid "Username"
+msgstr "Vartotojo vardas"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "auto režimas – pašalinti „tvarkomas“, kai būklė taps „veikia“"
+
+msgid "because"
+msgstr "kadangi"
+
+msgid "command"
+msgstr "komanda"
+
+msgid "down since"
+msgstr "„neveikia“ nuo"
+
+msgid "down"
+msgstr "neveikia"
+
+msgid "elapsed time"
+msgstr "prabėgęs laikas"
+
+msgid "flags"
+msgstr "nustatymai"
+
+msgid "hostname"
+msgstr "mazgo vardas"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "rankinis rėžimas – „tvarkymą“ būtina nuimti ranka"
+
+msgid "name"
+msgstr "pavadinimas"
+
+msgid "override"
+msgstr "tvarkomas"
+
+msgid "port"
+msgstr "portas"
+
+msgid "start"
+msgstr "pradžia"
+
+msgid "status"
+msgstr "būklė"
+
+msgid "times down"
+msgstr "„neveikia“ kartai"
+
+msgid "up since"
+msgstr "„veikia“ nuo"
+
+msgid "up"
+msgstr "veikia"
+
+msgid "Authentication Failed"
+msgstr "Nepavyko prisijungti"
+
+msgid "ERROR"
+msgstr "KLAIDA"
+
+msgid "Ack Checked"
+msgstr "Patvirtinti pažymėtus"
+
+msgid "Ack All"
+msgstr "Patvirtinti visus"
+
+msgid "There are no un-acked notifications"
+msgstr "Nėra nepatvirtintų pranešimų"
+
+msgid "There are no notifications"
+msgstr "Pranešimų nėra"
+
+msgid "Unacked Notifications"
+msgstr "Nepatvirtinti pranešimai"
+
+msgid "Broken Alias"
+msgstr "Neteisingas sinonimas"
+
+msgid "is down"
+msgstr "„neveikia“"
+
+msgid "zone"
+msgstr "zona"
+
+msgid "info"
+msgstr "info"
+
+msgid "note"
+msgstr "pastaba"
+
+msgid "comment"
+msgstr "komentaras"
+
+msgid "annotation"
+msgstr "anotacija"
+
+msgid "details"
+msgstr "detalės"
+
+msgid "Top"
+msgstr "Pradžia"
+
+Sisteminis vim:encoding=utf8:

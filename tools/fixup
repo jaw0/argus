@@ -1,0 +1,32 @@
+# -*- perl -*-
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Date: 2002-Apr-19 10:04 (EDT)
+# Function: fix up files with correct paths
+#
+# $Id: fixup,v 1.8 2011/11/03 02:13:41 jaw Exp $
+
+use Getopt::Std;
+getopts('b:c:d:g:l:s:w:A:D:F:P:Q:S:V:6:');
+
+while( <> ){
+    s/__DATADIR__/$opt_d/g;
+    s/__BINDIR__/$opt_b/g;
+    s/__SBINDIR__/$opt_s/g;
+    s/__CGIDIR__/$opt_c/g;
+    s/__LIBDIR__/$opt_l/g;
+    s/__WWWDIR__/$opt_w/g;
+
+    s/__SENDMAIL__/$opt_S/g;
+    s/__QPAGE__/$opt_Q/g;
+    s/__FPING__/$opt_F/g;
+    s/__FPING6__/$opt_6/g;
+    s/__PERL__/$opt_P/g;
+    s/__VERSION__/$opt_V/g;
+    s/__DATABASE__/$opt_D/g;
+    s/__AUTH_FILE__/$opt_A/g;
+    s/__HAVE_GD__/$opt_g/g;
+
+    print;
+}

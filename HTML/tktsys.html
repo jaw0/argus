@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+
+<h1>Ticket System Integration</h1>
+
+
+<DIV CLASS=TECHNOTE>
+Ticket system support was added in version 3.7
+</DIV>
+
+<p>Argus can attach overrides to your trouble ticket system,
+in order to:</p><ol>
+<li>make sure something isn't overridden without opening a trouble
+ticket
+<li>remove an override once a ticket is closed
+</ol>
+
+<ul>
+<li><span class=param>tkt_check_url</span>
+the url to check the status of a ticket. 
+<b>TICKET</b> will be replaced with the ticket number.<br>
+eg. <span class=example>http://tkt.example.com/tktview?t=TICKET</span>
+
+<li><span class=param>tkt_check_expect</span>
+a string that will be returned if the ticket is open.<br>
+eg. <span class=example>OPEN</span>
+
+<li><span class=param>tkt_view_url</span>
+the url to view a ticket. 
+<b>TICKET</b> will be replaced with the ticket number.<br>
+eg. <span class=example>http://tkt.example.com/tktview?t=TICKET</span>
+
+<p>once configured, argus will ask for the ticket number
+when an override is installed.</p>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: tmplt.html,v 1.4 2002/11/30 20:08:25 jaw Exp $ -->
+</HTML>

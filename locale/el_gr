@@ -1,0 +1,231 @@
+
+#greek translation -- Athanasios Douitsis
+#aduitsis@noc.ntua.gr 
+
+# set the character set that the language uses
+
+charset		"iso-8859-7"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"el_GR"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Κυρ Δευ Τρι Τετ Πεμ Παρ Σαβ 
+months	Iαν Φεβ Μαρ Απρ Μαι Ιουν Ιουλ Αυγ Σεπτ Οκτ Νοε Δεκ
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Σήμερα"
+
+msgid "This Month"
+msgstr "Αυτόν τον μήνα"
+
+msgid "This Year"
+msgstr "Φέτος"
+
+msgid "Yesterday"
+msgstr "Χτές"
+
+msgid "Last Month"
+msgstr "Τον περασμένο μήνα"
+
+msgid "Last Year"
+msgstr "Πέρυσι"
+
+msgid "2 Days Ago"
+msgstr "Δύο μέρες πριν"
+
+msgid "2 Months Ago"
+msgstr "Δύο μήνες πριν"
+
+msgid "3 Days Ago"
+msgstr "Τρεις μέρες πριν"
+
+msgid "3 Months Ago"
+msgstr "Τρεις μήνες πριν"
+
+msgid "Annotate"
+msgstr "Επιγραμμα"
+
+msgid "Annotation"
+msgstr "Επιγραμματισμός"
+
+msgid "Comment"
+msgstr "Σχόλιο"
+
+msgid "Debugging"
+msgstr "Αποσφαλμάτωση"
+
+msgid "Display Config"
+msgstr "Εμφάνιση Ρυθμίσεων"
+
+msgid "Down"
+msgstr "Κάτω"
+
+msgid "Error Log"
+msgstr "Ημερολόγιο"
+
+msgid "Expires"
+msgstr "Λήγει"
+
+msgid "Flush Cache"
+msgstr "Καθάρισμα Λανθάνουσας Μνήμης"
+
+msgid "Hush Siren"
+msgstr "Ησυχία"
+
+msgid "Login"
+msgstr "Είσοδος"
+
+msgid "Logout"
+msgstr "Έξοδος"
+
+msgid "Mode"
+msgstr "Λειτουργία"
+
+msgid "Name"
+msgstr "Όνομα"
+
+msgid "Notifications"
+msgstr "Ειδοποιήσεις"
+
+msgid "Notifies"
+msgstr "Ειδοποιήσεις"
+
+msgid "Override"
+msgstr "Υπερπήδηση"
+
+msgid "Password"
+msgstr "Κωδική λέξη"
+
+msgid "Please log in"
+msgstr "Παρακαλώ δώστε τα στοιχεία σας"
+
+msgid "Status"
+msgstr "Κατάσταση"
+
+msgid "Un-Acked Notifies"
+msgstr "Μη αναγνωρισμένες ειδοποιήσεις"
+
+msgid "Up"
+msgstr "Πάνω"
+
+msgid "User"
+msgstr "Χρήστης"
+
+msgid "Username"
+msgstr "Όνομα Χρήστη"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "Αυτόματη λειτουργία - απεμπλοκή υπερπήδησης όταν η κατάσταση επιστρέψει στο πάνω"
+
+msgid "because"
+msgstr "διότι"
+
+msgid "command"
+msgstr "εντολή"
+
+msgid "down since"
+msgstr "κάτω από"
+
+msgid "down"
+msgstr "κάτω"
+
+msgid "elapsed time"
+msgstr "διανυθείς χρόνος"
+
+msgid "flags"
+msgstr "σημαίες"
+
+msgid "hostname"
+msgstr "hostname"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "Χειροκίνητη λειτουργία - η υπερπήδηση πρέπει να απεμπλακεί χειροκίνητα"
+
+msgid "name"
+msgstr "όνομα"
+
+msgid "override"
+msgstr "υπερπήδηση"
+
+msgid "port"
+msgstr "πόρτα"
+
+msgid "start"
+msgstr "ξεκίνημα"
+
+msgid "status"
+msgstr "κατάσταση"
+
+msgid "times down"
+msgstr "φορές κάτω"
+
+msgid "up since"
+msgstr "πάνω από"
+
+msgid "up"
+msgstr "πάνω"
+
+msgid "Authentication Failed"
+msgstr "η ταυτοποίηση απέτυχε"
+
+msgid "ERROR"
+msgstr "ΛΑΘΟΣ"
+
+msgid "Ack Checked"
+msgstr "Επιβεβαίωση ελέγχθηκε"
+
+msgid "Ack All"
+msgstr "Επιβεβαίωση όλων"
+
+msgid "There are no un-acked notifications"
+msgstr "Δεν υπάρχουν ειδοποιήσεις που δεν επιβεβαιώθηκαν"
+
+msgid "There are no notifications"
+msgstr "Δεν υπάρχουν ειδοποιήσεις"
+
+msgid "Unacked Notifications"
+msgstr "Μη επιβεβαιωμένες ειδοποιήσεις"
+
+msgid "Broken Alias"
+msgstr "Σπασμένη ταυτοπροσωπεία"
+
+msgid "is down"
+msgstr "είναι κάτω"
+
+msgid "zone"
+msgstr "ζώνη"
+
+msgid "info"
+msgstr "πληροφορίες"
+
+msgid "note"
+msgstr "σημείωση"
+
+msgid "comment"
+msgstr "σχόλιο"
+
+msgid "annotation"
+msgstr "επίγραμμα"
+
+msgid "details"
+msgstr "λεπτομέρειες"
+

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+<h1>Interfacing with Argus</h1>
+<p>There are several ways for external programs or systems
+to interface with argus</p>
+
+<h2>Data Archiving</h2>
+<div class=TECHNOTE>
+	The data archiving feature was added in version 3.5
+</div>
+<p>The results of every service test can be sent to
+an external program for collecting, storing, analyzing, etc.</p>
+<pre>
+	archive_prog:	/bin/put_stuff_in_database
+	archive_fmt:	%t %o %s
+</pre>
+<p><tt>archive_prog</tt> specifies a program. it will be
+sent data on its standard input.
+<tt>archive_fmt</tt> specifies the format of the data
+to send to the archive program in a manner similar
+to the formats for message{up,dn} (except that the values
+will be URL encoded).
+</p>
+
+<H2>argusctl</H2>
+<P>Argus comes with a <TT>argusctl</TT> program which can be used
+to control or get data from the running argus server.</P>
+
+<P>For a list of poorly documented commands that are supported, you can
+run either: <TT>argusctl help</TT> or <TT>argusd -C</TT></P>
+
+<P>Some examples of useful commands:</P>
+<UL>
+<LI>	<B>argusctl hup</B>	- reload the config file
+<LI>	<B>argusctl -k console</B>	- display log messages
+<LI>	<B>argusctl ovlist</B>	- list everything currently in override
+<LI>	<B>argusctl status</B>	- display current status
+<LI>	<b>argusctl shutdown</b> - shut down argus
+</UL>
+
+
+<h2>loading perl code</h2>
+<div CLASS=TECHNOTE>
+This feature requires familiarity with the internal workings of argus.
+</div>
+<p>Argus can load user specified perl code into itself. This
+can be used to change argus's behavior, add additional
+features, remove features, enforce company policies, etc.</p>
+<pre>
+	load_modules:	MyArgus::Override_Policy MyArgus::TicketSystem
+</pre>
+
+
+<h2>running a program at startup</h2>
+<p>Argus can run a specified program whenever it starts or reloads the config.
+This can be used for logging, modifying argus's configuration, etc.
+</p>
+<pre>
+	runatstartup:	/usr/local/bin/myprogram
+</pre>
+<p>Normally, argus will wait for this program to complete. If you want argus to continue
+without waiting (eg. the program needs to talk to argus), you can put an '&' after
+the command to cause it ti run in the background.</p>
+
+<pre>
+	runatstartup:	/usr/local/bin/myprogram &
+</pre>
+
+
+<h2>Environment Variables</h2>
+<p>Argus sets a number of environment variables with are available to any program
+that argus runs (such as a 'Service Prog').</p>
+<table>
+<tr><td><b>ARGUS_PID</b></td><td>Argus's process id</td></tr>
+<tr><td><b>ARGUS_VER</b></td><td>Argus's version</td></tr>
+<tr><td><b>ARGUS_DATA</b></td><td>the location of the data directory</td></tr>
+<tr><td><b>ARGUS_LIB</b></td><td>the location of the lib directory</td></tr>
+<tr><td><b>ARGUS_CTL</b></td><td>the location of the control socket</td></tr>
+<tr><td><b>ARGUS_SYSLOG</b></td><td>the configured syslog facility</td></tr>
+<tr><td><b>ARGUS_OBJNAME</b></td><td>the full name of service being tested (Prog only)</td></tr>
+<tr><td><b>ARGUS_UNAME</b></td><td>the short name of the service being tested (Prog only)</td></tr>
+<tr><td><b>ARGUS_DEBUG</b></td><td>the value of the debugging parameter (Prog only)</td></tr>
+
+</table>
+
+<!-- 
+<h2>alternate graphing programs</h2>
+
+
+<h2>Audit Notifications</h2>
+
+-->
+
+
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: interfacing.html,v 1.5 2007/03/18 20:43:11 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Agent</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Argus Remote Agent</H1>
+<p>
+Argus can monitor various systems and parameters on servers
+via an agent
+</p>
+
+<h2>Installing the Agent</h2>
+When you installed argus, an <tt>argus-agent</tt> was installed in your <tt>sbin</tt>
+directory. <ol>
+        <li>You will need to copy this file to your remote servers.
+        <li>You will need to enable it to run on your remote servers.
+</ol>
+Your systems will be different, but often, enabling the agent to run involves:
+<ol>
+        <li>Add a line to your <tt>/etc/services</tt><br>
+        <tt>argusagent        164/tcp</tt>
+
+        <li>Add a line to your <tt>/etc/inetd.conf</tt><br>
+        <tt>argusagent	stream	tcp	nowait	nobody	/usr/local/libexec/argus-agent argus-agent</tt>
+</ol>
+
+
+<h2>Configuring Argus</h2>
+<p>
+The agent can gather all sorts of information on all sorts of subsystems on all sorts
+of Operating Systems. Except for yours. It works for most people, but for you,
+you might need to play around a bit. Just sayin'.</p>
+
+<p>Somewhere at the top of your config, tell argus what port
+you configured the agent to use (164 in the example above):</p>
+<pre>
+        agent_port:     164
+</pre>
+
+<p>Configure things to monitor. You can all of the usual minvalue, maxvalue,
+graphing, etc. parameters just as any other <a href="services.html">service</a>.
+</p><br/><br/>
+<table>
+<tr><th>Parameter</th><th>Description</th><th>Example</th></tr>
+
+<tr><td>load</td><td>load average on the remote system</td>
+<td><pre>
+Service Agent/load {
+        maxvalue:       0.5
+}
+</pre></td></tr>
+
+<tr class="altrow"><td>disk</td><td>filesystem percent full</td>
+<td><pre>
+Service Agent/disk {
+        arg:            /home/porno
+        maxvalue:       85
+}
+</pre></td></tr>
+
+<tr><td>netstat</td><td>network interface utilization</td>
+<td><pre>
+Service Agent/netstat {
+        #               interface in|out
+        arg:            bge0 in
+        calc:           ave-rate-bits
+        maxvalue:       100000000
+}
+</pre></td></tr>
+
+<tr class="altrow"><td>smart</td><td>Disk SMART status</td>
+<td><pre>
+Service Agent/smart {
+        arg:            /dev/rdsk/c0t0d0s2
+        expect:         OK
+}
+</pre></td></tr>
+
+<tr><td>zpool</td><td>zpool status</td>
+<td><pre>
+Service Agent/zpool {
+        arg:            rpool
+        expect:         OK
+}
+</pre></td></tr>
+
+
+<tr class="altrow"><td>iostat</td><td>Disk I/O</td>
+<td><pre>
+Service Agent/iostat {
+        arg:            c0t0d0s2 read
+        maxvalue:       15000
+}
+</pre></td></tr>
+
+
+
+
+</table>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: agent.html,v 1.1 2010/09/04 20:10:10 jaw Exp $ -->
+</HTML>

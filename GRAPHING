@@ -1,0 +1,119 @@
+
+draw graphs for SNMP and perhaps ping rtt
+draw line in green/red = up/down
+
+argusd - should only do little as possible
+	save data to file. cgi will deal with the rest
+
+2 sizes: 64x128 and 256x512
+what: samples x 1 day, hourly x 1 week, daily x 90 days
+
+do it self, or use rrdtool?
+	=> self
+
+binary fixed size file
+have Stats keep track of hourly/daily min/max/ave/stddev
+
+gs or GD
+	=> GD
+
+part of Service, or Graph object?
+
+	Service UDP/SNMP {
+		...
+		Graph {
+			param: value
+		}
+	}
+
+	=> no, I don't like
+
+QQQ
+	combine and create Group graphs?
+
+have layer above GD to do scaling, range, etc
+have cgi save image, check timestamps, send cached image, ...
+
+
+steps:
+	1) adjust to gather stats
+	2) save stats
+		per sample: time, value, flags(up, down, valid/invalid)
+		summary: time, min, max, ave, stdev, flags
+	3) extend control protocol
+		func=graph, object
+		=> datafile, customization params
+	4) cgi graph drawing
+	5) graph customization parameters
+		ave, ave-min-max, ave-stdev
+		labels, title, log-scale, grid, colors
+	6) think about group graphs
+
+		
+================================================================
+opening a file, seeking/writing * N per sample will be high-overhead
+have argus start a separate process for logging data
+
+or put all data in one giant file (DB_File)
+	file{ "$unique sample $index" }
+	=> will be much too big
+
+or gather data and only write periodically
+
+or separate process writing to SQL database
+	db can calculate and maintain hourly, daily stats
+	=> portability issues
+
+=> separate process. files. maybe optional SQL later.
+	Graph.pm,  argusgraph, web_graph.pm
+
+	
+Graph.pm:
+package Graph;
+@ISA = qw(BaseIO);
+
+MonEl::init {
+	...
+	$me->{graph} = 0 unless $me->can('gr_add_sample');
+}
+
+isup, isdown {
+	...
+	$me->gr_add_sample( $me->{srvc}{result}, $me->{ovstatus} )
+		if $me->{graph};
+}
+
+gr_add_sample {
+	...
+	Graph::write( "sample $^T " . $me->file() . " $status $value\n" );
+}
+
+Graph2.pm
+	readsamples
+	readhours
+	readdays
+
+Image.pm
+	anaylze( samples )
+	xtics()
+	ytics()
+	draw( 'line|filled|avesdv|minmax', $data )
+
+================================================================
+
+instead of cgi running picasso,
+push it back up to argusd or graphd
+
+cgi sends request to argus, argus checks timestamps, and maybe
+sends command to graphd to generate graph.
+
+graphd would need to be able to get params for graph
+would need to connect back to argusd and query
+
+or argus could do it itself.
+
+=> if graphd does it, it needs to tell argus when it is finished
+
+=> cgi continues to do it, timestamp checking gets done by argus
+
+

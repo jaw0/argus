@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Installing 2</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Installing, Part 2 - Advanced</H1>
+
+<B>After</B> verifying that everything works with a basic 
+setup, there are some <I>optional</I> steps that may or
+may not be useful.
+
+<H2>Additional Perl Modules</H2>
+<UL>
+	<LI>	<P><I>optionally</I>, argus can use a <TT>mod_perl</TT> capable web server.<BR>
+		Find mod_perl at <A HREF="http://perl.apache.org">perl.apache.org</A></P>
+
+	<LI>	<P><I>optionally</I>, <TT>Socket6.pm</TT>, an IPv6 capable <TT>fping</TT>,
+		and an OS that supports it are required for IPv6 support.<BR>
+		Find Socket6 at
+		<A HREF="http://www.cpan.org/modules/by-category/05_Networking_Devices_IPC/Socket6/">CPAN</A>
+		<BR><I>IPv6 support is available only in version 3.2 and later</I>
+		</P>
+
+	<LI>	<P><I>optionally</I>, <TT>GD.pm</TT> and its various dependencies are required for
+		graphing support.<BR>
+		Find GD.pm at <A HREF="http://stein.cshl.org/WWW/software/GD">stein.cshl.org</A><BR>
+		<I>Graphing support is available only in version 3.2 and later</I>
+		</P>
+
+	<LI>	<P><I>optionally</I>, if <TT>Time::HiRes</TT> is available, argus
+		can make use of its more precise time reporting.<br>
+		<TT>Time::HiRes</TT> comes with some versions of perl, or may
+		be found at <A HREF="http://searh.cpan.org">CPAN</A>
+		</P>
+
+	<LI>	<P><I>optionally</I>, <TT>Net::SSLeay.pm</TT> and the OpenSSL library are required
+		for extended SSL tests.<BR>
+		Find Net::SSLeay at
+		<A HREF="http://search.cpan.org/author/SAMPO/Net_SSLeay.pm-1.23/SSLeay.pm">CPAN</A><BR>
+		Find OpenSSL at <A HREF="http://www.openssl.org">www.openssl.org</A><BR>
+		<I>Extended SSL support is available only in version 3.3 and later</I>
+		</P>
+
+	<LI>	<P><I>optionally</I>, in order to support SNMPv3 authentication and
+		privacy, argus requires <TT>Digest::MD5</TT>, <TT>Digest::SHA1</TT>,
+		<TT>Digest::HMAC</TT>, and <TT>Crypt::DES</TT><BR>
+		Find all of these at <A HREF="http://searh.cpan.org">CPAN</A><BR>
+		<I>SNMPv3 support is available only in version 3.3 and later</I>
+		</P>
+
+</UL>
+
+<H2>Advanced Web Server Config</H2>
+
+<P>optionally, after verifying that everything works as a basic cgi-bin,
+customize and fine-tune your web server.</P>
+<P>You will need to consult the documentation for your web server, these
+examples probably won't work as is.</P>
+
+	<UL>
+	<LI>	optionally, adjust your httpd.conf to provide an alias or
+		a virtual server, some suggestions: <UL>
+		<LI>	alias /argus -> /cgi-bin/arguscgi<BR>
+                access it as: www.example.com/argus
+		<LI>create virt server,<BR>
+		alias / -> /cgi-bin/arguscgi, or use redirect, etc<BR>
+                access it as argus.example.com/
+		</UL>
+
+	<LI>	optionally set up mod_perl<BR>
+		exact configuration details will vary, but something like:
+		<PRE>
+                PerlRequire /.../arguscgi
+                &lt;Location /argus&gt;
+                    SetHandler   perl-script
+                    PerlHandler  Argus::Web
+                    allow from all
+                &lt;/Location&gt;
+		</PRE>
+		You might like to know that the author swears by combining
+		a virtual server along with mod_perl:
+		<PRE>
+		&lt;VirtualHost *&gt;
+		    ServerName	argus.example.com
+		    &lt;Location /&gt;
+		        SetHandler   perl-script 
+		        PerlHandler  Argus::Web
+		        allow from all
+		    &lt;/Location&gt;
+		&lt;/VirtualHost&gt;
+		</PRE>
+	</UL>
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: install2.html,v 1.4 2005/04/09 01:22:51 jaw Exp $ -->
+</HTML>

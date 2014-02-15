@@ -1,0 +1,221 @@
+
+tested:
+	mg-soft:	noAuth, MD5, SHA1, MD5+DES
+
+	ucd:		MD5, MD5+DES
+
+
+================================================================
+http://net-snmp.sourceforge.net/snmpv3.html
+http://www.mg-soft.si/snmpv3.html#SNMPv3ACCESS
+
+RFC 3411 default engine-id
+   $ENGINE_ID = pack('H10', '8000000001') . scalar(gethostbyname(hostname()));
+
+
+snmpget
+SNMP Version 3 specific
+  -Z <B,T>      set the destination engine boots/time for v3 requests.
+  -e <E>        security engine ID (e.g., 800000020109840301).
+  -E <E>        context engine ID (e.g., 800000020109840301).
+  -n <N>        context name (e.g., bridge1).
+  -u <U>        security name (e.g., bert).
+  -l <L>        security level (noAuthNoPriv|authNoPriv|authPriv).
+  -a <A>        authentication protocol (MD5|SHA)
+  -A <P>        authentication protocol pass phrase.
+  -x <X>        privacy protocol (DES).
+  -X <P>        privacy protocol pass phrase
+
+Net::SNMP
+
+           [-username      => $username,]    # v3  
+           [-authkey       => $authkey,]     # v3  
+           [-authpassword  => $authpasswd,]  # v3  
+           [-authprotocol  => $authproto,]   # v3  
+           [-privkey       => $privkey,]     # v3  
+           [-privpassword  => $privpasswd,]  # v3  
+           [-privprotocol  => $privproto,]   # v3
+
+           [-contextengineid => $engine_id,] # v3 
+           [-contextname     => $name,]      # v3
+
+The non-core modules Crypt::DES, Digest::MD5, Digest::SHA1, and Digest::HMAC are required
+
+================================================================
+	Service UDP/SNMPv3 {
+		username:	<string>
+		password:	<string>
+		authproto:	MD5, SHA1
+
+		seclevel:	default: noauth,nopriv; if pass=>nopriv, if pass+privpass=> authpriv
+
+		privproto:	des
+		privpass:	<string>
+
+		contextengine:	<hexstring>
+		contextname:	<string>
+
+
+	}
+
+================================================================
+RFC 3414 = USM
+
+   SnmpSecurityModel ::= TEXTUAL-CONVENTION
+                        3  User-Based Security Model (USM)
+       SYNTAX       INTEGER(0 .. 2147483647)
+
+      UsmSecurityParameters ::=
+          SEQUENCE {
+           -- global User-based security parameters
+              msgAuthoritativeEngineID     OCTET STRING,
+              msgAuthoritativeEngineBoots  INTEGER (0..2147483647),
+              msgAuthoritativeEngineTime   INTEGER (0..2147483647),
+              msgUserName                  OCTET STRING (SIZE(0..32)),
+           -- authentication protocol specific parameters
+              msgAuthenticationParameters  OCTET STRING,
+           -- privacy protocol specific parameters
+              msgPrivacyParameters         OCTET STRING
+          }
+
+
+ku  = f(passwd)		A.2.1, A.2.2
+kul = HASH( ku + authengine . ku )		# MD5 or SHA1
+
+
+
+################################################################
+
+RFC 2572
+6.  The SNMPv3 Message Format
+
+       SNMPv3Message ::= SEQUENCE {
+           msgVersion INTEGER ( 0 .. 2147483647 ),
+           -- the value 3 is used for snmpv3
+
+           msgGlobalData HeaderData,
+           msgSecurityParameters OCTET STRING,
+           -- format defined by Security Model
+           msgData  ScopedPduData
+       }
+
+       HeaderData ::= SEQUENCE {
+           msgID      INTEGER (0..2147483647),
+           msgMaxSize INTEGER (484..2147483647),
+
+           msgFlags   OCTET STRING (SIZE(1)),
+                      --  .... ...1   authFlag
+                      --  .... ..1.   privFlag
+                      --  .... .1..   reportableFlag
+           msgSecurityModel INTEGER (1..2147483647)
+       }
+
+       ScopedPduData ::= CHOICE {
+           plaintext    ScopedPDU,
+           encryptedPDU OCTET STRING  -- encrypted scopedPDU value
+       }
+       ScopedPDU ::= SEQUENCE {
+           contextEngineID  OCTET STRING,
+           contextName      OCTET STRING,
+           data             ANY -- e.g., PDUs as defined in RFC 1905
+       }
+################################################################
+   First, if a user uses a password, then the user's password is
+   converted into a key Ku using one of the two algorithms described in
+   Appendices A.2.1 and A.2.2.
+
+   To convert key Ku into a localized key Kul of user U at the
+   authoritative SNMP engine E, one appends the snmpEngineID of the
+   authoritative SNMP engine to the key Ku and then appends the key Ku
+   to the result, thus enveloping the snmpEngineID within the two copies
+   of user's key Ku.  Then one runs a secure hash function (which one
+   depends on the authentication protocol defined for this user U at
+   authoritative SNMP engine E; this document defines two authentication
+   protocols with their associated algorithms based on MD5 and SHA).
+   The output of the hash-function is the localized key Kul for user U
+   at the authoritative SNMP engine E.
+
+
+
+
+################################################################
+ethereal off the wire from net-snmp
+	snmpget -v 3 -u username tele sysName.0
+
+30 3d
+	02 01 03		version
+
+    30 10			header:
+	02 04 07 82 8d dc	msgid
+	02 02 05 c0		max size
+	04 01 04		flags (report, no auth, no priv)
+	02 01 03		sec model = usm
+
+				sec params
+    04 10
+	30 0e
+		04 00		auth engine
+		02 01 00	time
+		02 01 00	boots
+		04 00		username
+		04 00		auth
+		04 00		priv
+
+    30 14			scoped pdu:
+	04 00			context engine id
+	04 00			context name
+	a0 0e			GET
+	02 04 41 97 de 4d	request id
+	02 01 00		error status = no error
+	02 01 00		error index = 0
+    30  00
+
+	# something looks missing, where is oid?
+
+
+################################################################
+snmpget -v 3 -u USER -n NAME -A PASSWORD -X PRIVACY123 -E 800000020109840301 -e 800000020109840301  -l authPriv -a MD5 -x DES tele sysName.0
+
+	sec params:
+		auth engine id =  800000020109840301
+		engine boots = 0
+		engine time = 0
+		user name = USER
+		auth param =
+		priv param =
+	encrypted PDU
+04 38 78  e0 b5 ea 7c 96 57 03 9d
+3d ac 60 ed 05 15 e7 3d  fe 7a 39 79 68 55 e4 34
+d1 c6 0c 27 cd 67 8e 69  94 08 2d a0 9f 6c 31 97
+54 28 d9 b6 93 d7 62 3b  df 06 d9 72 84 1e 86
+
+################################################################
+(no privacy)
+snmpget -v 3 -u USER -n NAME -A PASSWORD -X PRIVACY123 -E 800000020109840301 -e 800000020109840301 -l authNoPriv -a MD5 tele sysName.0
+
+
+30 71
+	02 01 03		version = 3
+
+	msg global header
+	30 10
+		02 04 11 14 8d 1e	msg id
+		02 02 05 c0		max size
+		04 01 05		flags	(authNoPriv)
+		02 01 03		sec = usm
+	sec params
+	04 29
+             30 27
+		04 09 80  00 00 02 01 09 84 03 01	auth eng id
+		02 01 00		boots
+		02 01 00		time
+		04 04 55 53 45 52	USER
+		04 0c 13 2f da 9d f3 1f d5 bf a2 24 68 f1	auth param
+		04 00			priv param
+	30 2f
+	04 09 80 00 00 02 01 09 84 03 01	context engine id
+	04 04 4e 41 4d 45			context name (NAME)
+	PDU
+	a0 1c 02 04 19 e8 0c 68 02  01 00 02 01 00 30 0e 30
+	0c 06 08 2b 06 01 02 01  01 05 00 05 00
+

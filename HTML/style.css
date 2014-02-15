@@ -1,0 +1,92 @@
+	TD.TOP {
+		font-weight: bold;
+		font-family: sans-serif;
+	}
+	TD.TOP SPAN {
+		font-size: 50;
+	}
+	TD.BODY DIV {
+		margin-left:  10%;
+		margin-right: 10%
+	}
+	TD.BODY DIV H1 {
+		margin-left:	-5%;
+		font-size:	large;
+	}
+	TD.BODY DIV H2 {
+		font-size: large;
+	}
+	TABLE.SMALLTEXT TD {
+		font-size: small;
+	}
+	TABLE.FOOTER TD {
+		font-size:	x-small;
+	        font-family: 	monospace;
+	}
+
+        .sidebuttons {
+            border-right:		1px solid #aaa;
+        }
+        
+	TABLE.button TD {
+                padding-bottom: 5px;
+    	}
+	TABLE.button TD A {
+		display:		block;
+		color:			#000000;
+		background-color:	#DDDDDD;
+		font-weight:		bold;
+		font-family:		sans-serif;
+	        text-decoration:	none;
+	        border:			1px outset #ccc;
+                text-shadow:            1px 1px 1px #fff;
+	        border-radius:		3px;
+	        -moz-border-radius:	3px;
+                -o-border-radius:	3px;
+    	}
+	TABLE.button TD A:hover {
+		background-color:	#eee;
+                border-color:		#ddd;
+	}
+	DIV.TECHNOTE {
+		background-color:	#CCCCFF;
+		padding:		0.5em;
+		border-width:		thin;
+		border-style:		solid;
+	}
+
+	UL.NAR {
+		padding:	0px;
+	}
+
+	.ENTSUP {
+		font-size:	80%;
+	}
+
+	.ENTSUP > H1, .ENTSUP > H2 {
+		font-family:	sans-serif;
+	}
+
+	.ENTSUP > H2 {
+	        margin-bottom:  -0.8em;
+		color:		#44F;
+	}
+
+
+	.docs td {
+		font-size:	smaller;
+	}
+
+	.altrow {
+            background-color:	#dfd;
+	}
+
+	.param {
+            font-weight:	bold;
+            font-family:		monospace;
+	}
+	.example {
+		font-family:	monospace;
+		font-style:		italic;
+	}
+	

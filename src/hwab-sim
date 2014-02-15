@@ -1,0 +1,190 @@
+#!/usr/local/bin/perl
+# -*- perl -*-
+
+# Copyright (c) 2011
+# Author: Jeff Weisberg <jaw @ tcp4me.com>
+# Created: 2011-Oct-22 15:29 (EDT)
+# Function: 
+#
+# $Id$
+
+use lib 'bin';
+use DB_File;
+use POSIX;
+use Argus::MHWAB;
+use Argus::HWAB;
+use strict;
+
+$^T = 0;
+$::DATABASE = 'DB_File';
+$::datadir  = '/tmp';
+my $BUCKS  = 7 * 24 * 3600 / 300;
+my $WEEKS  = 7 * 24 * 3600;
+my $DAYS   = 24 * 3600;
+my $M_2PI  = 2 * 3.14159265;
+my $debug  = 0;
+my @tzchan;
+
+
+my $DBFILE = "$::datadir/stats/hwab.db";
+unlink $DBFILE;
+# 0.1, 0.0035, 0.05
+#my $h = Argus::HWAB->new( 'Test', 7*24*3600, 0.01, 0.0035, 0.05,   .5, 4, \&loggit );
+#my $h = Argus::HWAB->new( 'Test', 7*24*3600, 0.1, 0.0035, 0.05,   .1, 4, \&loggit );
+#my $h = Argus::HWAB->new( 'Test', 7*24*3600, 0.01, 0.0035, 0.1,   .5, 4, \&loggit );
+
+my $h = Argus::HWAB->new( 'Test', 7*24*3600, 0.0065, 0.0005, 0.1,   .1, 4, \&loggit ); # netw
+#my $h = Argus::HWAB->new( 'Test', 7*24*3600, 0.001, 0.0001, 0.5,   .1, 4, \&loggit );  # bkps
+
+new_chan_param($_) for (0..5);
+
+# simulate
+my @val;
+my @exp;
+my @expd;
+my $start = $^T;
+my $nb = 0;
+my $KG = pow(1.05, 1/($WEEKS/300));
+
+open(FD, ">/tmp/d");
+open(FY, ">/tmp/y");
+open(FV, ">/tmp/v");
+
+for(my $t=0; $t< 8*$WEEKS; $t += 300){
+    $^T = $start + $t;
+
+    my $v = sim_net($t);
+    #my $v = sim_bkp($t);
+
+    print FV "$nb\t", $v, "\n";
+    print FY "$nb\t", $h->{expect}{y}, "\n";
+    print FD "$nb\t", $h->{expect}{d}, "\n";
+
+    $h->add( $v );
+    $nb ++;
+    print STDERR ".";
+}
+print STDERR "\n";
+$h->sync();
+
+close FD;
+close FY;
+close FV;
+
+
+################################################################
+
+sub sim_bkp {
+    my $t = shift;
+
+    my $v = rand(100);
+    my $day = ($t / $DAYS) % 7;
+    return $v unless $day == 1 || $day == 3;
+
+    my $time = $t % $DAYS;
+
+    # from 5 - 9
+    my $start = 5*3600 - $t * 300/$WEEKS;
+    return $v if $time < $start;
+
+    my $end = 9*3600 + $t * 1800/$WEEKS;
+    my $end = ($t > 30*$DAYS) ? 12*3600 : 9*3600;
+    return $v if $time > $end;
+
+    return $v + 1000;
+}
+
+sub sim_net {
+    my $t = shift;
+
+    my $v = profile($^T) * 1000;
+
+    $v += rand(100) - rand(100);
+
+    if( $t > 30 * $DAYS ){ #&& $t < 30 * $DAYS + 3600 ){
+        # spike
+        $v += 500;
+    }
+
+    return $v;
+}
+
+
+################################################################
+
+sub loggit {
+    my $msg = shift;
+    return unless $debug;
+    print STDERR "$msg\n";
+}
+
+sub Cron::new {}
+
+################################################################
+
+sub new_chan_param {
+    my $i = shift;
+
+    for my $n (0 .. 1){
+        $tzchan[$i][$n]{phi} = (rand(3) - rand(2) + 1) / ($n + 1);
+        $tzchan[$i][$n]{amp} = 1 + (rand(.5) - rand(.5)) / ($n + 1);
+        $tzchan[$i][$n]{frq} = 1;
+    }
+}
+
+sub profile {
+    my $now = shift;
+
+
+    my($s,$m,$h,$md,$mon,$year,$wd) = localtime($now);
+    my $t = $h + $m/60 + $s/3600;
+
+    if(!int(rand(17*12)) ){
+        new_chan_param( int(rand(6)) );
+    }
+
+    my $r = 0;
+
+    $r += 0.30 * base_profile($t,   0);
+    $r += 0.15 * base_profile($t-1, 1);
+    $r += 0.15 * base_profile($t-2, 2);
+    $r += 0.25 * base_profile($t-3, 3);
+    $r += 0.10 * base_profile($t-4, 4);
+    $r += 0.05 * base_profile($t+1, 5);
+
+    # weekend
+    my $K = 0.75;
+    if( $wd==0 || $wd ==6 ){
+        my $k = 0;
+        if( $wd ){
+            $k = ($h==0) ? $m/60 : 1;
+        }else{
+            $k = ($h==23)? 1 - $m/60 : 1;
+        }
+
+        $r = (1 - $k) * $r + $k * $K * $r;
+    }
+
+    # debug("profile: $t => $r");
+    return $r;
+}
+
+sub base_profile {
+    my $t = shift;
+    my $i = shift;
+
+    my $AM = 9;
+    my $k = sin($M_2PI * ($t-$AM) / 24)
+        + $tzchan[$i][0]{amp} * sin($M_2PI * ($t-$AM+$tzchan[$i][0]{phi}) * $tzchan[$i][0]{frq} / 12) / 2
+        + $tzchan[$i][1]{amp} * sin($M_2PI * ($t-$AM+$tzchan[$i][1]{phi}) * $tzchan[$i][1]{frq} / 8 ) / 3;
+        ;
+    $k = ($k + .5) / 1.2;
+    $k += rand(1/10) - rand(1/10);
+    $k = sqrt($k) if $k > 1;
+    $k = - $k/4 + .1 if $k < 0;
+    # $k =   $k/4 + .2 if $k < .2;
+    # $k = $k / 4 + .3 if $k < .3;
+    $k = 2 if $k > 2;
+
+    return $k;
+}

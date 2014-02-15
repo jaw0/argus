@@ -1,0 +1,12 @@
+
+the default permissions on the 'Data' directory
+may not be appropriate for all environments,
+you may wish to adjust them appropriately once
+you have everything working correctly.
+
+permissions on the 'Data' directory should be
+set to prevent un-authorized users from accessing
+the 'control' socket.
+
+nothing needs to run as root.
+

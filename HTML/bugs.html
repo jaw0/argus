@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Bugs</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Bugs</H1>
+<P>
+There are no known bugs in the current version of argus.
+</P>
+
+<H1>Perl Issues</H1>
+<P><B>5.8.1</B> - it is expected that certain configurations of perl 5.8.1 will
+cause older versions of argus to fail. Using an older version of perl
+or newer version of argus is recommended.</P>
+
+<P><B>5.8.0</B>	- the default configuration of perl 5.8.0 has 'perlio'
+enabled. On several OSes, perlio has "issues", both performance-wise,
+and memory-wise. Argus will run, but memory use and CPU use can become
+excessive. Compiling perl to not use perlio, or using another version
+of perl is recommended.</P>
+
+<P><B>5.6.0</B>	- there is bug in perl's syslog module on some OSes,
+which can cause argus to fail if syslog is enabled. Disabling syslog
+or using another version of perl is recommended.</P>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: bugs.html,v 1.8 2003/09/25 15:08:13 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Example Config</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Example Config</H1>
+
+<PRE>
+
+# RPC tests
+
+Host "server.example.com" {
+
+	Service UDP/RPC/100005		# default version
+	Service UDP/RPC/100005/3	# specify version
+	Service TCP/RPC/100005		# UDP or TCP
+	Service UDP/RPC/ypbind		# by name
+	Service UDP/RPC/mountd/3
+}
+
+################
+# asterisk server (voip)
+
+Host "asterisk.example.com" {
+	# set in /etc/asterisk/manager.conf
+	user:	argus
+	pass:	secret
+
+	Service TCP/Asterisk {
+		# make sure PRI is up
+		cmd:		pri show span 1
+		expect:		Provisioned, Up, Active
+	}
+
+	Service TCP/Asterisk {
+		# graph number of channels in use
+		cmd:		show channels
+		pluck:		(\d+) active channel
+		graph:		yes
+		title:		Channels In Use
+	}
+
+	# test iax + sip
+	Service UDP/IAX2
+	Service UDP/SIP
+}
+
+
+################
+# DNS over TCP is the same as UDP, except for the spelling
+
+Service TCP/DNS {
+	zone:	example.com
+	class:	IN
+	query:	MX
+	test:	nanswers
+	expect: 2
+}
+
+################
+
+# enable the async resolver
+
+Resolv {
+        frequency:      15
+        timeout:        20
+        max_queries:    1000
+}
+
+# or just
+
+Resolv
+
+################
+# remote argus test port
+
+# server 1
+test_port:	3074
+
+# server 2
+Service TCP/Argus {
+	hostname:	server1.example.com
+	port:		3074
+}
+
+################
+
+# snmp v3
+Service UDP/SNMPv3 {
+	hostname:	router.example.com
+	oid:		ifInOctets.1
+	calc:		ave-rate-bits
+	maxvalue:	20000000
+	snmpuser:	UserName
+	snmppass:	Password
+	snmpprivpass:	Secret
+	# use default MD5+DES, auto-discover engine-id
+}
+
+################
+
+# cron jobs
+Service TCP/HTTP {
+	hostname:	www.example.com
+
+	# every saturday at 00:30
+	cron "30 0 * * * 6" {
+		func:		override
+		text:		weekly maintenance downtime
+		expires:	3600		# 1 hour
+		mode:		manual
+		quiet:		yes		# don't log
+	}
+
+	# lower the severity outside of busn hours
+	cron "0 17 * * *" {
+		func:		setparam
+		param:		severity
+		value:		warning
+	}
+	cron "0 9 * * *" {
+		func:		setparam
+		param:		severity
+		value:		critical
+	}
+
+}
+
+
+
+# database testing
+Group "Databases" {
+
+	Service DB {
+		# dsn  - the db to connect to, using DBI syntax
+		# user - the username
+		# pass - the password
+		# sql  - a select statement
+		dsn:		dbi:Pg:dbname=mydatabase;host=dbhost
+		user:		argus
+		pass:		password
+		sql:		select COUNT(*) from mytable
+		minvalue:	10
+	}
+}
+
+# graphing demo
+Group "Bandwidth" {
+	# verify usage is <20Mbps, and graph usage
+	graph: yes
+	ylabel: bits per second
+	title:  Bandwidth
+	Group "Sprint T3" {
+		service UDP/SNMP {
+			label:		Out
+			calc:		ave-rate-bits
+			hostname:       gw-amb3.example.com
+			oid:		.1.3.6.1.2.1.2.2.1.16.1
+			maxvalue:	20000000
+		}
+		service UDP/SNMP {
+			label:		In
+			calc:		ave-rate-bits
+			hostname:       gw-amb3.example.com
+			oid:		.1.3.6.1.2.1.2.2.1.10.1
+			maxvalue:	20000000
+		}
+	}
+}
+
+# extended DNS testing
+Group "DNS" {
+	Host "ns1.example.com" {
+		# is DNS running?
+		Service DNS			# same as UDP/DNS in 3.1
+
+		# are we authoritative?
+		Service Domain/example.com	# same as UDP/Domain in 3.1
+
+		Service DNS/Serial/example.com {
+			# make sure serial number is at least this tall
+			minvalue:	2001110100
+		}
+
+		Service DNS/A/www.example.com {
+			# make sure the web server is where is should be
+			expect:		10.1.2.3
+		}
+
+		# fully specified in "long form"
+		# make sure we have 2 MX servers
+		Service DNS {
+			zone:	example.com
+			class:	IN
+			query:	MX
+			test:	nanswers
+			expect: 2
+		}
+	}
+}
+
+# advanced generic test functions
+Group "NTP" {
+	Host "ntp.example.com" {
+
+		# pull out the stratum, and make sure is at most '6'
+		Service UDP/NTP {
+			label:    Stratum
+			uname:    NTP-Stratum
+			unpack:	  xC
+			maxvalue: 6
+		}
+
+		# pull out the root-dispersion
+		# verify that our clock has not drifted too far
+		# and graph the result
+		Service UDP/NTP {
+			graph:	  yes
+			title:	  Root Dispersion
+			ylabel:	  seconds
+			label:	  Dispersion
+			uname:	  NTP-Disp
+			unpack:	  x8N
+			scale:	  65536
+			maxvalue: 2
+		}
+	}
+}
+
+
+# my own stats
+Group "My Stats" {
+	graph:	yes
+
+	# number of notifications
+	Service Self/Notifs
+
+	Service Self/idle {
+		title:	Percent Idle
+		calc:	ave-rate
+		scale:	0.01
+		# let someone know when it is time to upgrade h/w
+		minvalue:  20
+		messagedn: time to buy faster server
+	}
+
+	Service Self/tested {
+		title:	Monitor Rate
+		ylabel: tests per second
+		calc:	ave-rate
+	}
+
+	Service Prog {
+		# your ps may be different
+		command:	ps -p $ARGUS_PID -o vsz | tail -1
+		uname:		VSZ
+		title:		Memory Use
+		ylabel:		kBytes
+	}
+}
+
+
+# create an audit log of everything that happens
+Method "auditlog" {
+	command:	echo "%T{%F %T} - %Y %P %O - %A" >> /tmp/audit.log
+	qtime:		0
+	nolotsmsgs:	yes
+}
+
+notifyaudit:	auditlog:
+
+
+</PRE>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: config-new.html,v 1.2 2005/01/30 20:37:32 jaw Exp $ -->
+</HTML>

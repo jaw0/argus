@@ -1,0 +1,44 @@
+
+# Argus can run an interpreter or preprocessor to generate
+# a config dynamically
+
+################################################################
+#!/bin/sh
+
+for x in server1 server2 server3; do
+
+	echo "Host \"$x.example.com\" {"
+	echo "    Service Ping"
+	echo "    Service TCP/HTTP"
+	echo "    Service TCP/SSH"
+	echo "}"
+done
+
+
+################################################################
+#!/usr/bin/m4
+
+define(Std_Server, `Host "$1" {
+	Service Ping
+	Service TCP/HTTP
+	Service TCP/SSH
+}')
+
+Std_Server( server1.example.com )
+Std_Server( server2.example.com )
+Std_Server( server3.example.com )
+
+################################################################
+#!/usr/bin/perl
+
+my @hosts = qw(server1 server2 server3);
+my @srvcs = qw(Ping TCP/HTTP TCP/SSH);
+
+for my $host (@hosts){
+	print qq(Host "$host.example.com" {\n);
+	foreach (@srvcs) {
+		print "\tService $_\n"
+	}
+	print "}\n"
+}
+

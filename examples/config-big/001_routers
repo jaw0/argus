@@ -1,0 +1,67 @@
+Group "Routers" {
+	overridable:	no
+	Group "Ambler" {
+		overridable:	no
+		Host "gw-amb1" {
+			hostname:	gw-amb1.example.com
+			service: Ping
+		}
+		Host "gw-amb11" {
+			hostname:	gw-amb11.example.com
+			service: Ping
+		}
+		Host "gw-amb2" {
+			hostname:	gw-amb2.example.com
+			service: Ping
+		}
+		Host "gw-amb3" {
+			hostname:	gw-amb3.example.com
+			service: Ping
+		}
+		Host "gw-amb4" {
+			hostname:	gw-amb4.example.com
+			service: Ping
+		}
+		Host "gw-amb5" {
+			hostname:	gw-amb5.example.com
+			service: Ping
+		}
+		Host "gw-amb6" {
+			hostname:	gw-amb6.example.com
+			service: Ping
+		}
+		Host "gw-amb7" {
+			hostname:	gw-amb7.example.com
+			service: Ping
+		}
+		Host "gw-amb8" {
+			hostname:	gw-amb8.example.com
+			service: Ping
+		}
+		Host "gw-amb10" {
+			hostname:	gw-amb10.example.com
+			service: Ping
+		}
+	}
+	Group "Bryn Mawr" {
+		overridable:	no
+		Host "gw-bm2" {
+			hostname:	gw-bm2.example.com
+			service: Ping
+		}
+		Host "gw-bm3" {
+			hostname:	gw-bm3.example.com
+			service: Ping
+		}
+	}
+	Group "Phlwlf" {
+		overridable:	no
+		Host "gw-phlwlf1" {
+			hostname:	gw-phlwlf1.example.com
+			service: Ping
+		}
+	}
+}
+
+############################################################
+

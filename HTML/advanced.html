@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Advanced Features</H1>
+
+
+<H2>Aliases</H2>
+<P>Often, when deciding how to arrange things, it may make sense to have something
+in more than one place. You may have a group of "Unix Servers" containing all of your
+unix servers, and also a group "Web Servers" containing all of your web servers.
+While you could just monitor the service twice, that just seems silly.</P>
+<P>An Alias acts much like a "symlink", allowing the same object to appear in more
+than one place, but still only be monitored once.</P>
+<PRE>
+	Group "Web Servers" {
+		Alias "threemile"  "Top:Unix_Servers:threemile"
+		Alias "tarawa"     "Top:NT_Servers:tarawa"
+		Alias "matagi"     "Top:NT_Servers:matagi"
+	}
+</PRE>
+
+<H2>uname</H2>
+<P>Sometimes you want to monitor 2 similar things, but with some minor
+difference. The way argus tells things apart is by is name. If the name argus
+wants to use is the same for both items, argus will complain. You can specify
+this name yourself, if you need to:</P>
+<PRE>
+		Host "jeremy-03.example.com" {
+			Service TCP/HTTP {
+				uname: HTTP-PRIMARY
+			}
+			Service TCP/HTTP {
+				port:  8080
+				uname: HTTP-SECONDARY
+			}
+		}
+</PRE>
+<P>Without the <TT>uname</TT> specified, argus will not be able
+to tell these items apart (both would have the name <TT>HTTP_jeremy-03.example.com</TT>.</P>
+
+<H2>Asynchronous Resolver</H2>
+<DIV CLASS=TECHNOTE>
+This feature was added in version 3.4
+</DIV>
+<p>At startup, argus ordinarily will resolve hostnames in your config files
+into IP addresses. For large configurations, this can cause a significant
+delay at startup. By enabling the asynchronous resolver, hostnames lookups
+are deferred until after argus has started, at which point they are looked
+up in parallel with normal operation. It may be enabled by:</p>
+<pre>
+	Resolv
+</pre>
+or
+<pre>
+	Resolv {
+		# various parameters
+	}
+</pre>
+<p>For better performance with large configs, multiple resolvers can be
+configured:</p>
+<pre>
+	Resolv
+	Resolv
+	Resolv
+</pre>
+or
+<pre>
+	Resolv/5
+</pre>
+<DIV CLASS=TECHNOTE>
+The Resolv/# syntax was added in version 3.5
+</DIV>
+
+
+<H2>Inheritance Bypass</H2>
+<DIV CLASS=TECHNOTE>
+This feature was added in version 3.5
+</DIV>
+<p>The argus config file is hierarchical. Many parameters can be specified at a higher level,
+and the value will be inherited by objects below it. e.g.</p>
+<pre>
+	Group "foo" {
+	    hostname:		server.example.com
+	    overridable:	no
+	    Service TCP/HTTP
+	    Service TCP/SSH
+	}
+</pre>
+<p>the hostname and overridable parameters are specified on group-foo, and are
+inherited by the 2 services.</p>
+<p>Sometimes, you don't want a parameter which is normally inherited to be inherited. In the
+above example, you may want the group to not be overridable, but the services to be overridable.
+Adding a <tt>!</tt> after the parameter name, will prevent the value from being inherited. e.g:</p>
+<pre>
+	Group "foo" {
+	    hostname:		server.example.com
+	    overridable:	yes	# will be inherited by the services
+	    overridable!:	no	# will be used by group-foo only
+	    Service TCP/HTTP
+	    Service TCP/SSH
+	}
+</pre>
+
+
+
+<H2>...</H2>
+
+<!--
+
+<H2>cron</H2>
+
+<H2>gravity, countstop</H2>
+
+<H2>nostatus, passive, nostats, showstats</H2>
+
+<H2>depends</H2>
+
+<H2>severity</H2>
+
+<H2>notifyaudit</H2>
+
+schedules
+
+-->
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: advanced.html,v 1.14 2012/10/12 02:17:20 jaw Exp $ -->
+</HTML>

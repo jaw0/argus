@@ -1,0 +1,228 @@
+dnl
+dnl What Is This File ?
+dnl -------------------
+dnl Argus has a feature that allows a property file to be built from a
+script
+dnl instead of simply read it as a plain text file.  Argus looks for a #!
+dnl directive in the first line of the script and if it sees one it uses
+the
+dnl interpreter indicated in the first line to process the script and uses
+dnl the output of the script as the configuration.  This file (include.m4)
+dnl implements a sophisticated include facility using the standard unix m4
+dnl macro interpreter.
+dnl
+dnl How Does the Macro Work?
+dnl ------------------------
+dnl The macro defined in this file is called m4_include.
+dnl The macro takes a minimum of 1 argument.  The first argument is the
+name of
+dnl the file to include (relative paths are relative to the location of the
+dnl file defining the include).  All arguments after the first are
+dnl used to define parameters that are used by the included file in the
+format
+dnl name=value.  In the following example the file configx is included and
+the
+dnl properties __HOST=web-prdapp1 and __TIMEOUT=3000 are passed.
+dnl
+dnl m4_include(`configx', `__HOST=web-prdapp1', `__TIMEOUT=3000')
+dnl
+dnl the included file can reference the properties __HOST and __TIMEOUT by
+dnl simply using the name of the property in the file.  For example the
+included
+dnl file might look like the following:
+dnl Service Ping {
+dnl     host: __HOST
+dnl     timeout: __TIMEOUT
+dnl }
+dnl
+dnl How Do I Enable the m4_include Macro In My Config File?
+dnl -------------------------------------------------------
+dnl In order to enable a config file to use the m4_include macro, you
+should
+dnl add the following as the first two lines of the file
+dnl
+dnl #!/usr/ccs/bin/m4
+dnl include(include.m4)
+dnl
+dnl The first of these lines tells Argus that the interpreter used
+dnl for the script is the standard unix m4 macro interpreter.  You can get
+dnl documentation on m4 using the 'man' command.  The second of these lines
+dnl imports this file which defines the m4_include macro.
+dnl
+dnl Quotes
+dnl ------
+dnl Please note the format of quotes in the example use of m4_include.  The
+m4
+dnl interpreter requires that the begin quote is the back quote and the
+ending
+dnl quote is the forward single quote.
+dnl
+dnl Use of dnl
+dnl ----------
+dnl It is also possible to format the macro include over multiple lines
+using
+dnl the m4 built-in macro dnl as shown in the following example which is
+simply
+dnl a multiline version of the example above.  (Note that the entire
+comment
+dnl in which this example is embedded uses the dnl macro at the beginning
+of
+dnl each line to hide the comment from m4.  In the example below and in all
+dnl the examples in this file you should ignore the dnl at the beginning
+dnl of the line.  For more information about dnl see the man page for m4.)
+dnl
+dnl m4_include(`configx', dnl
+dnl     `__HOST=web-prdapp1', dnl
+dnl     `__TIMEOUT=3000')
+dnl
+dnl A Note About Properties in m4_include
+dnl -------------------------------------
+dnl The m4_include macro provides some special handling for the properties
+which
+dnl are passed to it as arguments.  Effectively they become macros defined
+only
+dnl within the scope of the include file.  In m4 terminology, what happens
+is
+dnl that m4_include defines the macro, processes the include and then
+undefines
+dnl the macro.  So in the following example, the macro __MY_PROPERTY is
+defined
+dnl to have a value of 'abcd' when processing the include file include.txt,
+but
+dnl after the invocation of m4_include, on the second line of the example,
+dnl __MY_PROPERTY does not have a value.
+dnl
+dnl m4_include(`include.txt', `__MY_PROPERTY=abcd')
+dnl value=__MY_PROPERTY
+dnl
+dnl Nested Includes
+dnl ---------------
+dnl The m4_include macro causes the included file to also be processed
+through
+dnl the m4 interpreter.  This means that the included file may in turn
+include
+dnl other files either by another call to m4_include or to the m4 built-in
+dnl include macro.  In the case of a nested include, the properties defined
+dnl as arguments to m4_include propagate all the way through to all nested
+dnl includes.
+dnl
+dnl Defining Broadly Scoped Properties
+dnl ----------------------------------
+dnl If you want a property to have meaning for more than one invocation of
+dnl m4_include, then you may define it before the call to m4_include
+instead
+dnl of as an argument to m4_include.  Consider the following example:
+dnl
+dnl define(`__TIMEOUT', '3000')
+dnl m4_include(`ping_service_include.txt', `__HOST=host_a')
+dnl m4_include(`ping_service_include.txt', `__HOST=host_b')
+dnl
+dnl In this example the property __TIMEOUT will be defined as the value
+3000
+dnl for both calls to m4_include.  The property __HOST will have a
+different
+dnl value for each call to m4_include.
+dnl
+dnl Note that by defining a property this way you have defined its value
+for the
+dnl remainder of the file and all files included for the remainder of the
+file
+dnl and also for any files which may include this file.  This is standard
+m4
+dnl semantics in which a macro, once defined, has global scope until
+explicitely
+dnl undefined.  With this in mind, the following example is a bit safer
+than
+dnl the one above because it explicitely undefines the __TIMEOUT macro once
+dnl it is no longer needed.
+dnl
+dnl define(`__TIMEOUT', '3000')
+dnl m4_include(`ping_service_include.txt', `__HOST=host_a')
+dnl m4_include(`ping_service_include.txt', `__HOST=host_b')
+dnl undefine(`__TIMEOUT')
+dnl
+dnl Conflicts with m4 Built-Ins
+dnl ---------------------------
+dnl You may occasionally find that your argus configuration contains words
+dnl that are defined as built-in macros in m4.  Depending on your version
+of m4
+dnl these macros may be expanded even though no arguments are passed to
+them.
+dnl For example in some versions of m4 the following Argus config will get
+dnl mis-handled.
+dnl
+dnl Service TCP/URL {
+dnl     url: http://www.myhost.com/index.html
+dnl }
+dnl
+dnl In this example, because index is a built-in macro in m4, some versions
+dnl of m4 will expand it as follows.
+dnl
+dnl Service TCP/URL {
+dnl     url: http://www.myhost.com/-1.html
+dnl }
+dnl
+dnl To prevent this behavior you simply need to surround the word or line
+with
+dnl m4 style quotes as follows.
+dnl
+dnl Service TCP/URL {
+dnl     `url: http://www.myhost.com/index.html'
+dnl }
+dnl
+dnl
+dnl#############################################################################
+define(`property_define', `dnl
+    pushdef(`equalpos', index($1, `='))dnl
+    pushdef(`proplength', len($1))dnl
+    pushdef(`propname', substr($1, 0, equalpos))dnl
+    pushdef(`propvalue', substr($1, incr(equalpos), proplength))dnl
+dnl    pos=equalpos
+dnl    length=proplength
+dnl    defining propname=propvalue
+    pushdef(`popper', propname)dnl
+    pushdef(propname, propvalue)dnl
+    popdef(`equalpos')dnl
+    popdef(`proplength')dnl
+    popdef(`propname')dnl
+    popdef(`propvalue')dnl
+')dnl
+
+define(`property_undefine', `dnl
+dnl    pos=equalpos
+dnl    undefining defn(`popper')
+    popdef(defn(`popper'))dnl
+    popdef(`popper')dnl
+')dnl
+
+define(`m4_include', `dnl
+    ifelse($2, `', `
+dnl            including
+dnl            -$#
+dnl            -$*
+dnl            -$@
+include($1)dnl
+        ', `dnl
+dnl            defining
+dnl            -$#
+dnl            -$*
+dnl            -$@
+            property_define($2)dnl
+            m4_include($1, shift(shift($@)))dnl
+            property_undefine()dnl
+    ')dnl
+')dnl
+
+dnl experimental m4_include_n macro which could allow the same file to be
+dnl included multiple times with different properties
+define(`m4_include_n', `dnl
+    ifelse($2, `', `', `dnl
+dnl        including
+dnl        -$#
+dnl        -$*
+dnl        -$@
+        m4_include($1, $2)dnl
+        m4_include_n($1, shift(shift($@)))dnl
+    ')
+')
+

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Internals</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Internal Workings</H1>
+
+<P>normally the server sits around idle (blocked in select) until
+  either a file descriptor becomes readable/writable or a timer
+  goes off (a file descriptor timing out, a service scheduled to
+  start a new test, or something scheduled via cron).</P>
+
+  <H2>server - client</H2>
+<P> clients (cgi and argusctl) can control and/or query the server
+    via a control socket. connect, send commands, get responses.</P>
+
+  <H2>select loop</H2>
+<P> is at the heart of the server. all file descriptors of interest are
+    BaseIO objects (subclasses). the objects maintain state indicating their desires
+    for reading/writing/timeouts/etc. when one becomes readable/writable/
+    or times out the object's appropriate handler function is dispatched.</P>
+
+  <H2>web page generation</H2>
+<P> since there are lots of objects and lots of web page 'hits' we do not
+    want to generate web pages 'dumbly'. we generate a web page for an
+    object only if a) it has changed since last time we generated it, and
+    b) someone has requested it. we do not generate pages for objects that
+    no one looks at, and do not generate pages for every 'hit'.</P>
+
+  <H2>control</H2>
+<P> over a unix domain socket. use the program 'argusctl'.
+    the control functions are scattered throughout the code,
+    and install themselves at runtime using 'command_install'</P>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: internals.html,v 1.3 2002/11/30 20:08:23 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Graphing</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Graphing</H1>
+<P><DIV CLASS=TECHNOTE><B>
+Graphing support was added in version 3.2
+</B></DIV></P>
+
+<H2>Additional Prerequisites</H2>
+<UL>
+	<LI>	<B>GD.pm</B> is needed. this module in turn
+		requires libgd, libjpeg, libpng, and possibly more.
+</UL>
+
+<H2>Additional Directories</H2>
+<P>2 additional directories need to be created to contain graph data:</P>
+<UL>
+	<LI>	<B>$datadir/gcache</B>	- needs to be writable by
+		the web server. will contain cached graph images.
+
+	<LI>	<B>$datadir/gdata</B> - needs to be writable by
+		argusd and readable by the web server. will contain
+		graph data, one ~100k file per item.
+</UL>
+
+<H2>Enabling Graphing</H2>
+<P>Data from SNMP queries, TCP tests, UDP tests,
+external program tests, database queries, internal data, 
+ping round-trip-times, test elapsed time, (etc.) can all be graphed.
+Groups of these can also be graphed.
+The default is not to graph. To enable, in the desired places, add:</P>
+<PRE>
+	graph: yes
+</PRE>
+<P>You can also set various other parameters.
+For Example:</P>
+<PRE>
+	Group "Bandwidth Tests" {
+		graph:     yes			<FONT COLOR=blue># turn on graphing</FONT>
+		title:     Bandwidth		<FONT COLOR=blue># set the graph title</FONT>
+		ylabel:    Bits per second	<FONT COLOR=blue># label the y-axis</FONT>
+		drawgrid:  yes			<FONT COLOR=blue># draw a grid</FONT>
+		Service UDP/SNMP {
+			label:		Out
+			<FONT COLOR=blue># calc is documented elsewhere, but
+			# this will convert the SNMP counter
+			# to the average rate in bits/second</FONT>
+			calc:		ave-rate-bits
+			hostname:       gw-amb3.example.com
+			oid:		ifInOctets.1
+			maxvalue:	20000000
+			<FONT COLOR=blue># maxvlue is documented elsewhere, but
+			# this will cause the service to be
+			# down if it exceeds 20 Mbps
+			# when down, the graph will display red</FONT>
+		}
+		Service UDP/SNMP {
+			label:		In
+			calc:		ave-rate-bits
+			hostname:       gw-amb3.example.com
+			oid:		ifOutOctets.1
+			maxvalue:	20000000
+		}
+	}
+</PRE>
+
+<P>The webpages will contain 3 thumb-nail images covering roughly: 1 day, 2 weeks, 3 months.
+Clicking on the thumb-nails will bring up a larger image. Some example images, click for larger:
+</P>
+<CENTER>
+<TABLE>
+<TR>
+
+<TD><A HREF="gcache/Top:Other:World_Reachability:Yahoo.samples.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:World_Reachability:Yahoo.samples.thumb.png"></A></TD>
+<TD><A HREF="gcache/Top:Other:World_Reachability:Yahoo.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:World_Reachability:Yahoo.hours.thumb.png"></A></TD>
+<TD><A HREF="gcache/Top:Other:World_Reachability:Yahoo.days.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:World_Reachability:Yahoo.days.thumb.png"></A></TD>
+</TR>
+
+<TR>
+<TD><A HREF="gcache/Top:Other:Bandwidth_Use.samples.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:Bandwidth_Use.samples.thumb.png"></A></TD>
+<TD><A HREF="gcache/Top:Other:Bandwidth_Use.hours.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:Bandwidth_Use.hours.thumb.png"></A></TD>
+<TD><A HREF="gcache/Top:Other:Bandwidth_Use.days.full.png"><IMG BORDER=0 SRC="gcache/Top:Other:Bandwidth_Use.days.thumb.png"></A></TD>
+</TR>
+</TABLE>
+</CENTER>
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: graphing.html,v 1.8 2007/01/08 05:30:05 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,36 @@
+Prerequisites:
+    The following perl modules are required:
+	Digest::MD5
+	Digest::HMAC
+
+Installation:
+    Copy the 7 files from the enclosed src directory
+    into your argus libdir. eg:
+	cp src/* /my/lib/dir/
+
+    Your argus libdir can be found by running the
+    following command:
+	argus-config --libdir
+
+    Stop and restart argus.
+	argusctl shutdown
+	<wait>
+	argusd
+
+    or using an rc script
+	/etc/rc3.d/S99.argus stop
+	<wait>
+	/etc/rc3.d/S99.argus start
+
+Verify DARP installation:
+    run the following command to verify that
+    argus has darp available:
+	argusctl status
+
+    notice a line similar to:
+	darpmode:  disabled
+
+Configure DARP:
+    see:
+	http://argus.tcp4me.com/darp.html
+

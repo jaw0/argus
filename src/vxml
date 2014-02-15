@@ -1,0 +1,612 @@
+#!__PERL__
+# -*- perl -*-
+
+# Copyright (c) 2005 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Created: 2005-Dec-10 15:18 (EST)
+# Function: vxml cgi
+#
+# $Id: vxml,v 1.14 2012/11/29 00:02:46 jaw Exp $
+
+# tested + works on: blix, voxeo
+#  does not work on: tellme
+#
+# access is controlled with acl group 'vxml'
+#
+# as a notification method, use url "http://.../argusvxml?func=notify;idno=%I
+
+use lib('__LIBDIR__');
+package Argus::Web::VXML;
+use Argus::Ctl;
+use Argus::Encode;
+use CGI;
+use Fcntl;
+use Socket;
+use POSIX;
+require "conf.pl";
+use strict;
+use vars qw($datadir);
+
+my $vxml_record_call_p = 0;
+
+my $cgi  = CGI->new();
+my $url  = $cgi->url( -path_info => 1 );
+my $obj  = decode( $cgi->param('object') ) || 'Top';
+my $func = $cgi->param('func') || 'browse';
+my $wtp  = $cgi->param('wtp');
+
+
+################################################################
+# platform workarounds
+
+my $agnt = $cgi->user_agent();
+my $vxml_platform;
+
+if( $agnt =~ /^Blix/ ){
+    $vxml_platform = 'blix';
+}
+elsif( $agnt =~ /VoxGateway/ ){
+    $vxml_platform = 'voxeo';
+}
+elsif( $agnt =~ /Tellme/ ){
+    $vxml_platform = 'tellme';
+}
+elsif( $agnt =~ /OpenVXI/ ){
+    $vxml_platform = 'openvxi';
+}
+
+# enumerate _dtmf is cheesed on voxeo
+my $SAYDTMF = ($vxml_platform eq 'voxeo') ? '_dtmf' : 'saydtmf(_dtmf)';
+
+################################################################
+
+# Come hear the voices in my head
+# They say you wanna hurt me
+# and they want you dead
+#   -- Combichrist, Blut Royale
+
+my $argusd = argus_connect();
+vxml_top();
+browse($obj)                  if $func eq 'browse';
+notifs()                      if $func eq 'notifs';  # list all unacked
+notify( $cgi->param('idno') ) if $func eq 'notify';  # data on specific
+notack( $cgi->param('idno') ) if $func eq 'ack';
+vxml_bottom();
+argus_disconnect($argusd);
+exit;
+
+################################################################
+
+sub vxml_top {
+
+    print $cgi->header( -type => 'application/voicexml+xml', -expires => '+5min' );
+    my $title = $obj || $func;
+
+    my $xmlns;
+    $xmlns = qq{xmlns:voxeo="http://community.voxeo.com/xmlns/vxml"} if $vxml_platform eq 'voxeo';
+    $xmlns = qq{xmlns:blix="http://www.voicestar.com/xmlns/blix"}    if $vxml_platform eq 'blix';
+    my $platform = $vxml_platform || 'unknown';
+
+    # interdigittimeout breaks tellme
+    my $PROP = ($vxml_platform eq 'tellme') ? '' : qq{<property name="interdigittimeout" value="1s"/>};
+    $PROP .= qq{<property name="inputmodes" value="dtmf"/>\n} if $vxml_platform eq 'openvxi';
+
+    print <<EOV;
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" $xmlns>
+  <!-- Argus: $title -->
+  <!-- detected vxml platform: $platform -->
+
+  <var name="vxmlplatform" expr="'$platform'"/>
+  <property name="termchar" value=" "/>
+  <property name="ttsfetchtimeout" value="10s"/>
+
+  $PROP
+  <noinput count="3"><disconnect/></noinput>
+  <nomatch>invalid selection.</nomatch>
+
+  <script><![CDATA[
+    function saydtmf(dtmf){
+	if( dtmf == '#' ){ return 'pound' }
+	if( dtmf == '*' ){ return 'star' }
+	return dtmf;
+    }
+  ]]></script>
+
+EOV
+    ;
+
+    unless( $wtp ){
+	$wtp = 1;
+	print "  <form><block>\n";
+
+	if( $vxml_record_call_p ){
+	    # Let me be recorded by the righteous gods
+	    #   -- Shakespeare, Timon of Athens
+	    if( $vxml_platform eq 'blix' ){
+		print qq{<blix:recordcall value="100"/>};
+	    }
+	    if( $vxml_platform eq 'voxeo' ){
+		print qq{<voxeo:recordcall value="100"/>};
+	    }
+	}
+
+	print <<EOV;
+    <prompt>Welcome to Argus.</prompt>
+    <goto next="#mainmenu"/>
+  </block></form>
+
+EOV
+    ;
+    }
+}
+
+sub vxml_bottom {
+
+    print <<EOV;
+</vxml>
+EOV
+    ;
+}
+
+sub vxml_denymenu {
+    my $obj = shift;
+    my $fnc = shift;
+
+    # There is no sorrow like a love denied
+    #   -- Richard Hovey, The Marriage of Guenevere
+    print <<EOV;
+  <!-- vxml_denymenu -->
+  <!-- denied by acl: $fnc obj: $obj -->
+  <form id="mainmenu">
+    <block>
+      <prompt>
+        Permission Denied.
+	You do not have permission to access the requested item.
+	Sorry. Goodbye.
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+EOV
+    ;
+
+}
+
+sub vxml_errormenu {
+    my $msg = shift;
+
+    # To draw me from an error speak a little
+    #   -- Dante, Divine Comedy
+    print <<EOV;
+  <!-- vxml_errormenu -->
+  <form id="mainmenu">
+    <block>
+      <prompt>
+	An error occured.
+	$msg.
+        Sorry. Goodbye.
+      </prompt>
+      <disconnect/>
+    </block>
+  </form>
+EOV
+    ;
+}
+
+sub vxml_common_choices {
+    my %p = @_;
+
+    # The difficulty in life is the choice.
+    #   -- George Moore, The Bending of the Bough
+
+    print qq{    <choice dtmf="#" next="#mainmenu">For the previous menu</choice>\n}
+      unless $p{noprev};
+    print qq{    <choice dtmf="0" next="$url?wtp=$wtp">For the Top level</choice>\n};
+    print qq{    <choice dtmf="*" next="$url?func=notifs;wtp=$wtp">For the Alerts menu</choice>\n}
+      if check_acl_func('Top', 'ntfylist');
+
+}
+
+sub vxml_mainmenu {
+    my $obj = shift;
+
+    my $uniq   = getparam( $obj, 'vxml_long_name' );
+    my $status = getparam( $obj, 'ovstatus' );
+    my $type   = getparam( $obj, 'type' );
+    my $parent = getparam( $obj, 'parents::0::unique' );
+    $parent ||= 'Top';
+
+    print <<EOV;
+  <!-- vxml_mainmenu -->
+  <menu id="mainmenu">
+    <prompt bargein="true">
+      $type $uniq is $status.
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+    <choice dtmf="1" next="#details">For further details</choice>
+EOV
+    ;
+    print qq{    <choice dtmf="2" next="#children">To browse children</choice>\n}
+      if $type eq 'Group';
+    print qq{    <choice dtmf="3" next="$url?func=browse;object=$parent;wtp=$wtp">To go up a level</choice>\n}
+      unless $obj eq 'Top';
+
+    vxml_common_choices( noprev => 1 );
+
+    print "  </menu>\n";
+
+}
+
+sub vxml_nokids {
+    my $obj = shift;
+
+    # But Sarai was barren; she had no child.
+    #   -- Gen 11:30
+    print <<EOV;
+  <form id="children">
+    <block>
+      <prompt>Object has no children</prompt>
+      <goto next="#mainmenu"/>
+    </block>
+  </form>
+EOV
+    ;
+}
+
+sub vxml_children {
+    my $obj = shift;
+
+    my($rh, $ra) = $argusd->command_a( func   => 'getchildrenparamnr',
+				       object => $obj,
+				       param  => 'vxml_short_name',
+				       );
+
+    return vxml_nokids( $obj ) if $rh->{resultcode} != 200;
+    delete $rh->{resultcode};
+    delete $rh->{resultmsg};
+    return vxml_nokids( $obj ) unless @$ra;
+
+    print <<EOV;
+
+  <!-- vxml_children -->
+  <menu id="children">
+    <prompt bargein="true">
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+EOV
+    ;
+
+    my $dtmf = 1;
+    foreach my $x (@$ra){
+	my($xob, $xnm) = @$x;
+	print qq{    <choice dtmf="$dtmf" next="$url?func=browse;object=$xob;wtp=$wtp">For $xnm</choice>\n};
+	$dtmf ++;
+    }
+
+    vxml_common_choices();
+    print "  </menu>\n";
+
+}
+
+sub vxml_details {
+    my $obj = shift;
+
+    my $uniq   = getparam( $obj, 'vxml_short_name' );
+    my $descr  = getparam( $obj, 'vxml_descr' );
+    my $status = getparam( $obj, 'ovstatus' );
+    my $type   = getparam( $obj, 'type' );
+    my $reason = getparam( $obj, 'srvc::reason' );
+    my $since  = getparam( $obj, 'transtime' );
+    my $smy    = $argusd->command(func => 'summary', object => $obj);
+
+    $reason = "because $reason." if $reason;
+    $descr  .= '.' if $descr;
+    $since  = saytime($since);
+    my $summary;
+    if( $smy->{total} > 1 ){
+	# The children of Shephatiah, three hundred seventy and two.
+	# The children of Arah, six hundred fifty and two.
+	# The children of Pahathmoab, of the children of Jeshua and Joab,
+	# two thousand and eight hundred and eighteen.
+	# The children of Elam, a thousand two hundred fifty and four.
+        # The children of Zattu, eight hundred forty and five.
+        # The children of Zaccai, seven hundred and threescore.
+	#   -- Neh, 7:9
+
+	$summary = "Children summary: $smy->{up} up, $smy->{down} down, $smy->{override} in override.";
+    }
+
+    print <<EOV;
+
+  <!-- vxml_details -->
+  <menu id="details">
+    <prompt bargein="true">
+      $uniq became $status at $since. $reason $descr $summary
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+EOV
+    ;
+    vxml_common_choices();
+
+    # RSN - more choices ...
+    print "  </menu>\n";
+
+}
+
+sub browse {
+    my $obj = shift;
+
+    if( check_acl_func($obj, 'page') ){
+	vxml_mainmenu( $obj );
+	vxml_details( $obj );
+	vxml_children( $obj );
+    }else{
+	vxml_denymenu($obj, 'page');
+    }
+}
+
+sub vxml_enter_idno {
+
+    print <<EOV;
+  <form id="enter">
+    <property name="termchar" value="#"/>
+    <field name="idno" type="digits">
+      <prompt bargein="true">
+        Enter the alert eye-dee number followed by the pound key.
+      </prompt>
+    </field>
+    <filled>
+      <goto expr="'$url?wtp=$wtp;func=notify;idno=' + idno"/>
+    </filled>
+  </form>
+EOV
+    ;
+}
+
+sub notifs {
+
+    # notify list always uses object=Top
+    unless( check_acl_func('Top', 'ntfylist') ){
+	vxml_denymenu('Top', 'notifylist');
+	return;
+    }
+
+    my $r = $argusd->command_raw( func  => 'notify_list',
+				  which => 'unacked',
+				  );
+    my @notif;
+    while( $_ = $argusd->nextline() ){
+	chop;
+	last if /^$/;
+	push @notif, $_;
+    }
+
+    my $nnotif = @notif;
+
+    my $ackall;
+    if( check_acl_func('Top', 'ntfyackall') ){
+	$ackall = q{<choice dtmf="3" next="$url?func=ack;idno=all;wtp=$wtp">To ack all alerts</choice>};
+    }
+
+    print <<EOV;
+
+  <!-- notifs -->
+  <menu id="mainmenu">
+    <prompt bargein="true">
+      There are $nnotif un acked alerts.
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+    <choice dtmf="1" next="#list">For a list of un acked alerts</choice>
+    <choice dtmf="2" next="#enter">For a specific alert by eye-dee number</choice>
+    $ackall
+    <!-- anywhere else? -->
+    <choice dtmf="0" next="$url?wtp=$wtp">For the Top level</choice>
+  </menu>
+
+  <menu id="list">
+    <prompt bargein="true">
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+EOV
+    ;
+
+    my $dtmf = 1;
+    foreach my $not (@notif){
+	my($idno, $st, $time, $obj, $msg) = split /\s+/, $not;
+	my $name = getparam( $obj, 'vxml_long_name' );
+	my $sayidno = sayidno( $idno );
+	print qq{    <choice dtmf="$dtmf" next="$url?func=notify;idno=$idno;wtp=$wtp">Number $sayidno, $name</choice>\n};
+	$dtmf ++;
+    }
+
+    vxml_common_choices();
+    print "  </menu>\n";
+
+    vxml_enter_idno();
+}
+
+sub invalid_notify {
+    my $idno = shift;
+
+    print <<EOV;
+  <!-- invalid notify: $idno -->
+  <form><block>
+    <prompt>Invalid alert eye-dee.</prompt>
+    <goto next="$url?func=notifs;wtp=$wtp"/>
+  </block></form>
+EOV
+    ;
+}
+
+sub notify {
+    my $idno = shift;
+
+    my $r = $argusd->command( func => 'notify_detail',
+			      idno => $idno );
+    my $obj = decode($r->{object});
+
+    return invalid_notify( $idno ) unless $obj;
+
+    # notify-detail returns acl to use
+    unless( check_acl( decode($r->{acl_ntfydetail})) ){
+	vxml_denymenu($obj, 'notify_detail');
+	return;
+    }
+
+    my $sayidno = sayidno( $idno );
+
+    my $name  = getparam( $obj, 'vxml_long_name' );
+    my $when  = saytime($r->{created});
+    my $acked = ($r->{state} eq 'acked') ? 'This alert has been acked.' : '';
+    print <<EOV;
+
+  <!-- notify -->
+  <menu id="mainmenu">
+    <prompt bargein="true">
+      Alert $sayidno. $name became $r->{objstate} at $when. $acked
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+EOV
+    ;
+
+    if( $r->{state} ne 'acked' && check_acl(decode($r->{acl_ntfyack})) ){
+	print qq{    <choice dtmf="1" next="$url?func=ack;idno=$idno;wtp=$wtp">To ack this alert</choice>\n};
+    }
+
+    print qq{    <choice dtmf="2" next="$url?func=browse;object=$obj;wtp=$wtp">For $name</choice>\n};
+    vxml_common_choices( noprev => 1 );
+    print "  </menu>\n";
+}
+
+# if ever thou darest acknowledge it
+#   -- Shakespeare, King Henry V
+sub notack {
+    my $idno = shift;
+
+    my $r;
+    if( $idno eq 'All' ){
+	$r = $argusd->command( func   => 'getparam',
+			       object => 'Top',
+			       param  => 'acl_ntfyackall',
+			       );
+    }else{
+	$r = $argusd->command( func => 'notify_detail',
+			       idno => $idno );
+    }
+
+    my $acl = $r->{acl_ntfyack} || $r->{value};
+    unless( check_acl($acl) ){
+	vxml_denymenu($idno, 'ntfyack');
+	return;
+    }
+
+    my $r = $argusd->command( func => 'notify_ack',
+			      idno => $idno,
+			      user => 'argusvxml' );
+
+    my $sayidno = sayidno( $idno );
+
+    my $what = ($idno eq 'all') ? 'All Alerts have been acked' : "Alert $sayidno has been acked";
+    my $msg  = ($r->{resultcode} == 200) ?
+	$what : "Ack error: $r->{resultmsg}";
+
+    # force list to be refetched (different url)
+    $wtp ++;
+    print <<EOV;
+  <menu>
+    <prompt bargein="true">
+      $msg
+      <enumerate><value expr="_prompt"/>, press <value expr="$SAYDTMF"/>. </enumerate>
+    </prompt>
+EOV
+    ;
+    vxml_common_choices(noprev => 1);
+    print "  </menu>\n";
+}
+
+
+# acl is checked using group 'vxml'
+sub check_acl {
+    my $acl = shift;
+
+    return 1 if $acl =~ /ALL/;
+
+    foreach my $a (split /\s+/, $acl){
+	return 1 if $a eq 'vxml';
+    }
+    0;
+}
+
+sub check_acl_func {
+    my $obj = shift;
+    my $fnc = shift;
+
+    my $r = $argusd->command( func   => 'getparam',
+			      object => encode($obj),
+			      param  => "acl_$fnc",
+			   );
+
+    die "an error occurred while talking to the server\n"
+	unless $r && $r->{resultcode} == 200;
+
+    my $acl = decode($r->{value});
+
+    return 1 if check_acl($acl);
+}
+
+sub sayidno {
+    my $id = shift;
+
+    # 1234 => 1 2 3 4
+    $id =~ s/(\d)/$1 /g;
+    $id;
+}
+
+
+# One, two, three o'clock, four o'clock rock
+# Five, six, seven o'clock, eight o'clock rock
+# Nine, ten, eleven o'clock, twelve o'clock rock
+# We're gonna rock around the clock tonight
+#   -- Bill Haley, Rock Around The Clock
+sub saytime {
+    my $time = shift;
+
+    if( 1 ){
+	strftime '%H %M hours %B %d', localtime($time);
+    }else{
+	# no one supports this...
+	strftime '<say-as interpret-as="vxml:time">%H:%M</say-as> %B %d', localtime($time);
+    }
+}
+
+sub getparam {
+    my $obj   = shift;
+    my $param = shift;
+
+    my $r = $argusd->command( func   => 'getparam',
+			      object => $obj,
+			      param  => $param );
+    $r->{value};
+}
+
+sub argus_connect {
+    my $argusd = Argus::Ctl->new( "$datadir/control",
+			   retry  => 1,
+			   encode => 1,
+			   decode => 1,
+			   who    => 'argusvxml',
+			   onerror=> sub {
+			       vxml_top();
+			       vxml_errormenu( 'cannot connect to argus' );
+			       vxml_bottom;
+			       die "cannot connect to argusd: $!\n";
+			   },
+			   );
+    $argusd;
+}
+
+sub argus_disconnect {
+    my $argusd = shift;
+    $argusd->disconnect();
+}

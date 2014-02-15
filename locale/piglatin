@@ -1,0 +1,199 @@
+
+charset		"iso-8859-1"
+lang		"piglatin"
+
+days    Sun Mon Tue Wed Thu Fri Sat
+months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+msgid "Today"
+msgstr "Odaytay"
+
+msgid "This Month"
+msgstr "Isthay Onthmay"
+
+msgid "This Year"
+msgstr "Isthay Earyay"
+
+msgid "Yesterday"
+msgstr "Esterdayay"
+
+msgid "Last Month"
+msgstr "AstLay Onthmay"
+
+msgid "Last Year"
+msgstr "Astlay Earyay"
+
+msgid "2 Days Ago"
+msgstr "2 Aysday Goaay"
+
+msgid "2 Months Ago"
+msgstr "2 Onthsmay Goaay"
+
+msgid "Annotate"
+msgstr "Nnotateay"
+
+msgid "Annotation"
+msgstr "Nnotationaay"
+
+msgid "Comment"
+msgstr "Ommentcay"
+
+msgid "Debugging"
+msgstr "Ebuggday"
+
+msgid "Display Config"
+msgstr "Isplayay Onfigcay"
+
+msgid "Down"
+msgstr "Ownday"
+
+msgid "Error Log"
+msgstr "Rroreay Oglay"
+
+msgid "Expires"
+msgstr "Piresexay"
+
+msgid "Flush Cache"
+msgstr "Ushflay Achecay"
+
+msgid "Hush Siren"
+msgstr "Ushhay Irensay"
+
+msgid "Login"
+msgstr "Oginlay"
+
+msgid "Logout"
+msgstr "Ogoutlay"
+
+msgid "Mode"
+msgstr "Odemay"
+
+msgid "Name"
+msgstr "Amenay"
+
+msgid "Notifications"
+msgstr "Otificationsnay"
+
+msgid "Notifies"
+msgstr "Otifiesnay"
+
+msgid "Override"
+msgstr "Verrideoay"
+
+msgid "Password"
+msgstr "Asswordpay"
+
+msgid "Please log in"
+msgstr "Leasepay oglay niay"
+
+msgid "Status"
+msgstr "Atusstay"
+
+msgid "Un-Acked Notifies"
+msgstr "Un-Edackay Otifiesnay"
+
+msgid "Up"
+msgstr "Puay"
+
+msgid "User"
+msgstr "Seruay"
+
+msgid "Username"
+msgstr "Sernameuay"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "toauay odemay - isengageday enwhay puay"
+
+msgid "because"
+msgstr "ecausebay"
+
+msgid "command"
+msgstr "ommandcay"
+
+msgid "down since"
+msgstr "ownday incesay"
+
+msgid "down"
+msgstr "ownday"
+
+msgid "elapsed time"
+msgstr "apsedelay"
+
+msgid "flags"
+msgstr "agsflay"
+
+msgid "hostname"
+msgstr "ostnamehay"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "anualmay odemay - isengageday anuallymay"
+
+msgid "name"
+msgstr "amenay"
+
+msgid "override"
+msgstr "verrideoay"
+
+msgid "port"
+msgstr "ortpay"
+
+msgid "start"
+msgstr "artstay"
+
+msgid "status"
+msgstr "atusstay"
+
+msgid "times down"
+msgstr "#ownday"
+
+msgid "up since"
+msgstr "puay incesay"
+
+msgid "up"
+msgstr "puay"
+
+msgid "Authentication Failed"
+msgstr "Thenticationauay Ailedfay"
+
+msgid "ERROR"
+msgstr "ERROREAY"
+
+msgid "Ack Checked"
+msgstr "Ckaay Eckedchay"
+
+msgid "Ack All"
+msgstr "Ckaay LLaay"
+
+msgid "There are no un-acked notifications"
+msgstr "Onay un-ckedaay otificationsnay"
+
+msgid "There are no notifications"
+msgstr "Onay otificationsnay"
+
+msgid "Unacked Notifications"
+msgstr "un-ckedaay otificationsnay"
+
+msgid "Broken Alias"
+msgstr "Okenbray Liasay"
+
+msgid "is down"
+msgstr "siay ownday"
+
+msgid "zone"
+msgstr "onezay"
+
+msgid "info"
+msgstr "nfoiay"
+
+msgid "note"
+msgstr "otenay"
+
+msgid "comment"
+msgstr "ommentcay"
+
+msgid "annotation"
+msgstr "nootationaay"
+
+msgid "details"
+msgstr "etailsday"
+

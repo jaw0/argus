@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Access Control</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Access Control</H1>
+<P>In the users section we saw how to make a user a member of a set of
+groups. In order to control access to things, we specify which groups
+have access to a particular thing. If the user is a member of any of the
+specified groups, access is permitted.</P>
+<P>say we have a users file entry:</P>
+<PRE>
+	bob	xxYeIExOhgQJU	Top	gibber jabber
+</PRE>
+<P>bob now belongs to both the 'gibber' and 'jabber' groups.</P>
+<PRE>
+	Group "Foo" {
+		acl_foobar:	jabber gizzle
+		...
+	}
+</PRE>
+<P>this gives all members of the groups 'jibber' and 'gizzle'
+foobar permission. Thus, the user bob, being a member of 'jabber',
+has foobar access.</P>
+
+<DIV CLASS=TECHNOTE>
+In most installations, the default access control lists
+are sufficient, and you will not need to specify anything further.
+</DIV>
+
+<H2>Specifying Access Control Lists</H2>
+<P>You can specify access control parameters on an object
+in either of 2 modes: simple or extended.</P>
+<P>In simple mode, there are 3 access control lists which control
+all permissions:</P> <OL>
+	<LI>	acl_user
+	<LI>	acl_staff
+	<LI>	acl_root
+</OL>
+<P>acl_user controls basic read access to an objects webpage.
+acl_staff controls some read-write access, such as setting
+or removing overrides, and acknowledging notifications.
+acl_root controls everything else, such as accessing
+debug info, and the configuration data.</P>
+<P>Note, these are separate acls, controlling access to different things.
+Argus will happily permit a user access to debugging info (acl_root) and
+deny them access to view the webpage (acl_user). If you want to permit
+a user access to everything, they will need to be in all 3 of the acls.
+</P>
+<H2>Simple Mode Defaults</H2>
+<P>By default, if no acls are specified in the config file, argus
+uses 3 groups named 'user', 'staff', and 'root' and creates acls:</P>
+<PRE>
+	acl_root:	root
+	acl_staff:	staff root
+	acl_user:	user staff root
+</PRE>
+<P>allowing you to assign one of these 3 groups to users in the users file</P>
+
+<H2>Extended Mode</H2>
+<P>In extended mode, each separate function has its own acl.</P>
+<PRE>
+	Group "Foo" {
+		acl_mode:	extended
+		acl_override:	staff
+		acl_getconf:	sr_staff
+		...
+	}
+</PRE>
+<P>The acls are:</P><UL>
+	<LI>	acl_page
+	<LI>	acl_getconf
+	<LI>	acl_about
+	<LI>	acl_flush
+	<LI>	acl_override
+	<LI>	acl_annotate
+	<LI>	acl_logfile
+	<LI>	acl_ntfylist
+	<LI>	acl_ntfyack
+	<LI>	acl_ntfyackall
+	<LI>	acl_ntfydetail
+</UL>
+<DIV CLASS=TECHNOTE>
+In versions 3.5 and later, the acl_mode no longer needs to be specified,
+and simple mode and extended mode parameters may be mixed and matched.
+</DIV>
+
+<H2>Cumulative Inheritance</H2>
+<P>
+ACLs are cumulative from the top level down.</P>
+<PRE>
+	Group "Foo" {
+		acl_override:	foo
+
+		Group "Bar" {
+			acl_override:	bar
+			...
+		}
+	}
+</PRE>
+<P>Members of both groups 'foo' and 'bar' will have override access
+on 'Bar'.</P>
+<P>
+The syntax '-group' can be used to remove groups. The special '-ALL'
+will remove all groups:</P>
+<PRE>
+	Group "Foo" {
+		acl_override:	foo bar
+		Group "Bar" {
+			acl_override:	-foo baz
+			...
+		}
+		Group "Baz" {
+			acl_override:	-ALL baz
+			...
+		}
+	}
+</PRE>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: acl.html,v 1.8 2012/10/12 02:17:20 jaw Exp $ -->
+</HTML>

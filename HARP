@@ -1,0 +1,224 @@
+
+Hot Argus Replication Protocol		(HARP)
+Hot Standby Argus Protocol		(HSAP)
+Hot Argus Standby Protocol		(HASP)
+Virtual Argus Redundancy Protocol	(VARP)
+Hot Argus Redundancy Protocol		(HARP)
+Distributed Argus Redundancy Protocol	(DARP)
+
+	it isn't just replication
+	it isn't just standby
+
+================================================================
+
+problems:
+	1) server running argus may die
+	2) network issues may make something appear down from A, but not B
+	3) large config may be too much for a single process/machine
+	4) monitor things behind a NAT
+
+simplifications:
+	1) notification of a down argus - by normal "Service TCP/HARP" test
+	2) (3)+(4) above, are both: master monitors some things, slave other things
+
+features:
+	1) slaves will have minimal config
+	2) slaves will always fetch config from master, maybe with possibility of
+	   slave overriding some things
+	Q) will slave only fetch its part of config or entire config?	=> entire
+	Q) will slaves be web capable?	=> no
+	Q) will slaves notify? => maybe???
+	3) slave groups=>noop, services isup/isdown will rpc
+	4) per service, slaves will need:
+		test or don't test
+		notify or don't
+	5) per service, master will need:
+		test or don't test
+		how to determine state
+		
+design:
+	1) read config - need to modify, config from string
+	2) need a protocol, encrypted+authenticated
+		a) built on top of current control protocol
+	3) dynamic decision, obj-by-obj, test or not
+	4) dynamic decision, obj-by-obj, up or down
+	5) dynamic decision, obj-by-obj, notify or not, who?
+	6) need to be able to safely unconfig/reconfig on the fly
+
+steps:
+	1x) clean up config reading. be able to subclass and $cf->readconfig()
+	2x) clean. verify ability to unconfig.
+	3) figure out how it will work
+	4x) extend protocol
+	5) figure out objects, methods
+	6x) add some tests in various Service methods
+
+================================================================
+configuring
+	a few lines in config
+	or a separate file
+
+need to specify:
+	master | slave, addr/port of master
+	mode
+	master may need:
+		list of slaves
+
+DARP::readconfig()
+
+in config, master:
+	DARP "master0" {
+		port: 2345
+		debug: yes
+		...
+		slave "slave1" {
+			hostname:	1.2.3.4
+			secret:		hush
+		}
+	}
+
+on slave:
+	DARP "slave1" {
+		master "master0" {
+			hostname: 12.34.56.78
+			port:     12345
+			secret:   hush
+			...
+		}
+	}
+
+	=> is mode per server or per object?
+	=> per server makes no sense, => per object
+
+also permit:
+	DARP "tag" {
+		data:  value
+		slave  { ... }
+		master { ... }
+	}
+
+	
+will also need per MonEl/inherited darp data
+
+	Group "Foo" {
+		darp_mode: foo
+		darp_tags: foo bar baz
+		darp_xxx: xxx
+		darp_yyy: yyy
+		...
+	}
+
+================================================================
+modes:
+	every object will have a darp_mode:
+		[none]		- no darping
+		failover	- master monitors it, slaves take over if master fails (active-passive)
+		distributed	- slaves monitor it, master decides based on all slaves data (passive-active)
+		redundant	- all monitor it, master decides based on all slaves data (active-active)
+
+		dist+redund are same, w/ different darp_tags
+darp_tags:
+	which slaves monitor it, default = *
+
+distributed, redund need a gravity setting, and notify setting
+
+
+================================================================
+protocol:
+
+	use Control
+	unaltered, unadulterated, 
+	easy-peasy
+
+================================================================
+operation:
+	master starts
+	slaves connect to master
+	slaves fetch config
+	slaves need to send keepalive pings over connection
+	each determines other is up via timestamp on connection
+
+
+================================================================
+
+objects:
+	DARP_Master
+		create()	- calls Server::new_inet( ... )
+
+	DARP_Slave
+		{masterip, port, passwd
+		should auto-reconnect
+		create()	- connects to Master
+
+	DARP_Service
+		NB: can be master *and* slave at the same time
+		master_func()	- rpc to master
+
+================================================================
+todo:
+	x get slave to connect to master
+	x get slave to talk to master
+		x send secret
+		x fetch config
+		x keepalives
+		x rpc
+
+	x master update
+
+	x at start, slave should sync obj statuses (stats file) (m=>s push?)
+	x at master start, need statuses from slaves => save in stats? push? => (stats file)
+	x apop like auth
+	? public key auth?,
+		cram-md5   - rfc 2195
+		digest-md5 - rfc 2831
+		...?
+	x should only fetch config on 1st connect
+	x need to detect change in master config => reload slaves
+
+	x have master set timeouts, and track slave status
+	x need a 'Service DARP-WATCH/slave0' on master to notify if slave fails
+	x notme %seq for mytag
+
+
+	config options: (?)
+		no stats files		=> no_slave_state
+		no notifies		=> no_slave_notify
+
+	x  suppress 'unused parameter - typo' messages
+		x skip check_typos
+
+
+Note:
+	cannot DARP Self or DARP/Watch
+
+
+port:	2389=openview, 1984=bb4, bs, 2583=mon
+
+iop             2055/tcp   Iliad-Odyssey Protocol
+system-monitor  2609/tcp   System Monitor 
+
+================================================================
+
+create_object at runtime?
+
+    need to either
+	- drop DARP connections
+	- push new data
+
+
+    - modify keep alive ping
+	server responds with a last updated timestamp
+	client reconfigs if timestamp is newer...
+
+	may be a long time between keepalives if stuff is happening
+	should have a real push command
+
+	or keep a timestamp, and send a ka along with other commands if needed
+
+================================================================
+
+TODO:
+	multi-master/slave	- proxy updates
+	secondary master?	- send updates to, don't fetch from
+
+

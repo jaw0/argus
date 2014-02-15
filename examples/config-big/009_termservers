@@ -1,0 +1,77 @@
+Group "Termservers" {
+	overridable:	no
+	Group "Ambler" {
+		Host "ts-amb1.example.com" {
+			service: Ping
+		}
+		Host "ts-amb10.example.com" {
+			service: Ping
+		}
+		Host "ts-amb11.example.com" {
+			service: Ping
+		}
+		Host "ts-amb12.example.com" {
+			service: Ping
+		}
+		Host "ts-amb13.example.com" {
+			service: Ping
+		}
+		Host "ts-amb14.example.com" {
+			info:	PM2
+			service: Ping
+		}
+		Host "ts-amb2.example.com" {
+			service: Ping
+		}
+		Host "ts-amb23.example.com" {
+			service: Ping
+		}
+		Host "ts-amb3.example.com" {
+			service: Ping
+		}
+		Host "ts-amb4.example.com" {
+			service: Ping
+		}
+		Host "ts-amb5.example.com" {
+			service: Ping
+		}
+		Host "ts-amb6.example.com" {
+			service: Ping
+		}
+		Host "ts-amb7.example.com" {
+			service: Ping
+		}
+		Host "ts-amb8.example.com" {
+			service: Ping
+		}
+		Host "ts-amb9.example.com" {
+			service: Ping
+		}
+		Host "ts-amb18.example.com" {
+			service: Ping
+		}
+		Host "ts-amb19.example.com" {
+			service: Ping
+		}
+		Host "ts-amb20.example.com" {
+			service: Ping
+		}
+		Host "ts-amb21.example.com" {
+			service: Ping
+		}
+		Host "ts-amb22.example.com" {
+			service: Ping
+		}
+	}
+	Group "Phl Wlf" {
+		Host "ts-phlwlf1.example.com" {
+			service: Ping
+		}
+		Host "ts-phlwlf2.example.com" {
+			service: Ping
+		}
+	}
+}
+
+############################################################
+

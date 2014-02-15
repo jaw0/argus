@@ -1,0 +1,42 @@
+
+# example DARP slave config
+
+# locations of various items on web pages
+sirensong:	/sound/whoopwhoop.wav
+bkgimage:	/img/argus.logo.gif
+icon:		/img/smile.gif
+icon_down:	/img/sad.gif
+nospkr_icon:	/img/nospkr.gif
+style_sheet:	/argus.css
+
+# send messages to syslog
+syslog:		daemon
+
+# who should be notified when things break?
+notify:		mail:support@example.com
+
+# don't summarize notifications
+nolotsmsgs:	yes
+
+# enable built in tcp test port
+test_port:	3074
+
+footer_all:     <P>Server: slave1
+
+
+# enable built in resolver
+Resolv
+
+
+# configure DARP as slave.
+DARP "slave2" {
+
+        master "master" {
+            frequency:  10
+            timeout:    60
+            hostname:   argus-master.example.com
+            secret:     hush!
+        }
+}
+
+

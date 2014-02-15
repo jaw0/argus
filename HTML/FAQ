@@ -1,0 +1,333 @@
+
+Section: Common Problems
+
+Q:
+	I downloaded argus, but I think it is corrupt. I try to unzip
+	it, but I just get an error <EXAMPLE>Error reading header. Zip file corrupt.</EXAMPLE>
+
+A: 
+	It is not a zip file. It is a tgz file.
+	<BR>And, to save a step, read the next question also.
+
+----
+Q:
+	Can I use Argus with MicroSoft Windows?
+
+A:
+	No.
+
+----
+Q: aborting
+I try to use argus, and all I get is
+<PRE STYLE="background-color: #FF8888">
+    ERROR    unable to connect to server
+             checking cache...
+             unable to locate cached data
+             ABORTING
+</PRE>
+
+A:
+	Either: <UL>
+		<LI> argusd is not running. start it.
+		<LI> argusd is running. check your web server
+		error_log for additional details on why it cannot connect.
+	</UL>
+----
+Q:
+	I try to access argus, and my browser just displays an error
+	similar to, but not exactly like, the one above.
+A:
+	Check your web server error_log for additional details.
+
+----
+Q:
+	I get all sort of permission denied errors from the cgi program,
+	how should I have permission set on the various items in the datadir?
+A:
+	The datadir and auth file and control socket need to be writable by the
+	www user (or whatever user/group your web server runs as). <BR>
+	The log, user and html/* files need to be readable by the www user
+	and writable by the argus user (or whatever user argusd runs as).<BR>
+	The notno, notify/*, and stats/* need to be writable by the argus user.
+	<BR>
+	There is, of course, more than one way to do this, but one way:
+	<CONFIG>
+		ls -lF $datadir
+		drwxr-xr-x  6 www          512 Oct 19 12:32 ./
+		-rw-r--r--  1 www        32768 Oct 20 11:37 auth
+		drwxr-xr-x  2 argus	   512 Sep 20 13:18 config/
+		srw-rw-rw-  1 argus	     0 Oct 19 12:31 control=
+		drwxr-xr-x  2 argus	  4608 Oct 20 11:37 html/
+		-rw-r--r--  1 argus	151033 Oct 19 12:31 log
+		drwxr-xr-x  2 argus	 18944 Oct 20 11:30 notify/
+		-rw-r--r--  1 argus	     5 Oct 20 11:30 notno
+		drwxr-xr-x  2 argus	 52224 Oct  3 11:10 stats/
+		-rw-r--r--  1 argus	   134 Sep 20 15:25 users
+	</CONFIG>
+
+	<P>
+	Or, the short answer:<BR>
+	in your argus config, add
+	<CONFIG>
+		chmod_control:	777
+	</CONFIG>
+	and, do the following
+	<CONFIG>
+		prompt % cd $datadir
+		prompt % chmod -R a+rw .
+	</CONFIG>
+	replacing <TT>$datadir</TT> with the actual directory.
+	wait for argusd to reload the config file, and try again.
+
+----
+Q:
+        I see an error similar to <EXAMPLE>Error: cannot load argus javascript</EXAMPLE>
+A:
+        make sure you copy the file <tt>misc/argus.js</tt> to your htdocs directory
+        and configure a <tt>javascript: /correct/url/argus.js</tt> in your argus config.
+----
+Q:
+        I see an error similar to <EXAMPLE>Error: cannot load argus style_sheet</EXAMPLE>
+A:
+        make sure you copy the file <tt>misc/argus.css</tt> to your htdocs directory
+        and configure a <tt>style_sheet: /correct/url/argus.css</tt> in your argus config.
+
+----
+Section: Configuring
+
+Q:
+	How can I monitor HTTP on a particular host on port 80/tcp and also HTTP on
+	the same host on port 8080/tcp?<BR>
+	Argus does not like you if you add:
+	<CONFIG>
+		Host "jeremy-03.example.com" {
+			Service TCP/HTTP
+			Service TCP/HTTP {
+				port: 8080
+			}
+		}
+	</CONFIG>
+
+A:
+	It doesn't work because Argus requires objects to have unique names,
+	so it can tell them apart. In the above example both objects will
+	have the name <EXAMPLE>HTTP_jeremy-03.example.com</EXAMPLE>. <BR>
+	You can override the default name Argus uses to identify objects:
+	<CONFIG>
+		Host "jeremy-03.example.com" {
+			Service TCP/HTTP {
+				uname: HTTP-PRIMARY
+			}
+			Service TCP/HTTP {
+				port:  8080
+				uname: HTTP-SECONDARY
+			}
+		}
+	</CONFIG>
+
+----
+
+Q:
+	I want argus to notify me about DOWN events, but not about UP events.
+	Is there some syntax I can use to do this?
+
+A:
+	If you set the <EXAMPLE>messageup</EXAMPLE> or <EXAMPLE>messagedn</EXAMPLE>
+	parameter to the empty string, then that message will not be sent.
+	<CONFIG>
+		Service Ping {
+			messageup:
+		}
+	</CONFIG>
+----
+Q:
+	Instead of the 'Oodles of stuff just came up' or 'Tons of stuff just
+	went down' emails, can I get an email that lists exactly what happened?
+
+A:
+	Normally, Argus tries to conserve your sanity, and not blast you
+	with thousands of email messages. But, you can control this.
+	<BR>
+	If you set <EXAMPLE>nolotsmsgs: yes</EXAMPLE> you will receive
+	one email listing each thing that went up or down.
+	<BR>
+	If you set <EXAMPLE>qtime: 0</EXAMPLE> every message will sent
+	separately, nothing will be summarized.
+
+----
+Q:
+	How can I change the subject lines of emails argus send me?
+
+A:
+	Add to your config:
+	<pre>
+	Method "mail" {
+		command:	sendmail -t
+		send:		To: %R\nFrom:%F\nSubject: Argus %E\n\n%M\n
+	}
+	</pre>
+	edit as desired.
+	see <A HREF="notif.html">notification documentation</A>
+	for more details.
+
+----
+Q:
+	I am trying to monitor a djbdns server using UDP/DNS and it always
+	shows as down. It appears to work when I test it manually. What to do?
+A:
+	The UDP/DNS test sends a DNS 'status' query, which is ignored
+	by djbdns. Use the UDP/DNSQ test or a UDP/Domain test instead.
+----
+
+Q:
+	How can I monitor my DHCP server?
+
+A:
+	The DHCP protocol is a real bugger. Currently, Argus cannot
+	monitor it directly. Some Argus users have had success setting
+	Argus up to run the program 'dhcping':<BR>
+	<A HREF="http://freshmeat.net/branches/14698/">DHCP Ping Freshmeat Page</A>
+	<BR>
+	This program does require being installed setuid root and has some
+	limitations, so it may not work in all environments.
+----
+Q:
+	I am trying to use the UDP/RADIUS test to check my radius server,
+	but it always shows as down. What can I do?
+A:
+	Argus uses the RADIUS server-status extension for testing, this
+	is not supported by all radius servers. It is known to work with:
+	<CONFIG>
+	merit radius
+	radiator
+	cistron radius 1.6.5 and later
+	free radius 0.8 and later (set server_status = yes in the config)
+	gnu radius Sep/2003 and later
+	</CONFIG>
+
+----
+
+Section: Operations
+
+Q:
+	If I modify a config file, what is the best way to let argus
+	know it needs to reload it?
+A:
+	Argus checks all of the config files every several minutes, and
+	will automatically reload if one changes.<P>
+	If you are impatient, you can run <TT>argusctl hup</TT>
+
+----
+
+Q:
+	What is the best way to shut argus down? Should I just kill it?
+A:
+	The preferred method would be to run <TT>rc.argusd stop</TT>
+	or to run <TT>argusctl shutdown</TT>
+
+----
+
+Q:
+	I have a particular server which is down at the same time every day
+	for maintenance. I do not want to be notified about this. Is there
+	a way I can handle this?
+A:
+	In version 3.7 and later, you can use the following
+	in your config file:
+
+	<CONFIG>
+	Service TCP/HTTP {
+                Schedule checking {
+                        * 0400 - 1000 => no
+                }
+        }
+	</CONFIG>
+
+----
+
+Section: Other
+
+Q:
+	I keep seeing:
+	<EXAMPLE>Sep 11 06:18:26 pluto.example.com sendmail[2665]: NOQUEUE: pluto.example.com
+	[10.0.0.1] did not issue MAIL/EXPN/VRFY/ETRN during connection to MTA</EXAMPLE>
+	in my sendmail log. What is this?
+
+A:
+	New versions of sendmail log every connection that does not issue valid
+	mail transfer commands. The author recommends that you ignore the message.<BR>
+	If you to issue a valid MAIL command, you would still get entries in your log
+	file (but different messages).<BR>
+	If the message really bothers you, and you don't mind breaking the protocol,
+	the author has noticed that sendmail does not log syntax errors:
+	<CONFIG>
+			Service TCP/SMTP {
+				send:	MAIL\r\n
+			}
+	</CONFIG>
+	silly, silly, sendmail developers...
+
+----
+
+Q:
+	Can I get on a mailing list to learn about new versions of the software
+
+A:
+	Yes, see the link to the left.
+
+	<P>
+	Or, you can configure freshmeat to notify you of updates, by subscribing
+	to the <A HREF="http://freshmeat.net/projects/argus-tas">Argus Freshmeat Project</A>. Read the
+	<A HREF="http://www.freshmeat.net">freshmeat</A> instructions to learn how.
+
+----
+Q:
+	Another monitoring application includes a feature that lets
+	me get a random quotation by clicking a button, such as:
+	<CONFIG>
+		"It was as true as taxes is. And nothing's truer than them." 
+		Charles Dickens (1812-1870)
+	</CONFIG>
+	How can I get argus to do this?
+A:
+	Why on earth do you want a monitoring application to provide
+	random quotations?
+----
+Q:
+	Argus appears to be working correctly, but when I run <TT>ps</TT>
+	I see <B>2</B> argus daemons running. Is this normal?
+A:
+	Yes. One does all of the monitoring, etc. The other exists
+	to monitor the other one
+	and restart the first one if/when it exits.<P>
+	If you have graphing enabled, there will be an additional
+	process to save graphing data. If you have database testing
+	enabled, there may be additional processes communicating
+	with the databases.
+----
+Q:
+	I use qmail. How can I get argus to send me email?
+A:
+	The program "sendmail" that comes with qmail is fully
+	compatible with argus. Make sure argus discovers the correct
+	path during Configure (you can edit the Makefile if needed).
+	(typically, it is installed in '/var/qmail/bin/').
+	It will just work.
+
+----
+Q:
+	I have argus monitoring all of my stuff, but I worry
+	that by monitoring from inside my own network, I will
+	not be able to detect problems outside of my network
+	that could cause problems. What can I do?
+
+A:
+	Monitoring from several different locations is a highly
+	recommended part of a well balanced monitoring archetecture.
+	<P>
+	There are a number of companies that can augment your
+	internal monitoring by monitoring your systems from
+	outside of your network, such as:<BR>
+	<A HREF="http://www.monitor4me.com">Monitor4Me.com</A>
+
+----

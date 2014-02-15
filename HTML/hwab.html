@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+<h1>Aberrant Behavior Detection</h1>
+
+<DIV CLASS=TECHNOTE>
+Aberrant Behavior Detection support was added in version 3.7
+</DIV>
+
+<p>Any service that has a numeric result can be checked
+for aberrant or unexpected values. Once enabled, argus uses
+the Holt-Winters algorithm to predict what the result should be,
+and anything outside the expected range will cause the service to
+be down.
+</p>
+<p>to enable, configure a <span class=param>maxdeviation</span>
+(or any severity qualified variant (eg. maxdeviation.minor))
+</p>
+<pre>
+    Service UDP/SNMP {
+        oid:  ifInOctets[Gi3/0]
+        calc: ave-rate-bits
+        maxdeviation.minor:   2
+        maxdeviation.warning: 4
+    }
+</pre>  
+        
+
+<p>by default, argus uses a seasonal period of one week, and 
+alpha, beta, gamma, and zeta values reasonable for a week season.
+these can be changed using the parameters:
+</p><ul>
+<li><span class="param">hwab_period</span>
+<li><span class="param">hwab_alpha</span>
+<li><span class="param">hwab_beta</span>
+<li><span class="param">hwab_gamma</span>
+<li><span class="param">hwab_zeta</span>
+</ul>
+
+<p>See <a href="http://www.it.iitb.ac.in/~praj/acads/seminar/04329008_ExponentialSmoothing.pdf">this paper</a> for details on the
+various parameters</p>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: tmplt.html,v 1.4 2002/11/30 20:08:25 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,371 @@
+Group "Other" {
+	nostats:	true
+	overridable:	no
+
+	Host "UPS" {
+		hostname:	connectups-amb1.example.com
+		service:	UDP/SNMP {
+			sendnotify:	no
+			siren:		no
+			oid:	.1.3.6.1.2.1.33.1.4.1.0
+			eqvalue:	3
+			uname:	Output Source
+			label:	Output Source
+		}
+		service:	UDP/SNMP {
+			sendnotify:	no
+			siren:		no
+			oid:	.1.3.6.1.2.1.33.1.2.1.0
+			eqvalue:	2
+			uname:	Battery Status
+			label:	Battery Status
+		}
+	}
+
+	service: TCP/URL {
+		uname:		Server Disk Space
+		label:		Server Disk Space
+		url:            http://diskmon.example.com/cgi-bin/ds.cgi
+		expect:         no problems
+		frequency:      1800
+		retries:        1
+		pagermsg:	Check http://diskmon.example.com
+		sendnotify:	no
+	}
+	Group "Employee Connections" {
+		service: Ping {
+			label_left:	Chris's cable
+			hostname:	10.9.235.105
+			sendnotify:	no
+			siren:		no
+		}
+		service: Ping {
+			label_left:	Greg's cable
+			hostname:	10.9.193.81
+			sendnotify:	no
+			siren:		no
+		}
+		service: Ping {
+			siren:		no
+			label_left:	Jeff's DSL
+			hostname:	10.1.2.3
+			sendnotify:	no
+			retries:	1
+		}
+	}
+	service: TCP/URL {
+		uname:		CyberCash Payment Server
+		expect:		CyberCash Payment Server  </FONT></A></TD>
+		frequency:	3600
+		url:		http://merchant.example.com/cgi-bin/status/cyber/status.cgi
+		label:	CyberCash Payment Server
+		retries:	2
+		sendnotify:	no
+	}
+
+	Group "PM3 Test" {
+		# only notify if these are *all* down - indicating a serious problem
+		countstop:	yes
+		frequency:	3600
+		gravity:	up
+		messagedn:	PM3 OSPF or RADIUS or TELCO Problem
+		sendnotify:	yes
+		service: Ping {
+			info:	john hubickeys isdn
+			hostname:	10.29.204.2
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	davidd
+			hostname:	10.152.220.25
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	baw
+			hostname:	10.29.206.0
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	waynepres1
+			hostname:	10.152.220.93
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	row51
+			hostname:	10.29.196.51
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	vfcisdn
+			hostname:	10.29.206.86
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	static-jcox
+			hostname:	10.29.204.44
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	static-greggk
+			hostname:	10.152.215.81
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	plumstead1
+			hostname:	10.152.215.75
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	edge
+			hostname:	10.29.196.2
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	sorbeemodem1
+			hostname:	10.152.220.164
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	static-nicholst
+			hostname:	10.29.204.26
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	audiocare
+			hostname:	10.152.215.9
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	static-evans
+			hostname:	10.152.215.74
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	ldcomputing
+			hostname:	10.152.215.12
+			sendnotify:	no
+		}
+		service: Ping {
+			info:	bcwsa
+			hostname:	10.152.215.22
+			sendnotify:	no
+		}
+	}
+	Group "Temperature" {
+		Group "Ambler" {
+			service: UDP/SNMP {
+				label:	inlet-1
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb1 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb1.example.com
+			}
+			service: UDP/SNMP {
+				label:	inlet-2
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb2 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb2.example.com
+			}
+			service: UDP/SNMP {
+				label:	inlet-3
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb3 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb3.example.com
+			}
+			service: UDP/SNMP {
+				label:	inlet-4
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb4 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb4.example.com
+			}
+		}
+	}
+	Group "World Reachability" {
+		# check lots of things, only page if *everything* is down
+		countstop:	yes
+		frequency:	600
+		messagedn:	external reachability problems
+		sendnotify:	yes
+		Group "Root Servers" {
+			gravity:	up
+			sendnotify:	no
+			service: Ping {
+				label:	A
+				hostname:	a.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	B
+				hostname:	b.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	C
+				hostname:	c.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	D
+				hostname:	d.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	E
+				hostname:	e.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	F
+				hostname:	f.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	G
+				hostname:	g.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	H
+				hostname:	h.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	I
+				hostname:	i.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	J
+				hostname:	j.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	K
+				hostname:	k.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	L
+				hostname:	l.root-servers.net
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	M
+				hostname:	m.root-servers.net
+				sendnotify:	no
+			}
+		}
+		Group "Yahoo" {
+			gravity:	up
+			sendnotify:	no
+			service: Ping {
+				label:	www
+				hostname:	www.yahoo.com
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	www1
+				hostname:	www1.yahoo.com
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	www3
+				hostname:	www3.yahoo.com
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	www4
+				hostname:	www4.yahoo.com
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	www7
+				hostname:	www7.yahoo.com
+				sendnotify:	no
+			}
+			service: Ping {
+				label:	www9
+				hostname:	www9.yahoo.com
+				sendnotify:	no
+			}
+		}
+	}
+	Group "Bandwidth Use" {
+		# check that usage is sane
+		Group "Sprint T3" {
+			service: UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb3.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.1
+				maxval:		20000000
+			}
+			service: UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb3.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.1
+				maxval:		20000000
+			}
+		}
+		Group "SMDS" {
+			service: UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb1.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.3
+				maxval:		20000000
+			}
+			service: UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb1.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.3
+				maxval:		20000000
+			}
+		}
+		Group "Colo Net" {
+			service: UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb2.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.2
+				maxval:		20000000
+			}
+			service: UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb2.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.2
+				maxval:		20000000
+			}
+		}
+		Group "Internal Net" {
+			service: UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb4.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.4
+				maxval:		20000000
+			}
+			service: UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb4.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.4
+				maxval:		20000000
+			}
+		}
+	}
+
+}
+
+############################################################
+

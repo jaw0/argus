@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Test Port</H1>
+
+<DIV CLASS=TECHNOTE>
+The test port was added in version 3.3
+</DIV>
+
+<P>In order to remotely check that Argus is properly running,
+you can enable the test server on a TCP port</P>
+<PRE>
+	test_port:	3074
+</PRE>
+<P>You should pick a port number over 1024 that is not currently in
+use on the server argus is running on.</P>
+
+</P>
+
+<P>You can then check on it by telneting
+to the test port:</P>
+<PRE>
+	telnet argus.example.com 3074
+
+	Connected to argus.example.com.
+	Escape character is '^]'.
+	<FONT COLOR=blue>Argus running</FONT>
+	Connection closed by foreign host.
+</PRE>
+
+<P>Or, you can configure a 'Service' monitor on another Argus:</P>
+<PRE>
+	Service TCP/Argus {
+		hostname:	argus.example.com
+		port:		3074
+	}
+</PRE>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: testport.html,v 1.5 2012/10/12 02:17:21 jaw Exp $ -->
+</HTML>

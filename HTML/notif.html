@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Notifications</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Notifications</H1>
+<P>Whenever something changes state, Argus can notify someone about it.</P>
+
+<P>Argus realizes that in the real world, sometimes people forget,
+they go out of range of their paging service, their batteries die, etc.
+So, by default, when Argus wants to be sure someone knows about something
+it will require that the message be acknowledged and will resend and/or
+escalate until someone does.</P>
+
+<H2>Configuring</H2>
+<P>To specify where to send notifications:</P>
+<PRE>
+	notify:		mail:support@example.com  qpage:joe
+</PRE>
+<P>you can specify more than one. Currently notifying by mail
+and qpage are supported.</P>
+<P>
+By default, Services generate notifications and Groups do not.
+This can be changed:</P>
+<PRE>
+	Group "Foo" {
+		sendnotify:	yes
+		Service Ping {
+			sendnotify:	no
+		}
+	}
+</PRE>
+<P>You can change the message that gets sent:</P>
+<PRE>
+	Service UDP/SNMP {
+		# cisco inlet temperature
+		oid:		.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+		maxvalue:	27
+		messagedn:	server room is too hot
+		messageup:	server room has cooled back down
+	}
+</PRE>
+<P>If you only want one message sent, and never resent or escalated:</P>
+<PRE>
+	autoack:	yes
+</PRE>
+<P>By default, notifications are resent every 5 minutes, to change this,
+specify a value in seconds:</P>
+<PRE>
+	renotify:	120
+</PRE>
+
+<H2>Escalating</H2>
+<P>After attempting to notify someone of a problem repeatedly, you may want to try
+notifying someone else:</P>
+<PRE>
+	escalate:    10 qpage:manager; 30 qpage:cio; 60 qpage:ceo
+</PRE>
+<P>which means:</P><UL>
+	<LI>	after 10 minutes page the manager
+	<LI>	after 30 minutes page the CIO
+	<LI>	after 1 hour page the CEO
+</UL>
+
+<P><DIV CLASS=TECHNOTE>
+In previous versions of Argus, the number in the escalate parameter, above,
+was "number of pages sent", and another version in seconds. If you are running
+an older version of code, you may wish to check.
+</DIV></P>
+
+<H2>Acknowledging</H2>
+<P>On the webpage, click "Un-Acked Notifies".
+Ack them one-by-one by clicking "Ack", or ack several by checking their
+checkboxes and clicking "Ack Checked", or ack all of them by clicking
+"Ack All".
+</P>
+<P>
+The ability to ack is controlled by the "acl_ntfyack" access control list.
+The ability to "Ack All" is controlled by the "acl_ntfyackall" access control list.
+</P>
+<P>In order to remain sane, the author <B>highly recommends</B> verifying
+that anyone who may be sent notifications is also permitted to acknowledge them.</P>
+
+
+<H2>Adding Other Notification Methods</H2>
+<P><DIV CLASS=TECHNOTE><B>
+Support for user defined notification methods was added in version 3.2
+</B></DIV></P>
+
+<P>Argus comes with mail and qpage built in, to add other methods, pick
+a name for the method and add to the top of the config file:</P>
+<PRE>
+	Method "annoy" {
+		command:	winpopup %R
+		send:		%M
+	}
+
+	notify:		annoy:bob
+</PRE>
+<P>This will cause notifications to be sent to 'bob' using
+the 'winpopup' program. Various % sequences can be used:</P>
+<UL>
+	<LI><B>%R</B>	- the recipient ('bob' in the example)
+	<LI><B>%F</B>	- the from address (set with the 'mailfrom' parameter)
+	<LI><B>%M</B>	- the message
+	<LI><B>%E</B>	- extra info (things like 'RESENT' or 'ESCALATED')
+	<LI><B>%N</B>	- the method name ('annoy' in the example)
+	<LI><B>%P</B>	- the priority (set with the 'priority' parameter)
+	<LI><B>%S</B>	- the object state (up or down)
+	<LI><B>%C</B>	- the number of times the notification has been sent
+	<LI><B>%I</B>	- the notification id number
+	<LI><B>%O</B>	- the object name - full name
+	<LI><B>%O{param}</B>	- the current value of the specified object parameter (3.3)
+	<LI><B>%T</B>	- the notification creation time
+	<LI><B>%T{format}</B>	- the notification creation time, using the given strftime format (3.3)
+	<LI><B>%Y</B>	- the severity level (set with the 'severity' parameter) (3.3)
+	<LI><B>%Z</B>	- the timezone used for the above time
+</UL>
+
+<P>and in the message text (message{up,dn}) some additional sequences
+can be used:</P>
+<UL>
+	<LI><B>%i</B>	- the notification id number (3.3)
+	<LI><B>%o{param}</B>	- the value of the specified object parameter at message creation time (3.3)
+
+	<LI><B>%p</B>	- the priority (set with the 'priority' parameter) (3.3)
+	<LI><B>%r</B>	- the reason the object went down
+	<LI><B>%s</B>	- the object state (up or down) (3.3)
+	<LI><B>%t</B>	- the notification creation time (3.3)
+	<LI><B>%t{format}</B>	- the notification creation time, using the given strftime format (3.3)
+	<LI><B>%v</B>	- the value returned by the test
+	<LI><B>%y</B>	- the severity level (set with the 'severity' parameter) (3.3)
+	<LI><B>%z</B>	- the timezone used for the above time (3.3)
+
+</UL>
+
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: notif.html,v 1.12 2004/01/21 19:53:37 jaw Exp $ -->
+</HTML>

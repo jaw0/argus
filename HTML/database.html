@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Database</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Database Testing</H1>
+
+<DIV CLASS=TECHNOTE>
+Database testing support was added in version 3.2
+</DIV>
+
+<H2>Additional Prerequisites</H2>
+<UL>
+	<LI>	<B>DBI.pm</B> and any <B>DBD</B> modules needed for your database
+</UL>
+
+<H2>Configuring</H2>
+<P>You will need to specify various parameters:</P>
+<PRE>
+	Service DB {
+	    dsn:	dbi:mysql:database=mydatabase;host=dbhost
+	    user:	argus
+	    pass:	password
+	    sql:	SELECT COUNT(*) FROM mytable
+	}
+</PRE>
+<UL>
+	<LI><B>dsn</B>	- specify the dsn used to connect to the database. this should
+			be specified in perl DBI syntax. consult the documentation for DBI
+			and for your database for exact syntax.
+
+	<LI><B>user</B>	- the username to use for connecting to the database
+	<LI><B>pass</B>	- the password to use for connecting to the database,
+			depending on your database, this may be optional.
+
+	<LI><B>sql</B>	- any arbitrary sql 'select' statement
+</UL>
+<P>The results of the select statement may be tested using any of the
+normal tests described in <A HREF="xtservices.html">extended testing</A>, such
+as 'expect', or 'minvalue'.</P>
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: database.html,v 1.5 2012/10/12 02:17:20 jaw Exp $ -->
+</HTML>

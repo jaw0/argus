@@ -1,0 +1,104 @@
+#!/bin/sh
+#
+# Argusd init script
+#
+# chkconfig: 2345 99 10
+# description: starts and stops argusd
+# probe: true
+# Provides: $argusd
+#
+#
+# source function library
+#. /etc/rc.d/init.d/functions
+#
+# The user and group Argusd should run as
+ARGUSUSER=argus
+ARGUSGROUP=argus
+ARGUSDIR=/var/argus
+
+PID=`ps awx -o pid,command | grep "Argus" | grep -v 'grep' | awk ' {print $1}'`
+#
+#
+#
+cd $ARGUSDIR
+#
+
+case "$1" in
+
+start)
+                if [ "${PID}" != "" ]; then
+                        echo ""
+                        echo "Argus Monitor Already Running !"
+                        echo "          Aborting!"
+                        echo ""
+                else
+                        /usr/local/sbin/argusd -a /var/argus -u $ARGUSUSER -g $ARGUSGROUP
+                        echo "Argus Monitor Started !"
+                fi
+        exit 0;
+        ;;
+
+stop)
+        /usr/local/sbin/argusctl shutdown reason="rc.argusd stop"
+        echo "Argus Monitor Shutdown !"
+        ;;
+
+stopall)
+          kill $PID
+          echo "Killing all Argus Monitor PID's"
+          ;;
+
+restart)
+
+               if [ "${PID}" != "" ]; then
+                        echo ""
+                        echo "Stopping Argus Monitor"
+                        echo ""
+                        /usr/local/sbin/argusctl shutdown reason="rc.argusd stop"
+                        echo "Argus Monitor Stopped"
+                        sleep 5
+                        echo ""
+                        /usr/local/sbin/argusd -a /var/argus -u $ARGUSUSER -g $ARGUSGROUP
+                        echo "Argus Monitor Restarted !"
+                else
+                        echo "Argus Monitor Is Not Running"
+
+                fi
+        exit 0;
+        ;;
+
+reload)
+        /usr/local/sbin/argusctl hup
+        echo "Argus Monitor Reloaded !"
+        ;;
+
+status)
+                if [ "${PID}" != "" ]; then
+                        echo ""
+                        echo "Argus Monitor is Running !"
+                        echo "PID's Running are:"
+                        echo""
+                        echo $PID
+                        echo ""
+                else
+                        echo ""
+                        echo "Argus Monitor is NOT Running !"
+                        echo ""
+
+                fi
+        exit 0;
+        ;;
+
+*)
+        echo usage: $0 'start|stop|stopall|restart|reload|status'
+        exit 1
+        ;;
+
+esac
+exit 0
+
+### set file ownership, permissions and enable service at boot###
+# /etc/rc.d/init.d/argusd
+#chown root /etc/rc.d/init.d/argusd; chmod 744 /etc/rc.d/init.d/argusd;
+#chkconfig argusd on
+

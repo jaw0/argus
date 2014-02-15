@@ -1,0 +1,15 @@
+
+glossary
+================
+
+NB	- "Nota Bene" - this comment might be important, pay attention.
+
+XXX	- this code is wrong, and needs	to be fixed
+	  this should not be seen in production code
+
+QQQ	- "Question" - the author is clueless, and is unsure whether
+	   this is the best way to do something
+
+RSN	- "Real Soon Now" - the noted functionality will be added later
+	  (but don't hold your breath)
+

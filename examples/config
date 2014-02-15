@@ -1,0 +1,141 @@
+
+##################################################################
+#### This file is only an example. It WILL NOT actually work.
+#### You will need to use this as an example, and create your own.
+##################################################################
+
+# locations of various items on web pages
+sirensong:	/sound/whoopwhoop.wav
+bkgimage:	/img/argus.logo.gif
+icon:		/img/smile.gif
+icon_down:	/img/sad.gif
+nospkr_icon:	/img/nospkr.gif
+style_sheet:	/argus.css
+javascript:	/argus.js
+
+# send messages to syslog
+syslog:		daemon
+
+# who should be notified when things break?
+notify:		mail:support@example.com
+
+# don't summarize notifications
+nolotsmsgs:	yes
+
+# enable built in tcp test port
+test_port:	3074
+
+# configure mail notifications
+Method "mail" {
+	# command:	/lib/sendmail -t
+	# add/edit headers?
+	send:		To: %R\n\
+	From: %F\n\
+	Content-Type: text/plain; charset=utf-8\n\
+	Subject: Argus%E\n\n\
+	%M\n
+}
+
+
+# enable built in resolver
+Resolv
+
+
+Group "Example" {
+	Group "Servers" {
+		frequency: 1min
+		Host "eury" {
+			hostname: eury.example.com
+			Service TCP/HTTP
+			Service UDP/DNS
+			Service UDP/Domain/example.com
+			Service UDP/NFS
+			Service Ping
+			Service TCP {
+				# notify someone else when this breaks
+				notify:	mail:loco-support@example.com
+				label:	LoCo
+				info:	in-house LoCo server
+				port:	87
+				readhow: banner
+				send:	HELO\n
+				expect:	200 OK
+			}
+			Service TCP/URL {
+				label:	SQL
+				url:	http://www.example.com/cgi-bin/dbtest.pl
+				expect:	DATABASE OK
+			}
+		}
+		Host "pen" {
+			hostname: pen.example.com
+			Service TCP/SMTP
+			Service UDP/DNS
+			Service UDP/NFS
+			Service Ping
+		}
+		Host "gw" {
+			hostname: 192.168.200.1
+			community: public
+			Service Ping
+			Service UDP/SNMP {
+				label:	foo
+				oid:	.1.3.6.1.2.1.2.2.1.7.2
+				eqvalue: 1
+			}
+			Service UDP/SNMP/ifOperStatus.2 {
+				eqvalue: 1
+			}
+		}
+
+	}
+
+	Group "Software" {
+		# notify if there is a new version of the software available
+		Service TCP/URL {
+			url:		http://www.tcp4me.com/code/argus/download.html
+			browser:	Argus Version Check - 3.5
+			expect:		argus-3\.5\.tgz
+			label:		Argus Version
+			messagedn:	New Version of Argus Available
+			# if you use this example, the author appreciates you
+			# leaving the frequency at once per day, so as not to
+			# overburden his web server
+			frequency:	1day
+			retries:	5
+			retrydelay:	10min
+		}
+	}
+
+	Alias "Bar" "Top:Foo:Colo"
+
+        Group "World Reachability" {
+                countstop:	yes
+                frequency:      10min
+		sendnotify:	yes
+
+                Group "Root Servers" {
+			# do not send a notification if only some are down
+			# only if they are all down
+
+                        gravity:        up
+
+			Service Ping {
+				label:	A
+				hostname:	a.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	B
+				hostname:	b.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	C
+				hostname:	c.root-servers.net
+				sendnotify:	no
+			}
+                }
+        }
+}
+

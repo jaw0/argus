@@ -1,0 +1,106 @@
+
+
+	http://www.slac.stanford.edu/xorg/nmtf/nmtf-tools.html
+	http://www.softlandmark.com/Monitoring.htm
+	http://home.xnet.com/~blatura/linapp1.html
+	comp.networks.noctools.submissions
+	comp.dcom.net-management
+
+other:
+	http://www.sysmon.org/
+	http://www.bb4.com
+	http://www.ipswitch.com
+	http://www.kernel.org/software/mon/
+	http://pikt.org/
+	http://www.tildeslash.com/monit/
+
+================================================================
+
+doc
+	document *all* fields
+	document *all* public object methods
+	(not private methods, not class methods)
+
+subclasses should have no public methods, only private and virtual
+
+
+field attrs:
+	internal
+
+method attrs:
+	virtual
+
+
+
+name => monit (in use), horseradish, mv2, 
+
+================================================================
+all URLs:
+	in this order:
+		object, func
+
+object initialization order:
+	group:	group, monel
+	srvc:	specific, srvc, monel
+
+================================================================
+1016	fix stats save, roll race
+1017	fix configure, ack
+
+3.1.1
+	has typo: misc.pl::sysproblem
+	mod_perl connect problem
+================================================================
+solaris memory leak
+
+	5.8.0, gcc	=> leaks like a sieve
+	5.00503, suncc	=> beauty
+	5.00503, gcc	=> beauty
+	5.6.1, gcc	=>
+
+
+possibly perl bug:
+	http://bugs6.perl.org/rt2/Ticket/Display.html?id=18964
+
+================================================================
+profiling - adds only about 5% overhead
+	idle:     87.84% 86.62% 87.42%
+	monrate:  9.72 10.70 9.60 per second
+
+
+not profiling:
+	idle:     92.47% 95.28% 95.44%
+	monrate:  12.77 10.21 10.40 per second
+
+	=> 100/second = half idle
+================================================================
+
+giftopnm page.gif pnmscale .25 | ppmquant 256 | ppmtogif > page-thumb.gif
+
+================================================================
+Socket6 inet_pton changed behavior 0.11
+	now only handles numeric addrs
+	used to do a gethostbyname2 if passed a hostname
+
+================================================================
+
+My_Argus/definedattime
+	checked by argus-update
+	set by argus-update
+
+Top/definedattime
+	set by create_object
+	checked by darp ping
+
+================================================================
+
+Service::config
+    XXX::config
+    test_config
+    MonEl::init
+	DARP::Misc::init
+	stats_load
+	init_hook
+    XXX::configured
+
+================================================================

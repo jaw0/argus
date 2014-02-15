@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <jaw @ tcp4me.com>
+# Date: 2002-Oct-08 14:19 (EDT)
+# Function: update version string in various files
+#
+# $Id: upver,v 1.1 2007/02/19 04:16:20 jaw Exp $
+
+BRANCH=DEV
+VER=$1
+MSG=
+
+if [ -z "$VER" ]; then
+    echo version\?
+    exit
+fi
+
+case $VER in
+    *dev*)
+	MSG='This is unstable development code'
+	;;
+    *RC*)
+	MSG='This is release candidate beta code'
+	;;
+    *)
+	BRANCH=CURRENT
+	;;
+esac
+
+for file in Makefile Makefile.tplt; do
+    sed -e "s/VERSION = .*/VERSION = $VER/" -e "s/MESSAGE = .*/MESSAGE = $MSG/" $file > $file.$$
+    mv $file.$$ $file
+done
+
+sed -e "/START $BRANCH/,/END $BRANCH/s/argus[^/]*tgz/argus-$VER.tgz/g" HTML/download.html > download.$$
+mv download.$$ HTML/download.html
+chmod a+x HTML/download.html
+
+

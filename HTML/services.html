@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Services</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Documentation - Services</H1>
+
+<P>Services specify actual things to monitor. The very purpose of this
+software. So, you'll probably need to know about them</P>
+
+<P>In the config file, Services are specified as:</P>
+<PRE>
+	Service NAME {
+		<I>data...</I>
+	}
+</PRE>
+<P>Often, there will be no need to specify any data, and you may shorten
+the specification to just</P><PRE>
+	Service NAME
+</PRE>
+
+<DIV CLASS=TECHNOTE>
+If you are just starting out with argus, it is recommended that you
+stick to the short form when possible and let argus fill in the
+default values. In most cases, you will only say:<BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;Service Ping</TT><BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;Service TCP/SMTP</TT><BR>
+<TT>&nbsp;&nbsp;&nbsp;&nbsp;Service TCP/IMAP</TT><BR>
+in your config file, and argus will default the rest.
+</DIV>
+
+<P>NAME specifies the type of test. There are 4 main types of tests:</P><UL>
+	<LI>	Ping	-	Pings a host
+	<LI>	Prog	-	runs a program
+	<LI>	TCP	-	tests a TCP port
+	<LI>	UDP	-	tests a UDP port
+</UL>
+<P>Both TCP and UDP have a number of application tests built-in. Specifying an
+application does the same thing as setting the various bits of data to values
+appropriate for the protocol. But you could just as easily specify them directly.
+</P>
+<P>
+The currently built-in application tests are:</P><UL>
+	<LI>TCP/SMTP TCP/FTP TCP/NNTP TCP/HTTP TCP/HTTPS TCP/Gopher TCP/Telnet TCP/SSH TCP/POP TCP/IMAP TCP/DNS TCP/LPD TCP/Whois TCP/Rwhois
+		TCP/NFS TCP/NFSv3 TCP/POPS TCP/IMAPS TCP/SMTPS TCP/NNTPS
+		TCP/SIP<A HREF="#foot_6">[6]</A> TCP/Slimserver
+
+	<LI>UDP/SNMP UDP/SNMPv2c<A HREF="#foot_7">[7]</A> UDP/SNMPv3<A HREF="#foot_5">[5]</A>
+		UDP/DNS UDP/DNSQ<A HREF="#foot_1">[1]</A> UDP/NTP
+		UDP/Portmap UDP/NFS
+		UDP/NFSv3<A HREF="#foot_2">[2]</A>
+		UDP/RADIUS<A HREF="#foot_3">[3]</A>
+		UDP/SIP<A HREF="#foot_6">[6]</A>
+		UDP/IAX2<A HREF="#foot_6">[6]</A>
+
+	<LI>several "special" tests: TCP/URL UDP/Domain
+		TCP/RPC<A HREF="#foot_6">[6]</A> UDP/RPC<A HREF="#foot_6">[6]</A>
+</UL>
+
+<H2>Common Data that applies to all Services</H2>
+<PRE>
+	Service NAME {
+		frequency:	60
+		retries:	5
+		timeout:	10
+	}
+</PRE>
+<P>These do not need to be specified, they will happily default, or propagate
+from an enclosing group</P>
+<UL>
+<LI>	<P><TT>frequency</TT>	specifies how often the service is tested, in seconds.
+	<BR>The author is aware that technically, this should be called <TT>period</TT>
+	-- deal with it.</P>
+
+<LI>	<P><TT>retries</TT>	if a test fails, we will retry it the specified
+	number of times before declaring it down</P>
+
+<LI>	<P><TT>timeout</TT>	how long to wait for something (eg. a response from
+	a mail server) before giving up and declaring the test a failure.</P>
+</UL>
+<DIV CLASS=TECHNOTE>
+Note, specifying that things happen every 60 seconds (for example) does not mean
+that they will happen at the top of every minute (:00 seconds). Argus is smart
+and will load balance the tests to prevent the 59 seconds of quiet followed by
+an intense flurry of network congestion common in some other network monitoring
+applications. In argus-speak, things have a frequency and a phase, called <TT>phi</TT>.
+You cannot set this, but it is visible in the debugging web page.
+</DIV>
+
+<H2>Data for Prog Tests</H2>
+<PRE>
+	Service Prog {
+		# make sure no one deleted root from the passwd file
+		command:	cat /etc/passwd
+		expect:		^root:
+	}
+</PRE>
+<P>These need to be specified. They will not default, or propagate from anywhere</P>
+<UL>
+<LI>	<P><TT>command</TT>	the command to run, along with any commandline arguments.
+	specify it just as you would to your shell. you should either specify a complete
+	path to the program, or verify that it is in argus's PATH</P>
+<LI>	<P><TT>expect</TT>	a regular expression that needs to match the output
+	from the command. if not specified, the exit code from the program will be
+	used to determine success or failure</P>
+</UL>
+
+<H2>Data for Ping Tests</H2>
+<PRE>
+	Service Ping {
+		hostname:	host1.example.com
+	}
+</PRE>
+<P>This needs to be specified, but will propagate from an enclosing group</P>
+<P><TT>hostname</TT>	the hostname or IP address to ping</P>
+
+
+<H2>Data for TCP and UDP Tests</H2>
+<PRE>
+	Service TCP {
+		hostname:	www.example.com
+		port:		80
+		send:		HEAD / HTTP/1.0\r\n\r\n
+		expect:		HTTP
+		readhow:	toeof
+	}
+</PRE>
+<P>Both TCP and UDP have many of the same parameters</P>
+<UL>
+<LI>	<P><TT>hostname</TT>	the hostname or IP address to test.
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>port</TT>	the port to test. This needs to be specified.</P>
+<LI>	<P><TT>send</TT>	data to send once connected. This needs to be specified. If nothing
+	is specified, nothing will be sent to the remote server</P>
+<LI>	<P><TT>expect</TT>	a regular expression that needs to match the data received from the
+	remote server. This needs to be specified. If nothing is specified, success or failure
+	is determined by whether or not we received any data at all</P>
+<LI>	<P><TT>readhow</TT>	This needs to be specified. How much data should we try to read?
+	<TT>toeof</TT> indicates read until the remote end closes the connection. <TT>banner</TT>
+	indicates we only want to read a banner. <TT>once</TT> indicates to use whatever data
+	is returned in the first read(). This parameter only applies to TCP not UDP</P>
+</UL>
+<P>Specifying an application (eg. TCP/SMTP) will fill in port, send, expect, and readhow
+as appropriate for that protocol</P>
+
+<P>See below for details on the special <A HREF="#TCP/URL">TCP/URL</A>,
+<A HREF="#UDP/Domain">UDP/Domain</A>,
+and <A HREF="#UDP/SNMP">UDP/SNMP</A> tests</P>
+
+<H2><A NAME="UDP/SNMP">SNMP Tests</A></H2>
+<PRE>
+	Service UDP/SNMP {
+		hostname:	cisco-1.example.com
+		community:	qwerty
+		oid:		.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+		maxvalue:	27
+	}
+</PRE>
+<UL>
+<LI>	<P><TT>hostname</TT>	the hostname or IP address to test.
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>community</TT>	the SNMP community. 
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>oid</TT>		the OID to query. It should be numeric, and the
+	leading '.' is optional. This needs to be specified.</P>
+
+<LI>	<P><TT>maxvalue</TT>	the maximum permitted value, if the query returns
+	something larger, we consider the service down. You can specify any of:</P><UL>
+		<LI>maxvalue
+		<LI>minvalue
+		<LI>eqvalue
+		<LI>nevalue
+	</UL>
+</UL>
+
+<H2><A NAME="UDP/SNMPv3">SNMPv3 Tests</A><A HREF="#foot_5">[5]</A></H2>
+
+<PRE>
+	Service UDP/SNMPv3 {
+		hostname:	cisco-1.example.com
+		oid:		.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+		snmpuser:	joe
+		snmppass:	secret
+		snmpauth:	MD5
+		snmpprivpass:	supersecret
+		snmppriv:	DES
+		contextname:	public
+		contextengine:	80000000123456
+		authengine:	80000000123456
+	}
+</PRE>
+<UL>
+<LI>	<P><TT>snmpuser</TT>	the snmp username
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>snmppass</TT>	the snmp authentication password
+	This needs to be specified if authentication is required, but will propagate from an enclosing group</P>
+<LI>	<P><TT>snmpauth</TT>	the authentication algorithm, MD5, SHA1, or none.
+	This will default to MD5 if a password is provided, otherwise none.</P>
+<LI>	<P><TT>snmpprivpass</TT>	the privacy password
+	This needs to be specified if privacy is required, but will propagate from an enclosing group</P>
+<LI>	<P><TT>snmppriv</TT>	the privacy encryption algorithm, DES or none.
+	This will default to DES if a snmpprivpass is specified, otherwise none.
+<LI>	<P><TT>contextname</TT>	the context name
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>contextengine</TT>	the context engine-id
+	This needs to be specified, but will propagate from an enclosing group,
+	or will attempt to be auto-discovered.</P>
+<LI>	<P><TT>authengine</TT>		the authentication engine-id
+	This needs to be specified, but will propagate from an enclosing group,
+	or will attempt to be auto-discovered.</P>
+
+</UL>
+
+<H3>SNMP rate calculations <A HREF="#foot_4">[4]</A></H3>
+<P>Certain SNMP values are not useful themselves, but may be useful to watch
+after performing some manipulation. InOctets by itself is not useful, but
+using it to calculate a rate (or bandwidth use) in Bytes (or Bits) per second
+and comparing that value to a max or min is useful.</P>
+<PRE>
+	Service UDP/SNMP {
+		label:		Out
+		hostname:       cisco-1.example.com
+		# OutOctets
+		oid:		.1.3.6.1.2.1.2.2.1.16.2
+		calc:		ave-rate-bits
+		maxvalue:	20000000	# 20M bits/sec
+		minvalue:	 1000000	#  1M bits/sec
+	}
+</PRE>
+<P>This will convert the OutOctets value into a rate (Bytes per second),
+calculate the moving average, and convert it to Bits per second. If the
+resulting value falls outside the expected range of 1-20 Mbps, the test
+will fail.</P>
+
+<DIV CLASS=TECHNOTE>
+The <TT>calc</TT> parameter was known as <TT>snmpcalc</TT> prior
+to version 3.2</DIV>
+
+<H2><A NAME="TCP/URL">TCP/URL Content Test</A></H2>
+<P>The TCP/HTTP tests that the HTTP service is up and running. The TCP/URL test
+will test the content of a web page.</P>
+<PRE>
+	Service TCP/URL {
+		url:	 http://www.example.com/cgi-bin/shoppingcart.pl
+		browser: Mozilla/5.0 (compatible; just testing)
+		expect:	 cart contains 1 item
+	}
+</PRE>
+<UL>
+<LI>	<P><TT>url</TT>		the url to fetch. it must begin with 'http://',
+	and may contain an optional ':port'. It needs to be specified.</P>
+<LI>	<P><TT>expect</TT>	a regular expression that needs to match the data received from the
+	remote server. This needs to be specified. If nothing is specified, success or failure
+	is determined by whether or not we received any data at all</P>
+<LI>	<P><TT>browser</TT>	spoof the specified browser (send as the User-Agent). This
+	is optional, and can be used if the server or application is serving different
+	content based on browser.</P>
+</UL>
+
+<H2><A NAME="UDP/Domain">DNS Authoritativeness Test</A></H2>
+<P>The UDP/DNS (and UDP/DNSQ) test that a DNS server is up and running.
+The UDP/Domain test will test that a server is answering authoritatively for a zone.</P>
+<PRE>
+	Service UDP/Domain {
+		hostname:	ns1.example.com
+		zone:		example.com
+	}
+</PRE>
+<UL>
+<LI>	<P><TT>hostname</TT>	the hostname or IP address to query.
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>zone</TT>	the DNS zone to check.
+</UL>
+<P>as a shortcut, an alternative syntax is supported:</P>
+<PRE>
+	Group "nameserver" {
+		hostname:	ns1.example.com
+		Service UDP/Domain/example.com
+		Service UDP/Domain/example.net
+		Service UDP/Domain/example.org
+	}
+</PRE>
+
+<H2>RPC tests</H2>
+<DIV CLASS=TECHNOTE>
+RPC testing is available only in versions 3.4 and later
+</DIV>
+
+<P>Both TCP and UDP RPC services can be tested.
+The RPC tests will query the RPC portmapper
+to learn the service's current port.
+</P>
+<PRE>
+	Service UDP/RPC
+		hostname:	ns1.example.com
+		prognum:	100003
+		version:	2
+	}
+</PRE>
+<UL>
+<LI>	<P><TT>hostname</TT>	the hostname or IP address to query.
+	This needs to be specified, but will propagate from an enclosing group</P>
+<LI>	<P><TT>prognum</TT>	the RPC program number. this must be specified.
+				many common RPC services can also be specified by name.</P>
+<LI>	<P><TT>version</TT>	the RPC program version. will default to 0.</P>
+</UL>
+<P>as a shortcut, an alternative syntax is supported:</P>
+<PRE>
+
+	Group "server" {
+		hostname:	server.example.com
+
+		# Service UDP/RPC/program/version
+
+		Service UDP/RPC/100003
+		Service UDP/RPC/100003/2
+		Service TCP/RPC/mountd
+		Service TCP/RPC/mountd/2
+	}
+</PRE>
+
+
+
+<!-- **************************************************************** -->
+<HR>
+<P><A NAME="foot_1">[1]</A> - UDP/DNS sends a 'status-query', UDP/DNSQ sends an 'IN ANY' query.
+	some DNS servers (notably djbdns) do not handle 'status' queries.
+	UDP/DNSQ is available only in versions 3.1 and later.</P>
+<P><A NAME="foot_2">[2]</A> - UDP/NFS tests NFS version 2. UDP/NFSv3 is NFS version 3.
+	UDP/NFSv3 is available only in versions 3.1 and later.</P>
+<P><A NAME="foot_3">[3]</A> - This test uses the <TT>server-status</TT> query, which is not
+supported by all radius servers.</P>
+<P><A NAME="foot_4">[4]</A> - SNMP rate calculations are available only in versions 3.1.1 and later.</P>
+
+<P><A NAME="foot_5">[5]</A> - only available in versions 3.3 and later.</P>
+<P><A NAME="foot_6">[6]</A> - only available in versions 3.4 and later.</P>
+<P><A NAME="foot_7">[7]</A> - only available in versions 3.5 and later.</P>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: services.html,v 1.20 2012/10/12 02:17:21 jaw Exp $ -->
+</HTML>

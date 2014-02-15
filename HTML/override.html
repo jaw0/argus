@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Overrides</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Overrides</H1>
+<P>Everyone knows that <B>Red = Bad</B>. Two people working to fix the same
+thing is also bad. An override is a way of saying "I know it is down" or
+"I'm working on it".</P>
+<P>
+Overrides are typically used in the 2 following ways:</P>
+<UL>
+<LI>	<P>When someone discovers something is down, they will place an
+	override on the item letting their co-workers know that someone is fixing
+	the problem, and also to make it not red (so that management doesn't
+	storm on over wondering why there is red). In many companies a note may
+	also be placed in a trouble-ticket system</P>
+
+<LI>	<P>If someone is going to perform maintenance on something, an override
+	can be set on the item prior to doing the work, preventing it from turning
+	red and notifying someone. This will prevent the person who would have
+	been notified about the outage from having to wake up and scream at you.</P>
+</UL>
+
+<H2>Setting an Override</H2>
+<OL>
+<LI>	Click on the "Override" button on the webpage.
+<LI>	Fill in the fields. <UL>
+	<LI><B>Comment</B>	- a comment, such as "why is it down", or "how is it being fixed",
+				perhaps a reference to a trouble-ticket number.
+
+	<LI><B>Expires</B>	- how long should the object stay overridden. it should be
+				set to roughly "how long will it take to fix". this prevents
+				things from being placed in override and forgotten.
+
+	<LI><B>Mode</B>		- if set to manual, the override will stay in place until
+				it is manually removed or it expires.<BR>
+				if set to auto, it will stay in place until the object comes up,
+				or it is removed manually, or it expires.
+	</UL>
+<LI>	Click "Submit"
+<LI>	Depending on company policy, create a trouble-ticket.
+<LI>	Fix problem.
+</OL>
+
+<P>
+In order to set an override on an object that is currently "up", manual mode
+must be used. Otherwise, immediately after being set, it will notice the
+object is up, and automatically disengage.
+</P>
+
+<H2>Preventing Overriding</H2>
+<P>Often, there are things that should be able to be overridden (such as a router),
+and things that should not be (such as "our entire east coast network"). This can
+be specified in the config file:</P><PRE>
+	Group "East Coast Network" {
+		<FONT COLOR=blue>overridable:	no</FONT>
+		Host "gw-phila1" {
+			Service Ping
+		}
+		Host "gw-nyc1" {
+			Service Ping
+		}
+		...
+	}
+</PRE>
+<P>Additionally, you can control who can and cannot override what on a per user, per object
+basis using access control lists. Overrides are protected by "acl_override" (or, in simple
+mode, "acl_staff").
+</P>
+
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: override.html,v 1.4 2002/11/30 20:08:24 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,443 @@
+/*
+  Copyright (c) 2007 by Jeff Weisberg
+  Author: Jeff Weisberg <argus @ tcp4me.com>
+  Created: 2007-Jan-10 23:20 (EST)
+  Function: argus css
+
+  $Id: argus.css,v 1.19 2012/10/06 19:51:07 jaw Exp $
+*/
+
+/* stylize the "buttons" to look like buttons */
+TD.BUTTON A, TD.ERRORSBUTTON A, TD.ATTNBUTTON A {
+	display:		block;
+        color:			#448;
+	margin-bottom:		3px;
+        font-family:		Helvetica, Arial, sans-serif;
+        font-size:		85%;
+	text-decoration:	none;
+	border-radius:		3px;
+	-moz-border-radius:	3px;
+        -o-border-radius:	3px;
+
+        min-height:		18px;
+        /* firefox: padding-top: 2px */
+}
+
+TD.BUTTON A {
+	background-color:	#ddd;
+	border:			1px outset #ccc;
+        text-shadow:            1px 1px 1px #e8e8e8;
+}
+TD.ERRORSBUTTON A {
+	background-color:	#f88;
+	border:			1px outset #e77;
+        text-shadow:            1px 1px 1px #ff9898;
+}
+TD.ATTNBUTTON A {
+	background-color:	#fdd;
+	border:			1px outset #ccc;
+        text-shadow:            1px 1px 1px #ff9898;
+}
+
+/* move the arrows to left of the buttons */
+.buttonarrow {
+        float:                  left;
+        position:               relative;
+        /* the double + single arrow do not align the same, 2px = compromise */
+        top:                    -2px;
+        width:                  0;
+}
+
+tr.warning > td {
+        border-bottom:          2px solid #fff;
+}
+
+.ackbutton {
+        padding-left:           10px;
+        padding-right:          10px;
+        font-family:		Helvetica, Arial, sans-serif;
+        font-size:		85%;
+        color:			#44a;
+	background-color:	#ddd;
+	border:			2px outset #ccc;
+	border-radius:		3px;
+	-moz-border-radius:	3px;
+        -o-border-radius:	3px;
+	text-decoration:	none;
+        text-shadow:            1px 1px 1px #e8e8e8;
+}
+
+.dashbuttons A {
+    	padding-left:		5px;
+        padding-right:		5px;
+}
+
+/* make the stats + logs tables smaller */
+TABLE.STATS TD, TABLE.LOGS TD {
+	font-size:		85%;	/* firefox: 95% */
+        padding-right:  	5px;
+}
+
+TABLE.STATS, TABLE.LOGS {
+        padding-left:           20px;
+        padding-top:            10px;
+}
+
+TABLE.LOGS {
+        padding-bottom:         10px;
+}
+
+/* change the border on the main tables */
+TABLE.MAIN, table.graphmain, table.notifydetailmain, table.overview, table.loginmain, table.logfilemain, table.aboutmain, table.dashboard {
+	border-spacing:         0;
+        border-bottom:          1px solid #888;
+}
+
+/* do not underline the graph links */
+.GRAPHS A {
+	text-decoration:	none;
+}
+
+/* QQQ - groupchild belongs here but can get wide */
+/* scoot over to the right a bit */
+TABLE.DARP, TABLE.SRVCDTA, TABLE.GROUPDATA {
+	margin-left:		20px;
+}
+
+hr {
+        border-top:             1px dashed #888;
+        border-bottom:          0px;
+        clear:                  both;
+}
+
+th {
+        font-family:		Helvetica, Arial, sans-serif;
+        font-size:              85%;
+}
+
+.heading {
+        font-family:		Helvetica, Arial, sans-serif;
+        font-size:              90%;
+}
+h2 {
+        font-family:		Helvetica, Arial, sans-serif;
+        font-size:              110%;
+}
+
+td.objectname {
+        padding-left:           5px;
+        font-family:		Helvetica, Arial, sans-serif;
+}
+td.objectname a {
+        text-decoration:	none;
+        color:			#008;
+}
+td.username {
+        padding-right:          5px;
+}
+
+.maincontent {
+        padding-left:           5px;
+}
+
+.sidebuttons {
+        padding-top:            3px;
+        padding-right:          5px;
+        padding-left:           3px;
+        border-left:            1px solid #888;
+        width:			160px;
+}
+
+.headerargus A {
+        font-size:              75%;
+        font-family:		Helvetica, Arial, sans-serif;
+        color:                  #777;
+        text-decoration:        none;
+        position:               relative;
+        top:                    3px;
+}
+.footerargus {
+        font-size:              75%;
+        font-family:		Helvetica, Arial, sans-serif;
+        color:                  #876;
+}
+.footerargus A {
+        color:                  #876;
+}
+
+.coloverviewdown {
+        padding-left:           5px;
+        border-right:           1px solid #000;
+}
+.coloverviewoverride {
+        border-right:           1px solid #000;
+}
+.coloverviewunacked {
+        padding-right:          5px;
+}
+
+/* notify list */
+
+.notifylist td {
+        border-bottom:          1px solid #888;
+        border-left:            1px dotted #888;
+        padding-left:           5px;
+        padding-right:          5px;
+        padding-top:            2px;
+        padding-bottom:         2px;
+}
+
+.notifylist td:first-child {
+        padding-left:           20px;
+        border-left:            0px;
+}
+
+.notifydetail td {
+        padding-left:           5px;
+        padding-right:          5px;
+        padding-top:            2px;
+        padding-bottom:         2px;
+}
+
+.notifydetail td:first-child {
+        padding-left:           20px;
+}
+
+.notifydetailstatus, .notifydetailaudit {
+        padding-left:           20px;
+}
+
+.notifydetailaudit TD {
+        padding-right:          10px;
+}
+
+.coloverviewdown, .coloverviewoverride, .coloverviewunacked {
+        width: 33%;
+}
+table.overviewdown, table.overviewoverride, table.overviewunacked {
+	font-size:	75%;
+}
+
+.graph {
+        float: left;
+        text-align:     center;
+        padding-left:   5px;
+        padding-right:  5px;
+        padding-bottom: 5px;
+}
+
+.graphs {
+        padding-left:   5px;
+}
+
+.graphpagelinks {
+    	float:		right;
+        font-size:	80%;
+}
+
+pre {
+        padding-top:            5px;
+        padding-bottom:         5px;
+        font-size:              80%;
+}
+
+.notifyuser {
+        float:                  left;
+        margin-right:           10px;
+        margin-bottom:          10px;
+        padding-left:           2px;
+        padding-right:          2px;
+        border:                 2px solid #aaa;
+}
+
+/*****************************************************************/
+/* popup forms */
+/*****************************************************************/
+#overridefoot {
+	margin-top:		6px;
+	font-style:		italic;
+	font-size:		12px;
+}
+
+#annotatediv, #overridediv {
+	position:		fixed;
+	top:			100px;
+	right:			100px;
+	background-color:	#6dd;
+	border:			1px solid #000;
+	border-radius:		10px;
+	-moz-border-radius:	10px;
+        -o-border-radius:	10px;
+}
+
+#annotatediv div.inner, #overridediv div.inner {
+	margin:			2px;
+	background-color:	#8ff;
+	border:			1px solid #488;
+	border-radius:		12px;
+	-moz-border-radius:	12px;
+        -o-border-radius:	12px;
+}
+
+#annotatediv form, #overridediv form {
+	margin:			10px;
+}
+
+
+#arguserror_ss37 {
+        display:                none;
+}
+
+
+/* animated buttons */
+@-webkit-keyframes argus-bouncer {
+  0%,6%,12%,18%,24%,100% {
+    -webkit-transform: translate(0,0);
+  }
+  3% {
+    -webkit-transform: translate(-10px,1px);
+  }
+  9% {
+    -webkit-transform: translate(8px,0px);
+  }
+  15% {
+    -webkit-transform: translate(-5px,0px);
+  }
+  21% {
+    -webkit-transform: translate(2px,1px);
+  }
+}
+
+@-moz-keyframes argus-bouncer {
+  0%,6%,12%,18%,24%,100% {
+    -moz-transform: translate(0,0);
+  }
+  3% {
+    -moz-transform: translate(-10px,1px);
+  }
+  9% {
+    -moz-transform: translate(8px,0px);
+  }
+  15% {
+    -moz-transform: translate(-5px,0px);
+  }
+  21% {
+    -moz-transform: translate(2px,1px);
+  }
+}
+
+.ATTNBUTTON {
+    -webkit-animation: argus-bouncer 2s infinite;
+    -moz-animation:    argus-bouncer 2s infinite;
+}
+.ATTNBUTTON:hover {
+    -webkit-animation: none;
+    -moz-animation:    none;
+}
+
+/*****************************************************************/
+/* mobile devices */
+/*****************************************************************/
+
+@media screen and (max-device-width: 480px){
+
+    * {
+	font-size: 28px;
+    }
+
+    #annotatediv, #overridediv {
+        right:                          40px;
+    }
+
+    input[type=text], input[type=password] {
+        width:                          350px;
+    }
+
+    table.overviewdown, table.overviewoverride, table.overviewunacked {
+        word-break: 			break-all;
+    }
+
+    .notifvalue {
+        word-break: 			break-all;
+        width:                          350px;
+    }
+
+    .debugkey {
+        word-break: 			break-all;
+        max-width:                      250px;
+
+    }
+    .debugval {
+        word-break: 			break-all;
+        max-width:                      380px;
+    }
+    td.objectname {
+        word-break: 			break-all;
+    }
+    .sidebuttons {
+        width:				120px;
+    }
+
+    .headerbranding {
+	font-size:			85%;
+    }
+    .headerargus {
+        font-size:			85%;
+    }
+    .footerargus {
+        font-size:			65%;
+    }
+    .footerargus A {
+        font-size:			95%;
+    }
+
+    /* make the buttons bigger */
+    TD.BUTTON A, TD.ERRORSBUTTON A, TD.ATTNBUTTON A {
+        padding-bottom:                 16px;
+        padding-top:                    16px;
+
+        max-width:			130px;
+        overflow-x:			hidden;
+    }
+
+    .dashbuttons A {
+        height:				50px;
+    }
+    .ackbutton {
+        padding:                        8px 30px 8px 30px;
+    }
+
+    /* hide some things */
+    td.username {
+        display:                        none;
+    }
+    .stats {
+        display:                        none;
+    }
+
+    .logs td {
+        font-size:                      16px !important;
+    }
+    table.logs {
+        padding-left:			5px !important;
+    }
+
+    td.objectname, .heading, h2 {
+        font-size:                      30px;
+    }
+
+    /* adjust image sizes */
+    img.thumb {
+        height:                         auto;
+        width:                          400px;
+    }
+    .graphs {
+        padding-left:   30px;
+    }
+
+   .notifydetailaudit TD {
+        font-size:                      70%;
+    }
+
+}
+

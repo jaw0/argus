@@ -1,0 +1,8 @@
+#!/usr/local/bin/perl
+# for generating encrypted passwords for users file
+# usage: mkpasswd passwd
+
+$pw = shift @ARGV;
+@a = grep {/[a-zA-Z0-9]/} map {chr} (0..127);
+$salt = $a[rand(@a)] . $a[rand(@a)];
+print crypt($pw,$salt),"\n";

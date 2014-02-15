@@ -1,0 +1,75 @@
+#!__PERL__
+# -*- perl -*-
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Date: 2002-Apr-18 15:52 (EDT)
+# Function: control argus
+#
+# $Id: argusctl,v 1.14 2005/02/13 21:12:00 jaw Exp $
+
+use lib('__LIBDIR__');
+use Socket;
+use Getopt::Std;
+use Argus::Ctl;
+use Argus::Encode;
+require "conf.pl";
+
+# The controlling Intelligence understands its own nature,
+# and what it does, and whereon it works.
+#   -- Marcus Aurelius, Meditations
+
+getopts('c:hkpq');
+
+if( $opt_h ){
+    print STDERR <<U;
+usage:
+    argusctl [options] command [param=value]...
+    options:
+	-c    control socket
+	-h    display this message
+        -k    stay connected to server
+	-q    no output
+        -p    prettier output
+    known commands:
+	shutdown    - shuts down the server
+	hup         - causes server to reload its config
+	help        - gets list of known commands from the server
+	console     - along with -k, to watch the log messages
+U
+    ;
+    exit;
+}
+
+# connect to Argus
+$argusd = Argus::Ctl->new( ($opt_c || "$datadir/control"),
+			 who    => 'argusctl',
+			 retry  => 0,
+			 encode => 1 );
+
+exit -1 unless $argusd && $argusd->connectedp();
+
+$cmd = shift @ARGV;
+$p{func} = $cmd;
+foreach $arg (@ARGV){
+    ($k, $v) = split /=/, $arg, 2;
+    $p{$k} = $v;
+}
+
+$r = $argusd->command_raw( %p );
+print "$r\n" unless $opt_q;
+
+while( $_ = $argusd->nextline() ){
+    exit if /^$/ && !$opt_k;
+
+    if( $opt_p ){
+	# partial decode
+	s/~x([234567].)/chr(hex($1))/ge;
+	s/\0177/~x7F/g;
+    }
+    
+    print unless $opt_q;
+}
+
+exit ($r =~ /200/ ? 0 : -1);
+

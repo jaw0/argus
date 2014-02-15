@@ -1,0 +1,445 @@
+
+
+additional states: degraded, bouncing, etc. via configurable modules
+
+notification config syntax
+	escalation table syntax sucks
+	separate up/down parameters
+	schedules?
+
+notif suppress
+
+snmp traps
+
+extended tcp chat scripts
+	modify Service::readconfig
+	build chat => [send, expect, send, expect, ...]
+
+new tests:
+	x sunrpc
+	dhcp
+	x radius
+
+sys agent?
+
+DARP
+
+DNS re-resolver child process or service
+
+WAP
+	login, page, unacked, ack, override?
+
+
+
+BTW, how do you handle daily 'scheduled' outages and notifications?  I
+
+================================================================
+degraded:
+	services - always up|down (?)
+	groups:
+		gravity: up-but-degraded
+			up if all up
+			down if all down
+			degraded if some up/some down
+	
+
+================================================================
+document:
+	depends: object
+
+================================================================
+
+config file syntax to specify "sometimes inherit"
+	udp/dns/timeout:	10	# specify default for udp/dns
+	udp/timeout:		15	# specify default for udp
+
+	service/sendnotify:	no	# don't notify about services
+
+================================================================
+        mean  = (bw + k * mean) / (k + 1)
+        stdev = (abs(bw - mean) + k * stdev) / (k + 1)
+
+================================================================
+x-axis on graphs:
+    My preference would be to have it day, week, month and maybe last hour.
+
+================================================================
+
+Events	- such as reboot, snmp-traps
+	generates 1 notification when it happens
+	always up
+
+	Event SNMP/Reboot {
+		notify: mail:syswatch
+	}
+
+	Event Prog {
+		command: uptime
+		minvalue: 10
+	}
+
+special case of Service
+	forces: 0 retries, null messageup,
+
+================================================================
+
+Conf::configure, (Group,Service)::readconfig,
+
+all look about the same
+move differences into doc->conf
+unify
+
+================================================================
+Sometimes it is useful to negate tests, e.g. to consider it a problem
+if a service *is* actually running. Since 0.98b4 uxmon accepts a
+syntax like e.g.:
+
+================================================================
+ISO/OSI 10164, x.733:
+
+down severity levels:
+	clear(green)
+	warning(blue), minor(yellow), major(orange), critical(red)
+
+================================================================
+
+m4m timestamp handling:
+	use a different timestamp than definedattime
+	set on insert, check/update on update
+
+
+================================================================
+TODO for 3.3:
+	x perl 5.8.1: Encode
+	x https
+	x nolotsmsgs per Method
+	x notification channel 
+	x user cron jobs
+	x severity
+	x i18n
+	x snmpv3
+	x notification cleanup
+
+	x document: l10n how to config
+	x document: snmpv3
+	document: hacking:  runatstartup, load_modules, web_customizations
+	document: advanced: severity, notifyaudit, 
+
+	x l10n
+	graphing options
+	events
+	x readconfig cleanup
+	more e-u hooks, and helpers
+	x 'reverse' status
+
+	DARP override
+
+	x n_services -- @ recycle
+	x darp::synced, verify => set flag when response is rcvd
+	x better timestamp handling, DARP/M4M, avoid excess reloads
+
+
+TODO for 3.4:
+	x modules => Argus::Foo
+	WAP
+	x SIP
+	x TCP/DNS
+	x SIP, IAX2
+	x RPC
+	x disable spike suppression
+
+	x asynchronous resolver
+	expand % in web pages?
+
+	x db choose row/col
+		rowfmt:		%{COL1} %{COL2}
+
+
+	rfc 2925 remote ping
+	ping - jitter, pkt loss?
+
+	x net::ssleay old version brokenness? <1.09
+	x lsrr, ssrr
+	x no username/passwd
+	x solaris+5.8 syslog problem
+	message{up,dn}_all or message{up,dn}_fmt ?
+
+	wiki
+
+	profile graphing
+	x redo graphing - chart::strip
+	
+	readsummary, measure # of ns==1, keep if >50%
+
+	document Resolv
+	
+================================================================
+3.5:
+	x cgi cleanup, split
+	x configurable mibs
+	x vxml
+	x %(test_text=pattern?then_text:else_text)
+	x DARP
+	x new css
+	x better graph when no data yet
+	x customize graph xranges
+	
+	x easier timespecs: 1y 4w 3d 6h 12m 45s
+		=> document. error checking?
+
+	x argus + js: annotate, override
+
+	play with nagios
+	clean + link: http://argus.tcp4me.com/cgi-bin/wiki.pl
+	service Math { ... }
+
+	x mibfile:	filename
+
+	x new count mode?
+
+	x rss, widgets, ...
+		notify list: rss, json
+		summary: json
+
+	x number of samples in graph data files
+	x list of new/changed parameters
+	argus cli
+	
+	new demo config:
+		domains:	google, yahho, cnn, msn, aol
+		web sites:	google, yahoo, cnn, bbc, aol
+		disk:
+		telco:
+
+	vxml override
+	callerid in vxml user for ack, override
+	x bulkget in snmp?
+        x data-storage interfaces
+	documentation
+		- agent
+
+	updated screenshots
+
+
+http://en.wikipedia.org/wiki/Network_monitoring		
+http://www.deadcat.net
+http://twiki.org/
+
+
+	if updated snmpv3 params - must retry within window
+
+	x scheduler? high monrate adjustments?
+
+	can crons(yes), Methods(yes), Resolves(yes), DARPs(no) be created via create_object?
+	x - cron - no. cannot embed an argusctl cmd in an argusctl cmd
+	- darp no. need non-trivial init.
+
+	x better handling of cgi install errors
+	
+	x web site - performance, scalability charts
+		ss10, X1, v100, PC
+		Ping, DNS, TCP/?, Prog
+
+================================================================
+3.6
+	unify $Conf + Top
+	make sure everything can be configured/reconfigured via ctl
+
+	new config engine
+	start running while configuring
+	checksum files+blocks, reload only changed parts
+	x faster startup
+
+	built-in templating/macros
+	Resolv autoconfig
+	SNMPv3 AES
+	x SNMP fanciness
+		ifInOctets[T1 3/0]
+
+	multi-step send/expect
+	x check severity for transition
+	web user manager
+	graph viewer (think google maps)
+	95% mark on graphs
+	doomsday alert (less than X until value reaches Y)
+	x quick view of interesting things
+	anti-depends - down when other thing down
+	x Compute { }
+
+	x reorg data dir structure:
+		stats, gdata, gcache, html
+		=> A/A/file
+
+
+	initial config suggestor
+	smokeping
+	write article
+	web page - recipes
+
+	ping - pkt loss, jitter
+
+	SMB
+	add tests: nagios, bb, ...
+
+	x maxvalue.warning:, ...
+	severity stats
+
+	cronjob - check svnsch + fix
+
+	x escalate + autoack
+
+	x stopcount - shows 1 ?
+
+	x better short messages - host service is state
+	
+	x *.<severity>
+	x configure - fping = symlink
+
+	x send: \n\n
+
+	x escalated UP
+
+	x severity: minor	+ maxvalue, -> becomes critical
+
+	x compute + check now
+
+	x retries for Compute services should be more clear
+
+	x transition log on webpage: change wording
+		transition to down because ...
+
+	x invalid authentication doesnt show an error message on cgi login
+
+	x <function>.<severity> should override less specific parameters:
+	   sendnotify: yes + sendnotify.severity: no => don't send
+
+	x snmp helper - timeout, ...
+
+	x cron, override, expires - timespec
+
+	x dns resolv - robustify
+
+	x udp robustify
+
+	x graphs - lots of things, end up with labels + no graph
+	x graphs - add new service, group graph shows 'not enough...'
+
+	x dns resolv - v6 nameservers
+
+	x snmp v3 - changed engineid
+
+	X:00 cpu load spike
+
+================================================================
+
+* Aberrant Behavior Detection with Holt-Winters Forecasting
+  Compare current data with expected data, detect and log when
+  the rates are outside expected levels
+
+
+* rewritten graphics generation based on libart.
+
+http://code.google.com/p/flot/
+
+================================================================
+
+TEMPLATE name ($param, $param, ...)
+...
+END TEMPLATE
+
+name(a,b,c)
+
+loop:
+	name(a,b, (1,2,3,4))
+	name((a,b,c), d, (1,2,3))
+
+VARIABLE name value
+
+	$(name)
+
+================================================================
+
+multi-process
+
+darp graph links, about, override, + auto-auth
+
+================================================================
+
+3.7
+
+        auto-dependancy/default-dependancy
+        x schedule notify.* on objects
+
+	built-in templating/macros
+	x Resolv autoconfig
+	new config engine
+	start running while configuring
+	checksum files+blocks, reload only changed parts
+	multi-step send/expect
+	graph viewer (think google maps)
+	95% mark on graphs
+	doomsday alert (less than X until value reaches Y)
+	initial config suggestor
+	add tests: nagios, bb, ...
+
+	http auth
+
+	docs - compute, agent
+
+        DARP better integration + cleanup
+
+        gravity: vote, %
+
+darp group status on slave wrong
+
+startup jiggle - better at fixing, recalc
+
+top row, gravity up, number wrong, shows 1 down
+
+combine/commonize compute + perlexpr
+
+x dashboards
+        x darp graphs
+        x interpolate values in text
+
+        - subclass of monel?
+
+x multiple A/A4 records for failover
+    hostname: A, B, C
+    => ip/addr: [a,b,c,d,e,f]
+
+x ipv4/6 knob/sort order
+
+watch this/bookmark
+
+x unacked button - only if there are, include #, color
+
+x monitor resolv stats
+
+x compute: aggregates on all srvcs in group
+        SUM(X) AVG(X) SDEV(X) COUNT(X) MIN MAX
+
+compute
+        x darp order
+        x graph freq
+
+docs
+        compute, schedule, dashboard, generate, snmpoid,
+
+
+================================================================
+4.0
+
+darp users+auth
+user manager
+hosts file
+apache 2
+great renaming
+auto conf
+
+cli
+        http://mailman.nanog.org/pipermail/nanog/2012-October/052722.html
+
+perl 5.14 socket/6
+snmp aes, 3des
+

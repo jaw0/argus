@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - DNS</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Extended DNS tests</H1>
+
+<P><DIV CLASS=TECHNOTE><B>
+Extended DNS testing support was added in version 3.2
+</B></DIV></P>
+
+<P><DIV CLASS=TECHNOTE>
+Extended DNS testing is an advanced feature. If you are just starting out with argus,
+or are not familiar with the inner workings of DNS
+<A HREF="http://www.ietf.org/rfc/rfc1035.txt">[RFC 1035]</A>,
+it is recommended that you stick to the standard built-in DNS tests as
+described in <A HREF="services.html">services</A>
+</DIV></P>
+
+<P>It seems that there is no end to the creativity of people
+mis-configuring DNS servers, or the number of failure modes
+that exist in DNS servers.</P>
+<P>The new DNS testing facility attempts to stay one step
+ahead.</P>
+<P>You can now specify any arbitrary DNS query, and perform
+any number of tests on the response</P>
+
+<P>In addition to all of the parameters for a typical UDP
+test, the following can also be specified:</P>
+
+<H2>Specifying a Query</H2>
+<UL>
+<LI>	<B>zone</B> - the DNS zone to query about
+<LI>	<B>class</B> - the DNS class to query about. (typically <TT>IN</TT>)
+<LI>	<B>recurse</B> - should the query be recursive
+<LI>	<B>query</B> - the type of query. most standard queries are supported, including:
+	<UL>
+	<LI>	<B>A</B>	- ask for an address
+	<LI>	<B>TXT</B>	- ask for text
+	<LI>	<B>MX</B>	- ask for MX server
+	<LI>	<B>NS</B>	- ask for name server
+	<LI>	<B>SOA</B>	- ask for the start-of-authority data
+	<LI>	<B>CNAME</B>	- ask for canonical name
+	<LI>	<B>PTR</B>	- ask for ptr data
+	<LI>	<B>STAT</B>	- perform a status query
+	</UL>
+</UL>
+<P>for example:</P>
+<PRE>
+	Service UDP/DNS {
+		zone:	example.com
+		class:	IN
+		query:	A
+	}
+</PRE>
+
+<H2>Specifying a Test</H2>
+<P>There are several different ways to test the response</P>
+<UL>
+<LI>	<B>none</B>	- up if we receive a response
+<LI>	<B>noerror</B>	- up if the response is error free
+<LI>	<B>authok</B>	- up if the response has the <TT>authoratative</TT> flag set
+<LI>	<B>serial</B>	- perform an <A HREF="xtservices.html">extended test</A> on the serial number.
+			<I>this only makes sense for SOA queries</I>
+<LI>	<B>nanswers</B>	- perform an <A HREF="xtservices.html">extended test</A> on the number of answers
+<LI>	<B>answer</B>	- perform an <A HREF="xtservices.html">extended test</A> on the answer itself
+</UL>
+
+<P>for example:</P>
+<PRE>
+	Service UDP/DNS {
+		zone:	example.com
+		class:	IN
+		query:	MX
+		test:	answer
+		expect:	mail.example.com
+	}
+	Service UDP/DNS {
+		zone:	  example.com
+		class:	  IN
+		query:	  SOA
+		test:	  serial
+		minvalue: 2002010100
+		maxvalue: 2004123100
+	}
+	Service UDP/DNS {
+		zone:	  example.com
+		class:	  IN
+		query:	  NS
+		test:	  nanswers
+		minvalue: 2
+	}
+</PRE>
+
+<H2>Compatibility with Old DNS queries</H2>
+
+<P>The syntax is backwards compatible with the DNS tests in previous versions.
+So you can still say:</P>
+<PRE>
+	Service UDP/Domain/example.com
+	Service UDP/DNSQ
+	Service UDP/DNS
+</PRE>
+<P>The backwards compatible syntax is also extended slightly, so you can say things like:</P>
+<PRE>
+	Service UDP/DNS/NS/example.com {
+		expect:		ns1.example.com
+	}
+	Service UDP/DNS/Serial/example.com {
+		minvalue:	2002112000
+	}
+</PRE>
+<P>Using the backwards compatible shorthand syntax will set
+things to reasonable default values (such as <TT>class: IN</TT>
+and <TT>test: answer</TT> or <TT>test: soa</TT>)</P>
+
+<H2>Answer Format</H2>
+<P>When testing the answer, the answer section of the response is decoded
+into a textual format similar to the format of a DNS zone file or 
+to the output of <TT>dig</TT>, and it may be multi-line if there is more than one
+answer. For example:</P>
+<PRE>
+	www.example.com.  23h5m  IN   A    10.0.1.2
+or
+	example.com.      1d     IN   MX   10 mail1.example.com.
+	example.com.      1d     IN   MX   20 mail2.example.com.
+</PRE>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: dns.html,v 1.8 2003/03/05 20:59:23 jaw Exp $ -->
+</HTML>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Web Page Decoration</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Web Page Decoration</H1>
+
+<P>You can adjust the look of the web pages in numerous ways.
+The most commonly used parameters are:</P>
+
+<P>You can add text or html to the top and bottom of web pages:</P>
+<UL>
+<LI>	<B>header</B> - text or html to be placed at the top of web pages
+<LI>	<B>footer</B> - text or html to be placed at the bottom of web pages
+</UL>
+
+<P>You can set various images and noises:</P>
+<UL>
+<LI>	<B>bkgimage</B> - an image to use as the background of web pages
+<LI>	<B>sirensong</B> - a wav file for the browser to play when the object is down.
+			-- not all browsers support this feature. 
+<LI>	<B>nospkr_icon</B> - an icon to use to indicate that the user has turned off
+			the siren
+</UL>
+
+<P>You can set CSS style sheets + javascript to be used [version 3.3]</P>
+<P>These may be multiple files separated by spaces.
+<UL>
+<LI>	<B>style_sheet</B> - style sheets to use
+<LI>	<B>javascript</B> - javascript to use
+</UL>
+<PRE>
+        style_sheet:  /argus/argus.css  /argus_local.css
+</PRE>
+
+<P>Some browsers will display a small icon in the location bar, title bar, or tab bar.</P>
+<UL>
+<LI>	<B>icon</B> - the default icon to display
+<LI>	<B>icon_up</B> - the icon to display when the object is up
+<LI>	<B>icon_down</B> - the icon to display when the object is down
+</UL>
+
+<P>Note: these icons, images, and noises should be specified in whatever
+form needed for your web server. The values will be inserted un-altered
+into the generated web pages.</P>
+
+<P>There are several fields that can be used for informational purposes. They can
+be text or html (such as a link to additional information).</P>
+<UL>
+<LI>	<B>note</B> - informational
+<LI>	<B>info</B> - informational
+<LI>	<B>comment</B> - informational
+<LI>	<B>details</B> - informational
+</UL>
+
+<P>You can change the name that gets displayed for each object
+by setting:</P>
+<UL>
+<LI>	<B>label</B>	- name to display on web page
+
+</UL>
+
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: webpretty.html,v 1.7 2011/12/23 23:21:04 jaw Exp $ -->
+</HTML>

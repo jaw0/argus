@@ -1,0 +1,85 @@
+
+Dashboard "Test 1" {
+        # dashboard contains a number of rows
+        # rows contain either widgets or columns of widgets
+
+        row {
+                # display a box of statuses, like we'd see on the Top:example page
+                # saying 'numbers' shows the counts instead of names
+
+                status numbers "Top:example" {
+                        # we can change the style using css
+                        style: border: 1px solid \#000;
+                }
+
+                # a box of statuses, one row per the listed objects
+
+                status {
+                        style: border: 1px solid \#000;
+
+                        + Top:example:BW
+                        + Top:example:DNS:example
+                        + Top:example:eumaeus.example.com:Ping_eumaeus.example.com
+                }
+                col {
+                        # 3 row high column
+                        rowspan: 3
+
+                        # a list of everything that's currently down
+
+                        overview down {
+                                heading: Down
+                                style:   border: 1px solid \#000;
+                        }
+
+                        # arbitrary html in a box
+                        text {
+                                style: background-color: \#fdb; padding-left: 5px;
+
+                                + <pre>
+                                + lorum ipsum dolor sit ahmet
+                                + lorum ipsum dolor sit ahmet
+                                + lorum ipsum dolor sit ahmet
+                                + lorum ipsum dolor sit ahmet
+                                + lorum ipsum dolor sit ahmet
+                                + </pre>
+                        }
+                }
+        }
+
+        row {
+                style: border: 1px solid \#800; padding-left: 10px;
+
+                # make these 3 graphs fit in the space of 2 columns
+                colspan: 2
+
+                # graph the samples, hours, or days data
+                #  large or thumbnails
+                # list any arbitrary objects to graph
+
+                graph samples thumb {
+                        caption:  samples
+                        + Top:Test:hwab1
+                        + Top:example:BW:COMCAST
+                }
+                graph hours thumb {
+                        caption:  hours
+                        + Top:Test:hwab1
+                        + Top:example:BW:COMCAST
+                }
+                graph days thumb {
+                        caption: days
+                        + Top:Test:hwab1
+                        + Top:example:BW:COMCAST
+                }
+        }
+
+        row {
+                # just one object on graph
+                graph samples large "Top:example:Usage:Counts" {
+                        colspan:   2
+                }
+        }
+
+}
+

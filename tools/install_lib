@@ -1,0 +1,45 @@
+# -*- perl -*-
+
+# Copyright (c) 2004 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Created: 2004-Apr-28 10:53 (EDT)
+# Function: install argus library files
+#
+# $Id: install_lib,v 1.2 2007/01/12 05:35:11 jaw Exp $
+
+# usage:
+#   program -s srcdir -l libdir file.pm file.pm file.pm ...
+
+use File::Copy;
+use File::Path;
+use Getopt::Std;
+getopts('nl:s:v');
+# -l destination directory
+# -s source directory
+# -n  do not actually do anything
+# -v  verbose
+
+die "invalid usage\n" unless $opt_s && $opt_l;
+
+my %dirs;
+
+foreach my $f (@ARGV) {
+    my $d = $f;
+    $d =~ s,::,/,g;
+
+    my $b = "$opt_l/$d";
+    $b =~ s,/[^/]+$,,;
+
+    if( $b && !$dirs{$b} ){
+	print STDERR "mkdir $b\n" if $opt_v;
+	mkpath( $b, 0, 0755 ) unless $opt_n;
+	$dirs{$b} = 1;
+    }
+    
+    print STDERR "$opt_s/$f\t=> $opt_l/$d\n" if $opt_v;
+    unless( $opt_n ){
+	copy( "$opt_s/$f", "$opt_l/$d" ) || die "copy failed ($opt_s/$f -> $opt_l/$d): $!\n";
+    }
+
+}
+

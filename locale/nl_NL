@@ -1,0 +1,231 @@
+########################################################
+# Dutch translation -- Marco Davids <mdavids@forfun.net>
+# 20070129
+########################################################
+
+# set the character set that the language uses
+
+charset		"iso-8859-1"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"nl_NL"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Zon Maa Din Woe Don Vrij Zat
+months	Jan Feb Mrt Apr Mei Jun Jul Aug Sep Okt Nov Dec
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Vandaag"
+
+msgid "This Month"
+msgstr "Deze maand"
+
+msgid "This Year"
+msgstr "Dit jaar"
+
+msgid "Yesterday"
+msgstr "Gisteren"
+
+msgid "Last Month"
+msgstr "Vorige maand"
+
+msgid "Last Year"
+msgstr "Vorig jaar"
+
+msgid "2 Days Ago"
+msgstr "2 dagen geleden"
+
+msgid "2 Months Ago"
+msgstr "2 maanden geleden"
+
+msgid "3 Days Ago"
+msgstr "3 dagen geleden"
+
+msgid "3 Months Ago"
+msgstr "3 maanden geleden"
+
+msgid "Annotate"
+msgstr "Annoteren"
+
+msgid "Annotation"
+msgstr "Annotatie"
+
+msgid "Comment"
+msgstr "Commentaar"
+
+msgid "Debugging"
+msgstr "Debuggen"
+
+msgid "Display Config"
+msgstr "Configuratie tonen"
+
+msgid "Down"
+msgstr "Down"
+
+msgid "Error Log"
+msgstr "Fouten logboek"
+
+msgid "Expires"
+msgstr "Vervalt"
+
+msgid "Flush Cache"
+msgstr "Cache leegmaken"
+
+msgid "Hush Siren"
+msgstr "Sirene uit"
+
+msgid "Login"
+msgstr "Aanmelden"
+
+msgid "Logout"
+msgstr "Afmelden"
+
+msgid "Mode"
+msgstr "Modus"
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "Notifications"
+msgstr "Notificaties"
+
+msgid "Notifies"
+msgstr "Meldingen"
+
+msgid "Override"
+msgstr "Opheffen"
+
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgid "Please log in"
+msgstr "Aub aanmelden"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Un-Acked Notifies"
+msgstr "Onbevestigde meldingen"
+
+msgid "Up"
+msgstr "Up"
+
+msgid "User"
+msgstr "Gebruiker"
+
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "auto mode - hef het overrulen op als status terugkeert naar up"
+
+msgid "because"
+msgstr "omdat"
+
+msgid "command"
+msgstr "commando"
+
+msgid "down since"
+msgstr "down sinds"
+
+msgid "down"
+msgstr "down"
+
+msgid "elapsed time"
+msgstr "verstreken tijd"
+
+msgid "flags"
+msgstr "vlaggen"
+
+msgid "hostname"
+msgstr "hostnaam"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "handmatige modus - het overrulen opheffen dient handmatig te geschieden"
+
+msgid "name"
+msgstr "naam"
+
+msgid "override"
+msgstr "overrulen"
+
+msgid "port"
+msgstr "poort"
+
+msgid "start"
+msgstr "start"
+
+msgid "status"
+msgstr "status"
+
+msgid "times down"
+msgstr "keren down"
+
+msgid "up since"
+msgstr "up sinds"
+
+msgid "up"
+msgstr "up"
+
+msgid "Authentication Failed"
+msgstr "Authenticatie mislukt"
+
+msgid "ERROR"
+msgstr "FOUT"
+
+msgid "Ack Checked"
+msgstr "Bevestiging gecontroleerd"
+
+msgid "Ack All"
+msgstr "Allen bevestigen"
+
+msgid "There are no un-acked notifications"
+msgstr "Er zijn geen onbevestigde notificaties"
+
+msgid "There are no notifications"
+msgstr "Er zijn geen notificaties"
+
+msgid "Unacked Notifications"
+msgstr "Onbevestigde notificaties"
+
+msgid "Broken Alias"
+msgstr "Defecte alias"
+
+msgid "is down"
+msgstr "is down"
+
+msgid "zone"
+msgstr "zone"
+
+msgid "info"
+msgstr "info"
+
+msgid "note"
+msgstr "notitie"
+
+msgid "comment"
+msgstr "commentaar"
+
+msgid "annotation"
+msgstr "opmerking"
+
+msgid "details"
+msgstr "details"

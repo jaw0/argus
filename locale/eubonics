@@ -1,0 +1,185 @@
+
+charset		"iso-8859-1"
+lang		"ebonics"
+
+# abbreviated names of the days and months
+days		Sin Min Tew Wid Tha For Sit
+months		Jin Fub Mor App Mei Jon Jil Ugh Sip Ott Num Doc
+
+# msgid:  the english phrase
+# msgstr: the translated phrase
+
+msgid "Today"
+msgstr "Todee"
+
+msgid "This Month"
+msgstr "Dis Mont"
+
+msgid "This Year"
+msgstr "Dis Yeer"
+
+msgid "Yesterday"
+msgstr "Yestdee"
+
+msgid "Last Month"
+msgstr "Las Mont"
+
+msgid "Last Year"
+msgstr "Las Yeer"
+
+msgid "2 Days Ago"
+msgstr "2 Dee Go"
+
+msgid "2 Months Ago"
+msgstr "2 Mont Go"
+
+msgid "3 Days Ago"
+msgstr "3 Dee Go"
+
+msgid "3 Months Ago"
+msgstr "3 Mont Go"
+
+msgid "Annotate"
+msgstr "A note it"
+
+msgid "Annotation"
+msgstr "Yer Note"
+
+msgid "Comment"
+msgstr "Comet"
+
+msgid "Debugging"
+msgstr "Da Guts"
+
+msgid "Display Config"
+msgstr "Sho it"
+
+msgid "Down"
+msgstr "Broke"
+
+msgid "Error Log"
+msgstr "My Bad"
+
+msgid "Expires"
+msgstr "In for"
+
+msgid "Flush Cache"
+msgstr "Clean it"
+
+msgid "Hush Siren"
+msgstr "Shut up"
+
+msgid "Login"
+msgstr "Get in"
+
+msgid "Logout"
+msgstr "Get out"
+
+msgid "Mode"
+msgstr "How"
+
+msgid "Name"
+msgstr "Called"
+
+msgid "Notifications"
+msgstr "Annoy o grams"
+
+msgid "Notifies"
+msgstr "Annoyances"
+
+msgid "Override"
+msgstr "Bypass"
+
+msgid "Password"
+msgstr "Secrit"
+
+msgid "Please log in"
+msgstr "Get On wit it"
+
+msgid "Status"
+msgstr "How's At"
+
+msgid "Un-Acked Notifies"
+msgstr "Still Annoying"
+
+msgid "Up"
+msgstr "OK"
+
+msgid "User"
+msgstr "Who"
+
+msgid "Username"
+msgstr "Yo Name"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "automatical - bork bork bork"
+
+msgid "because"
+msgstr "why for"
+
+msgid "command"
+msgstr "done this"
+
+msgid "down since"
+msgstr "Broke at"
+
+msgid "down"
+msgstr "broke"
+
+msgid "elapsed time"
+msgstr "how long"
+
+msgid "flags"
+msgstr "things"
+
+msgid "hostname"
+msgstr "da machine"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "manually - the man does it himself"
+
+msgid "name"
+msgstr "patron"
+
+msgid "override"
+msgstr "bypass"
+
+msgid "port"
+msgstr "porto"
+
+msgid "start"
+msgstr "began"
+
+msgid "status"
+msgstr "How's At"
+
+msgid "times down"
+msgstr "times broke"
+
+msgid "up since"
+msgstr "fixed at"
+
+msgid "up"
+msgstr "OK"
+
+msgid "Authentication Failed"
+msgstr "dat is all wrong"
+
+msgid "ERROR"
+msgstr "DANG IT"
+
+msgid "Ack Checked"
+msgstr "Whack Marked"
+
+msgid "Ack All"
+msgstr "Whack em all"
+
+msgid "There are no un-acked notifications"
+msgstr "Nothin to see, nothin to do"
+
+msgid "There are no notifications"
+msgstr "Nothin to see"
+
+msgid "Unacked Notifications"
+msgstr "Still Annoying"
+

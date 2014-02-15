@@ -1,0 +1,168 @@
+
+# set the character set that the language uses
+
+charset		"iso-8859-1"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"xx_xx"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days		
+months		
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+
+msgid "This Month"
+
+msgid "This Year"
+
+msgid "Yesterday"
+
+msgid "Last Month"
+
+msgid "Last Year"
+
+msgid "2 Days Ago"
+
+msgid "2 Months Ago"
+
+msgid "2 Years Ago"
+
+msgid "3 Days Ago"
+
+msgid "3 Months Ago"
+
+msgid "3 Years Ago"
+
+msgid "Annotate"
+
+msgid "Annotation"
+
+msgid "Remove Annotation"
+
+msgid "Comment"
+
+msgid "Debugging"
+
+msgid "Display Config"
+
+msgid "Down"
+
+msgid "Error Log"
+
+msgid "Expires"
+
+msgid "Flush Cache"
+
+msgid "Hush Siren"
+
+msgid "Login"
+
+msgid "Logout"
+
+msgid "Mode"
+
+msgid "Name"
+
+msgid "Notifications"
+
+msgid "Notifies"
+
+msgid "Override"
+
+msgid "Password"
+
+msgid "Please log in"
+
+msgid "Status"
+
+msgid "Un-Acked Notifies"
+
+msgid "Up"
+
+msgid "User"
+
+msgid "Username"
+
+msgid "auto mode - disengage override when status returns to up"
+
+msgid "because"
+
+msgid "command"
+
+msgid "down since"
+
+msgid "down"
+
+msgid "elapsed time"
+
+msgid "flags"
+
+msgid "hostname"
+
+msgid "manual mode - require override be disengaged manually"
+
+msgid "name"
+
+msgid "override"
+
+msgid "port"
+
+msgid "start"
+
+msgid "status"
+
+msgid "times down"
+
+msgid "up since"
+
+msgid "up"
+
+msgid "Authentication Failed"
+
+msgid "ERROR"
+
+msgid "Ack Checked"
+
+msgid "Ack All"
+
+msgid "There are no un-acked notifications"
+
+msgid "There are no notifications"
+
+msgid "Unacked Notifications"
+
+msgid "Broken Alias"
+
+msgid "is down"
+
+msgid "zone"
+
+msgid "info"
+
+msgid "note"
+
+msgid "comment"
+
+msgid "annotation"
+
+msgid "details"
+

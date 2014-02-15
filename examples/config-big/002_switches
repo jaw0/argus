@@ -1,0 +1,96 @@
+
+Group "Switches" {
+	overridable:		no
+
+	Host "sw-amb1" {
+		hostname:	sw-amb1.example.com
+		note:		switch - foundry
+		info:		internal
+		service:	Ping
+	}
+	Host "sw-amb2" {
+		hostname:	sw-amb2.example.com
+		note:		switch - HP4000
+		info:		colo
+		service:	Ping
+	}
+	Host "sw-amb3" {
+		hostname:	sw-amb3.example.com
+		note:		switch - HP4000
+		info:		internal
+		service:	Ping
+	}
+	Host "sw-amb4" {
+		hostname:	sw-amb4.example.com
+		note:		switch - HP4000
+		info:		internal
+		service:	Ping
+	}
+	Host "sw-amb5" {
+		hostname:	sw-amb5.example.com
+		note:		switch - HP4000
+		info:		colo
+		service:	Ping
+	}
+	Host "sw-amb6" {
+		hostname:	sw-amb6.example.com
+		note:		switch - HP4000
+		info:		phone closet
+		service:	Ping
+	}
+	Host "sw-amb7" {
+		hostname:	sw-amb7.example.com
+		note:		switch - HP4000
+		info:		phone closet
+		service:	Ping
+	}
+	Host "sw-amb8" {
+		hostname:	sw-amb8.example.com
+		note:		cisco
+		service:	Ping
+	}
+	Host "sw-amb9" {
+		hostname:	sw-amb9.example.com
+                note:           cisco
+                service:        Ping
+        }
+	Host "sw-amb10" {
+		hostname:	sw-amb10.example.com
+		note:		cisco
+		comment:	handles indraweb servers
+		service:	Ping
+	}
+	Host "sw-noc1" {
+		hostname:	sw-noc1.example.com
+		note:		switch - 3com SuperStack II
+		info:		NOC - jkister
+		service:	Ping
+	}
+
+	Host "lb-amb1" {
+		hostname:	lb-amb1-mgt.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	management interface on lb-amb1 - only reachable from server network
+		service:	Ping
+	}
+	Host "lb-amb2" {
+		hostname:	lb-amb2-mgt.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	management interface on lb-amb2 - only reachable from server network
+		service:	Ping
+	}
+
+	Host "lb-vip-outside" {
+		hostname:	lb-amb1.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	outside virtual address - floats between the 2 load balancers
+		service:	Ping
+	}
+	Host "lb-vip-inside"
+		hostname:	lb-amb1-e2.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	inside virtual address - floats between the 2 load balancers
+		service:	Ping
+	}
+}
+

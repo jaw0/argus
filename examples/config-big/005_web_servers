@@ -1,0 +1,18 @@
+Group "Web Servers" {
+	overridable:	no
+	Host "virtual-tarawa" {
+		hostname:	virtual-tarawa.example.com
+		service: TCP/HTTP
+	}
+	Host "virtual-threemile" {
+		hostname:	virtual-threemile.example.com
+		service: TCP/HTTP
+	}
+	Host "matagi" {
+		hostname:	10.29.194.36
+		service: TCP/HTTP
+	}
+}
+
+############################################################
+

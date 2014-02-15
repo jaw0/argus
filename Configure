@@ -1,0 +1,501 @@
+#!/bin/sh
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Date: 2002-Apr-19 16:44 (EDT)
+# Function: discover configuration info
+#
+# $Id: Configure,v 1.28 2011/11/03 02:13:39 jaw Exp $
+
+cat<<EOF
+Well, Hidey-Ho Neighbor!
+Hold on while I poke around to find a few things.
+This shouldn't take long...
+
+EOF
+#'
+
+# for people whose PATHs suck...
+PATH=$PATH:/bin:/usr/bin:/usr/local/bin:/usr/ucb:/sbin:/usr/sbin:/usr/local/sbin
+PATH=$PATH:/usr/lib:/usr/libexec:/etc:/usr/etc
+export PATH
+
+# default auth file
+auth_file=web_auth_file.pl
+
+# name of perl - used by author's test rig
+PERL=${PERLNAME:-perl}
+
+# process cmdline args
+while test $# -gt 0 ; do
+    case $1 in
+	--*=*)	arg=`echo $1 | sed 's/.*=//'`		;;
+	*)	arg=					;;
+    esac
+
+    case $1 in
+	--bin*)		if [ "$arg" ]; then dir_bin=$arg;  else dir_bin=$2;  shift; fi	;;
+	--sbin*)	if [ "$arg" ]; then dir_sbin=$arg; else dir_sbin=$2; shift; fi	;;
+	--cgi*)		if [ "$arg" ]; then dir_cgi=$arg;  else dir_cgi=$2;  shift; fi  ;;
+        --www*)		if [ "$arg" ]; then dir_www=$arg;  else dir_www=$2;  shift; fi  ;;
+	--lib*)		if [ "$arg" ]; then dir_lib=$arg;  else dir_lib=$2;  shift; fi	;;
+	--data*)	if [ "$arg" ]; then dir_data=$arg; else dir_data=$2; shift; fi	;;
+	--db*)		if [ "$arg" ]; then db_type=$arg;  else db_type=$2;  shift; fi  ;;
+	--auth*)	if [ "$arg" ]; then auth_file=$arg;else auth_file=$2;shift; fi  ;;
+	--upgrade)
+	    old=`argus-config --version`
+	    if test -z "$old"; then
+		echo I cannot find the argus-config program, either it is not in your path
+	        # I could not have discovered where it was,
+                # Even if backward I had turned myself
+		#   -- Dante, Divine Comedy
+		echo or you are upgrading from a version that did not include this.
+		echo sorry, maybe next time.
+		exit
+	    else
+		echo upgrading from argus version $old
+		# Anxious and eager to discover more...
+		#   -- Virgil, Aeneid
+		dir_bin=`argus-config --bindir`
+		dir_sbin=`argus-config --sbindir`
+		dir_data=`argus-config --datadir`
+		dir_lib=`argus-config --libdir`
+		auth_file=`argus-config --authfile`
+		dir_cgi=`argus-config --cgidir`
+                dir_www=`argus-config --wwwdir`
+		upgrading="$old"
+
+		# previous version did not have these
+		dir_cgi_test=`echo $dir_cgi | sed 's/: .*//'`
+		if [ "$dir_cgi_test" = "usage" ]; then dir_cgi=''; fi
+		dir_www_test=`echo $dir_www | sed 's/: .*//'`
+		if [ "$dir_www_test" = "usage" ]; then dir_www=''; fi
+
+	    fi
+	    ;;
+	--help|-h)
+	    cat <<EOF
+run ./Configure and specify configuration parameters interactively
+or use the following command line arguments
+
+    --upgrade		use configuration from already installed argus
+    --bin_dir=DIR	set the bin directory
+    --sbin_dir=DIR	set the sbin directory
+    --lib_dir=DIR	set the lib directory
+    --data_dir=DIR	set the data directory
+    --cgi_dir=DIR       set the cgi directory
+    --www_dir=DIR	set the www directory
+    --db_type=xxx	set the db type (DB_File, NDBM_File, ...)
+    --auth_file=FILE	use an alternate auth file
+    --help		display this message
+EOF
+	    exit
+	    ;;
+    esac
+    shift
+done
+
+# figure out how to get echo to suppress newline
+echo " "
+echo "Checking echo to see how to suppress newlines..."
+echo "hello\c" > .echo.tmp
+if grep c .echo.tmp >/dev/null 2>&1; then
+    echo -n hello > .echo.tmp
+    if grep n .echo.tmp >/dev/null 2>&1; then
+	echoc=''
+	echon=''
+	echosucks=1
+    else
+	echoc=''
+	echon='-n'
+    fi
+else
+    echoc='\c'
+    echon=''
+fi
+rm -f .echo.tmp
+if [ "$echosucks" ]; then
+    echo "echo cannot suppress newlines, prompts may look funny. no big deal."
+else
+    echo $echon "The star should be here-->$echoc"
+    echo '*'
+fi
+echo " "
+
+findit(){
+    file=$1
+    ofs=$IFS
+    IFS=:$IFS
+    set -- $PATH
+    IFS=$ofs
+
+    for dir in $*; do
+	if test -f $dir/$file; then
+	    echo $dir/$file
+	    found=$dir/$file
+	    exit
+	fi
+    done
+}
+
+ask(){
+    ans=''
+    def=$1
+    if test -n "$def"; then
+	prompt="[$def]"
+    else
+	prompt='?'
+    fi
+    while test -z "$ans"; do
+	echo $echon "$prompt $echoc" >&2
+	read ans
+	if test -z "$ans"; then
+	    ans=$def
+	fi
+	if test -z "$ans"; then
+	    echo "Will you answer if I say 'Please'?" >&2
+	fi
+    done
+    echo $ans
+}
+
+perlmodule(){
+    mod=$1
+    if $PERL -M$mod -e 0 2>/dev/null; then
+	echo "found $mod" >&2
+	echo 1
+    else
+	echo "$mod not found" >&2
+	echo 0
+    fi
+}
+
+
+path_perl=`findit $PERL`
+path_sendmail=`findit sendmail`
+path_qpage=`findit qpage`
+path_fping=`findit fping`
+path_fping6=`findit fping6`
+
+sleep 1
+
+if test -z "$path_perl"; then
+    cat<<EOF
+
+*  Hmmm,
+*  I cannot seem to find perl anywhere. This is bad.
+*  Very Bad.
+*  I don't see any way to make this package work with out perl.
+*  I'm aborting. So sorry. Still friends?
+EOF
+    exit
+else
+    echo "found perl: $path_perl"
+fi
+
+sleep 1
+if test -z "$path_fping"; then
+    cat<<EOF
+
+*  I've searched high, and I've searched low
+*  and I have come to the conclusion that 'fping' is not installed.
+*  As a piece of network monitoring software, I really like to ping.
+*  and ping and ping and ping.
+*  But, if you insist, and you promise not to configure any Ping tests,
+*  I'll continue on against my better judgement.
+*  But really, consider installing it, we'll both be happier
+EOF
+    sleep 10
+else
+    echo "found fping: $path_fping"
+    # nb. fping might be a symlink. just try running it
+    $path_fping 127.0.0.1 >/dev/null 2>&1
+    if [ $? != 0 ] ; then
+	echo '* but it is not installed setuid'
+	echo '* argus ping tests will fail unless argus runs as root'
+	echo '* or fping is fixed'
+    fi
+fi
+
+sleep 1
+if test -z "$path_sendmail"; then
+    cat<<EOF
+
+*  Well I'll Be!
+*  Not a sendmail in sight!
+*  I'll run without it, but just don't ask me to send notifications by email
+EOF
+#'
+    sleep 5
+else
+    echo "found sendmail: $path_sendmail"
+fi
+
+sleep 1
+if test -z "$path_qpage"; then
+    cat<<EOF
+
+*  Huh!
+*  No Qpage.
+*  OK. Whatever. Just don't ask me to send notifications by qpage
+EOF
+#'
+    sleep 5
+else
+    echo "found qpage: $path_qpage";
+fi
+
+if test -z "$path_sendmail" -a -z "$path_qpage"; then
+    cat<<EOF
+
+*  You don't have sendmail.
+*  You don't have qpage.
+*  How pray tell am I to notify you?
+*  I'll run, just don't ask me to send any notifications at all.
+EOF
+fi
+
+# what type of DB?
+if test -n "$db_type"; then
+    # nothing
+    true
+elif $PERL -MDB_File   -e 0 2>/dev/null; then
+    db_type=DB_File
+elif $PERL -MNDBM_File -e 0 2>/dev/null; then
+    db_type=NDBM_File
+elif $PERL -MSDBM_File -e 0 2>/dev/null; then
+    db_type=SDBM_File
+elif $PERL -MGDBM_File -e 0 2>/dev/null; then
+    db_type=GDBM_File
+elif $PERL -MODBM_File -e 0 2>/dev/null; then
+    db_type=ODBM_File
+fi
+
+if test -z "$db_type"; then
+    cat<<EOF
+
+*  I cannot find DB_File or anything remotely similar
+*  I really need this. I just don't know what to do.
+*  I'm going to abort. Some other time, though.
+EOF
+    exit
+else
+    echo "found db type: $db_type";
+    if test $db_type != DB_File; then
+	echo '!!!' but be aware, the software has only been tested with DB_File '!!!'
+	sleep 2
+    fi
+fi
+
+# informational message only, IPv6 support will be determined at run-time
+if $PERL -MSocket6 -e 0 2>/dev/null; then
+    echo 'found Socket6 - Including IPv6 support (Yippee!)'
+
+    if test -z "$path_fping6"; then
+	cat <<EOF
+*  ... but I cannot seem to find an IPv6 capable fping
+*  I looked for it as fping6. This isn't critical, but
+*  I will not be able to do IPv6 ping tests.
+*  Oh well.
+EOF
+#'
+	sleep 5
+    else
+	echo "found fping6: $path_fping6"
+    fi
+else
+    echo 'Socket6 not found - no IPv6 support for you :-('
+    sleep 1
+fi
+
+if $PERL -MGD -e 0 2>/dev/null; then
+    echo 'found GD - including graphing support'
+    have_gd=1
+else
+    # NB: you can still collect graph data, you just can't graph it
+    echo 'GD not found - no graphing support'
+    have_gd=0
+    sleep 1
+fi
+
+# informational message only, DB support will be determined at run-time
+if $PERL -MDBI -e 0 2>/dev/null; then
+    echo 'found DBI - including Database testing support'
+else
+    echo 'DBI not found - no Database testing support'
+fi
+
+# informational message only, SSL support will be determined at run-time
+if $PERL -MNet::SSLeay -e 0 2>/dev/null; then
+    if $PERL -MNet::SSLeay=1.09 -e 0 2>/dev/null; then
+        echo 'found Net::SSLeay - including extended SSL testing support'
+    else
+	echo 'Net::SSLeay found, but too old - no extended SSL testing support'
+    fi
+else
+    echo 'Net::SSLeay not found - no extended SSL testing support'
+fi
+
+# how much SNMPv3 support?
+# informational message only, SNMP support will be determined at run-time
+hmac=`perlmodule Digest::HMAC`
+md5=`perlmodule Digest::MD5`
+sha1=`perlmodule Digest::SHA1`
+des=`perlmodule Crypt::DES`
+mac=`expr "$md5" \| "$sha1"`
+auth=`expr "$mac" \& "$hmac"`
+darp=`expr "$md5" \& "$hmac"`
+
+if test "$auth" -ne 0; then
+    echo "including SNMPv3 authentication support"
+    if test "$des" -ne 0; then
+	echo "including SNMPv3 privacy support"
+    else
+	echo "cannot support SNMPv3 privacy"
+    fi
+else
+    echo "cannot support SNMPv3 authentication"
+fi
+
+# will DARP work? need md5 + hmac
+# informational message only, DARP support will be determined at run-time
+if test "$darp" -ne 0; then
+    echo "including DARP support"
+else
+    echo "cannot support DARP"
+fi    
+
+################################################################
+cat<<EOF
+
+
+Welcome to Part 2 -- The interactive portion of today's program.
+Lay back on the couch. I'll ask some questions.
+Please answer them.
+
+EOF
+
+if [ "$dir_bin" ]; then
+    echo using bindir = $dir_bin
+else
+    cat<<EOF
+
+I need a place to put a few general purpose programs.
+I recommend using something that will be in your PATH.
+
+Typical answers are: /usr/local/bin /usr/bin
+EOF
+    dir_bin=`ask /usr/local/bin`
+fi
+
+if [ "$dir_sbin" ]; then
+    echo using sbindir = $dir_sbin
+else
+    cat<<EOF
+
+I need a place to put a few programs.
+These programs are administrative in nature and not for general use.
+
+Typical answers are: /usr/local/sbin  /usr/local/argus/sbin
+                     /home/software/argus/sbin
+EOF
+    dir_sbin=`ask /usr/local/sbin`
+fi
+
+if [ "$dir_cgi" ]; then
+    echo using cgidir = $dir_cgi
+else
+    cat <<EOF
+
+Where does your web server look for cgi programs?
+
+Typical answers are: /home/www/cgi-bin /usr/apache/cgi-bin
+EOF
+    dir_cgi=`ask /usr/local/cgi-bin`
+fi
+
+if [ "$dir_www" ]; then
+    echo using wwwdir = $dir_www
+else
+    cat <<EOF
+
+Where should I put static files (images, css, js)
+so that they will be served by your web server?
+
+Typical answers are: /home/www/htdocs /usr/apache/htdocs
+                     /home/www/htdocs/argus
+EOF
+    dir_www=`ask /usr/local/htdocs/argus`
+fi
+
+
+if [ "$dir_lib" ]; then
+    echo using libdir = $dir_lib
+else
+    cat<<EOF
+
+I need a place to put a whole bunch of supplemental files
+that I'll need in order to run.
+
+Typical answers are: /usr/local/lib/argus  /usr/local/argus/lib
+                     /home/software/argus/lib
+EOF
+#'
+    dir_lib=`ask /usr/local/lib/argus`
+fi
+
+if [ "$dir_data" ]; then
+    echo using datadir = $dir_data
+else
+    cat<<EOF
+
+And lastly, I need a place to keep various files that I'll create
+while I'm running. config files, temporary files, status files, etc.
+I'll be reading and writing these often while I run.
+The more stuff you want me to monitor, the more space I'll need here.
+
+This is the directory that the documentation refers to as the
+data directory.
+
+Typical answers are: /usr/local/argus/data  /var/argus
+                     /home/software/argus/data
+
+EOF
+    dir_data=`ask /var/argus`
+fi
+
+cat<<EOF
+Thank you.
+processing data...
+EOF
+(
+    echo '#### This section automagically generated by Configure'
+    echo PERL=$path_perl
+    echo SENDMAIL=$path_sendmail
+    echo QPAGE=$path_qpage
+    echo FPING=$path_fping
+    echo FPING6=$path_fping6
+    echo DATABASE=$db_type
+    echo HAVE_GD=$have_gd
+    echo AUTH_FILE=$auth_file
+    echo UPGRADING=$upgrading
+
+    echo INSTALL_BIN=$dir_bin
+    echo INSTALL_SBIN=$dir_sbin
+    echo INSTALL_CGI=$dir_cgi
+    echo INSTALL_LIB=$dir_lib
+    echo INSTALL_DATA=$dir_data
+    echo INSTALL_WWW=$dir_www
+    echo '#### End of Configure section'
+
+    cat Makefile.tplt
+
+) > Makefile
+
+cat<<EOF
+
+Done.
+Examine the generated Makefile, and edit it if you wish.
+Then type 'make', and 'make install'
+Enjoy!
+EOF

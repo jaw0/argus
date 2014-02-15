@@ -1,0 +1,22 @@
+
+Group "Internal Connections" {
+	overridable:		no
+	# Ping both ends
+	Group "T1 Amb - Wlf" {
+		service: Ping {
+			hostname:	10.29.198.21
+		}
+		service: Ping {
+			hostname:	10.29.198.22
+		}
+	}
+	Group "T1 Amb - BM" {
+		service: Ping {
+			hostname:	10.152.192.69
+		}
+		service: Ping {
+			hostname:	10.152.192.70
+		}
+	}
+}
+

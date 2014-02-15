@@ -1,0 +1,66 @@
+Installing
+
+ 1. verify that you have the prerequisites installed
+      + perl
+        the software has been tested with 5.6.1 and should work with most other
+        versions of perl 5 as well.
+        Find perl at www.perl.org
+
+        Note: there are issues with some versions of perl on some operating
+        systems, see bugs.html for additional details.
+
+      + sendmail and qpage are recommended. either or both can be used to send
+        notifications.
+        Find sendmail at www.sendmail.org
+        Find qpage at www.qpage.org
+
+        Note: this does not need to be the real sendmail, as long as it looks
+        and smells like sendmail. ie. qmail's sendmail compatible sendmail
+        program will be just fine.
+
+      + fping is used by the Ping Monitoring module for ping tests. While this
+        is not required, it is highly recommended.
+        Find fping at www.fping.com
+
+      + a cgi capable web server, such as apache.
+        Find apache at httpd.apache.org
+      + Berkeley DB and perl DB_File
+        Find DB at www.sleepycat.com
+        DB_File ships with perl.
+
+        Alternatively, ndbm, odbm, sdbm, or gdbm can be used, but they have not
+        been extensively tested.
+
+      + an understanding of UNIX file permissions and how to use and operate
+        your web server.
+
+    some additional modules that may be useful are listed in the advanced
+    installation section.
+ 2. unbundle the tarball
+ 3. run ./Configure
+    if upgrading from 3.2 or later, you can run ./Configure --upgrade
+ 4. answer any questions it asks
+ 5. run make
+ 6. as root, run make install
+ 7. create 2 files in the data directory:
+     1. config
+     2. users
+    in addition to the documentation, the tarball contains examples in the
+    'examples' directory.
+ 8. configure your web server
+      + be sure that $datadir is writable by the www user (or whatever uid your
+        web server runs as)
+      + copy icons to somewhere accessible by your web server (these locations
+        get specified in config file, above) or feel free to replace them with
+        your own icons, or no icons at all.
+ 9. start the argus server by running argusd
+    or install the rc.argusd script as appropriate for your system.
+10. check the argus log file ($datadir/log) and/or your syslog logs to verify
+    that argus is operating correctly.
+11. load the argus cgi interface in your web browser, and verify that
+    everything is configured correctly.
+12. perform any optional advanced configuration described in the advanced
+    installation section.
+13. you are finished, sing a happy song, or, optionally, send in a bug report
+    or survey report
+

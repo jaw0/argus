@@ -1,0 +1,420 @@
+#!__PERL__
+# -*- perl -*-
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <argus @ tcp4me.com>
+# Date: 2002-Apr-02 23:12 (EST)
+# Function: cgi frontend (will run as cgi-bin or as mod_perl)
+#
+# $Id: cgi,v 1.91 2012/09/29 21:23:01 jaw Exp $
+
+use lib('__LIBDIR__');
+
+use CGI;
+
+package Argus::Web;
+use Argus::Ctl;
+use Argus::Encode;
+use Argus::HashDir;
+use Fcntl;
+use Socket;
+use POSIX;
+use __DATABASE__;
+require "conf.pl";
+require "common.pl";
+require "web_misc.pl";
+require "web_acl.pl";
+require "web_notify.pl";
+require "web_override.pl";
+require "web_page.pl";
+require "web_login.pl";
+require "web_utils.pl";
+require "web_about.pl";
+require "web_graph.pl";
+require "web_web20.pl";
+require "__AUTH_FILE__";
+require "localization.pl";
+
+unshift @INC, "$datadir/perl";
+eval{ require "web_customizations.pl" };
+
+$NAME = "Argus";
+$COOKIENAME = 'argus';
+$WEBCACHE = "$datadir/html";
+$LOGFILE = "$datadir/log";
+$AUTHDB  = "$datadir/auth";
+$AUTH_EXPIRE = 3600 * 24 * 28;
+
+my $connected  = 0;
+my $cookie_verbose = 0;
+my $lang_conf = undef;
+my %auth;
+
+my %fnc_dispatch =
+#              function, need authcookie, default user
+(
+ error       => [\&web_error,       0 ],
+ default     => [\&web_home,	    0 ],
+ home        => [\&web_home,        0 ],
+ login       => [\&web_login,       0 ],
+ logout      => [\&web_logout,      1 ],
+ page        => [\&web_page,        1 ],
+ graph       => [\&web_graph,       1, 'graphuser' ],
+ graphpage   => [\&web_graphpage,   1 ],
+ flushcache  => [\&web_flushcache,  1 ],
+ about       => [\&web_about,       1 ],
+ dispconf    => [\&web_getconf,     1 ],
+ annotate    => [\&web_annotate,    1 ],
+ rmannotate  => [\&web_annotate,    1 ],
+ override    => [\&web_override,    1 ],
+ rmoverride  => [\&web_rmoverride,  1 ],
+ logfile     => [\&web_logfile,     1, 'loguser' ],
+ ntfylist    => [\&web_ntfylist,    1 ],
+ ntfylsua    => [\&web_ntfylsua,    1 ],
+ ntfydetail  => [\&web_ntfydetail,  1 ],
+ ntfyack     => [\&web_ntfyack,     1 ],
+ hushsiren   => [\&web_hushsiren,   1 ],
+ checknow    => [\&web_checknow,    1 ],
+ summary     => [\&web_summary,     1, 'json' ],
+ rss         => [\&web_notify_rss,  1, 'rss'  ],
+ );
+
+my $TZ = $ENV{TZ};
+
+if( $ENV{'MOD_PERL'} ){
+    # running under mod_perl
+    CGI->compile(':all');
+    ma_init() if defined &ma_init;
+    return 1;
+}else{
+    # running as cgi program
+    init();
+    handler(0);
+    disconnect_from_server();
+    exit;
+}
+
+sub init {
+    # connect to server
+    connect_to_server();
+}
+
+sub handler {
+    my $r = shift;
+    my( $x, $f, $fnc, $q );
+
+    if( $ENV{'MOD_PERL'} && !$connected ){
+	init();
+    }
+
+    if( $r ){
+        Apache->request($r);
+        $q = new CGI;
+    }else{
+        $q = new CGI;
+    }
+
+    $x = { r  => $r,				# Apache request
+           q  => $q,				# CGI query
+           ci => $q->cookie($COOKIENAME),	# input cookie
+	 # co =>				# output cookie
+	 # auth =>				# authentication data
+	 # header =>				# have we sent an http header
+       };
+    bless $x, 'Argus::Web';
+
+    my $pi = $q->path_info();
+    $pi =~ s%^/%%;
+
+    $f = $q->param('func')   || $pi || 'default';
+    $fnc = $fnc_dispatch{$f} || $fnc_dispatch{error};
+    $^T = time();
+
+    eval {
+	# catch user installation/permission errors
+	tie_auth();
+    };
+    if($@){
+	$x->error($@);
+    }
+
+    $x->validate_cookie();
+    if( $x->{prefs}{TZ} ne $TZ ){
+	$ENV{TZ} = $x->{prefs}{TZ};
+	tzset();
+    }
+    # set desired language
+    init_l10n($x, $x->{prefs}{LANG} || $lang_conf || $ENV{LC_ALL} || $ENV{LC_ARGUS} || $ENV{LANG} || 'default');
+
+    # does function require being logged in?
+    if( $fnc->[1] && ! $x->{auth}{user} ){
+	# does function allow a special user to bypass being logged in?
+	if( $fnc->[2] && $x->authenticate( $fnc->[2], '') ){
+	    # ok. let'm in.
+	}else{
+	    # force user to log in
+	    $fnc = [\&web_need_login];
+	}
+    }
+
+    # print STDERR "[$$] func $f\n";
+
+    eval {
+	$fnc->[0]->( $x );
+	$x->error('an unknown error occurred') unless $x->{header};
+    };
+    if( $@ ){
+	print STDERR "ERROR: $@\n";
+    }
+
+    if( $ENV{'MOD_PERL'} && $x->{prefs}{TZ} ne $TZ ){
+	# put it back, or things get confused under mod_perl
+	$ENV{TZ} = $TZ;
+	delete $ENV{TZ} unless $TZ;
+	tzset();
+    }
+    untie_auth();
+}
+
+sub validate_cookie {
+    my $me = shift;
+    my( $c, $p );
+
+    $me->{auth} = {};
+    delete $me->{ci} if $me->{ci} eq 'invalid';
+
+    if( ! $me->{ci} && !defined &auth_user ){
+	# bypass login if no auth function exists
+	$me->create_auth( 'webanon', 'Top', 'root', 'staff', 'user' );
+	$me->{ci} = $me->{co};
+    }
+
+    return unless $me->{ci};
+
+    print STDERR "$$ got cookie: $me->{ci}\n"
+	if $cookie_verbose;
+
+    sync_db()  unless $auth{$me->{ci}};
+    flush_db() unless $auth{$me->{ci}};
+
+    my($user, $t, $hush, $home, $pref, @groups
+       ) = split /\s+/, $auth{$me->{ci}};
+
+
+    print STDERR "$$ cookie ok: $user, $t, $hush, $home, $pref, @groups\n"
+	if $cookie_verbose;
+    # invalid, forged, or expired cookie?
+    if( !$user ){
+	if( !defined &auth_user ){
+	    $me->create_auth( 'webanon', 'Top', 'root', 'staff', 'user' );
+	    ($user, $t, $hush, $home, $pref, @groups) =
+		('webanon', $^T, 0, 'Top', '-', 'root', 'staff', 'user' );
+	    $me->{ci} = $me->{co};
+	}else{
+	    $me->{ci} = '';
+	    return;
+	}
+    }
+
+    $me->{prefs} = {map {my($a,$b)=split /=/; ($a,$b)} split /,/, $pref}
+    	if $pref && $pref ne '-';
+
+    $me->{auth} = {
+	time   => $t,
+	user   => $user,
+	addr   => $ENV{REMOTE_ADDR},
+	home   => $home,
+	grps   => [ @groups ],
+	hush   => $hush,
+	pref   => $pref,
+	# ...
+	};
+}
+
+sub create_auth {
+    my $me   = shift;
+    my $user = shift;
+    my $home = shift;
+    my @grps = @_;
+    my( $pref );
+
+    $me->{co} = new_cookie();
+    $pref = shift @grps if $grps[0] =~ /=/;
+
+    $me->{auth} = {
+	user  => $user,
+	home  => $home,
+	pref  => $pref,
+	hush  => 0,
+	time  => $^T,
+	grps  => [ @grps ],
+    };
+    $me->update_auth( $me->{co} );
+}
+
+sub update_auth {
+    my $me   = shift;
+    my $cook = shift || $me->{ci};
+
+    my $p = join(',', map {"$_=$me->{prefs}{$_}"} keys %{$me->{prefs}});
+    $p ||= $me->{auth}{pref} || '-';
+    my $c = "$me->{auth}{user} $me->{auth}{time} $me->{auth}{hush} " .
+	"$me->{auth}{home} $p @{$me->{auth}{grps}}";
+    $auth{ $cook } = $c;
+    print STDERR "$$ update cookie $cook -> $c\n" if $cookie_verbose;
+    flush_db();
+}
+
+sub web_hushsiren {
+    my $me = shift;
+
+    $me->{auth}{hush} = $^T;
+    $me->update_auth();
+    return $me->light_redirect( $me->{q}->url() . "?object=" . $me->{q}->param('object') . ";func=page"
+				. ($me->{q}->param('top')?';top=1':'') );
+}
+
+sub web_need_login {
+    my $me = shift;
+
+    my $next = url_encode( $me->{q}->query_string() );
+    return $me->light_redirect( $me->{q}->url() . "?func=login;next=$next" );
+
+}
+
+# default page
+sub web_home {
+    my $me = shift;
+
+    if( $me->{auth} && $me->{auth}{user} ){
+	my $home = $me->{auth}{home};
+	return $me->light_redirect( $me->{q}->url() . "?object=$home;func=page;top=1" );
+    }else{
+	return $me->light_redirect( $me->{q}->url() . "?func=login" );
+    }
+}
+
+sub web_logfile {
+    my $me = shift;
+    my( @l );
+
+    return unless $ALWAYS_SHOW_LOG || $me->check_acl_func('Top', 'logfile', 1);
+    my $r = $argusd->command( func => 'logindata' ) || {};
+    $me->startpage(title  => "Lof Gile",
+                   bkgimg => decode($r->{bkgimg}),
+                   style  => decode($r->{style_sheet}),
+                   icon   => decode($r->{icon}) );
+
+    print decode($r->{"header"}), "\n";
+    $me->top_of_table( title     => l10n("Log File"),
+                       mainclass => 'logfilemain',
+                       branding  => decode($r->{branding}),
+                      );
+    print "<TR><TD VALIGN=TOP>\n";
+
+    open( F, $LOGFILE );
+    @l = <F>;
+    chop @l;
+    close F;
+
+    my $partial = $me->{q}->param('abridge');
+    my ($date, $proc);
+
+    print "<PRE>\n";
+    foreach (reverse @l){
+	if( $partial ){
+	    my($d, $p) = /^([^\]]+\]) ([^\]]+\])/;
+	    $d =~ s/\s.*//;
+	    $date ||= $d;
+	    $proc ||= $p;
+
+	    last if $d ne $date;
+	    last if $p ne $proc;
+	}
+
+	s/(.*(?:ERROR|WARNING).*)/<FONT COLOR=\"\#FF0000\">$1<\/FONT>/;
+	print "$_\n";
+    }
+    print "</PRE>\n";
+
+    if( $partial ){
+	my $url = $me->{q}->url() . "?func=logfile";
+	print qq{<br><A HREF="$url">More...</A><br>\n};
+    }
+
+    print "</TD></TR>\n";
+    $me->bot_of_table();
+    print decode($r->{footer}), "\n";
+
+    $me->endpage();
+}
+
+################################################################
+
+sub tie_auth {
+    tie( %auth, __DATABASE__, $AUTHDB, O_RDWR|O_CREAT, 0644 )
+	|| die "cannot tie auth '$AUTHDB': $!\n";
+}
+
+sub untie_auth {
+    untie %auth;
+}
+
+sub sync_db {
+    my $x = tied %auth;
+
+    if( $x->can('sync') ){
+	$x->sync();
+    }else{
+	untie_auth();
+	tie_auth();
+    }
+}
+
+# sometimes sync doesn't
+sub flush_db {
+    untie_auth();
+    tie_auth();
+}
+
+sub expire_auth {
+    foreach my $a (keys %auth){
+        my $t = (split /\s/, $auth{$a})[1];
+        delete $auth{$a} if( $t + $AUTH_EXPIRE < $^T );
+    }
+}
+
+################################################################
+sub connect_if_not_already {
+    connect_to_server() unless $connected;
+}
+
+sub connect_to_server {
+    $argusd = Argus::Ctl->new( "$datadir/control",
+			     retry => 1,
+			     who   => 'arguscgi' );
+    $connected = 1;
+
+    my $r = $argusd->command( func   => 'getparam',
+			      object => 'Conf',
+			      param  => 'lang',
+			      );
+    $lang_conf = $r->{value};
+    1;
+}
+sub disconnect_from_server {
+    $argusd->disconnect();
+    $connected = 0;
+}
+sub reconnect {
+    $argusd->reconnect();
+    print STDERR "[$$] reconnect\n";
+}
+
+################################################################
+# mod_perl hook...
+sub dispatch_table {
+    return \%fnc_dispatch;
+}
+
+1;

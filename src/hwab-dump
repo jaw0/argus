@@ -1,0 +1,48 @@
+#!/usr/local/bin/perl
+# -*- perl -*-
+
+# Copyright (c) 2011
+# Author: Jeff Weisberg <jaw @ tcp4me.com>
+# Created: 2011-Oct-22 14:15 (EDT)
+# Function: 
+#
+# $Id$
+
+use DB_File;
+use POSIX;
+use strict;
+
+my $DBFILE = 'Data/stats/hwab.db';
+my $BUCKS  = 2 * 7 * 24 * 3600 / 300;
+
+my %DB;
+tie( %DB, 'DB_File', $DBFILE) or die "cannot tie $DBFILE: $!\n";
+
+if(0){
+    while( my($k,$v) = each %DB ){
+#        next unless $k =~ m|chalhw/created|;
+
+        print "$k\n";
+    }
+    exit;
+}
+
+
+for my $key ('Top:Test:hwab1'){
+    #die "not found\n" unless $DB{"$key/created"};
+
+    for my $k ('created', 'cstart', 'a boot', 'a', 'b', 'x'){
+        my $v = $DB{"$key/$k"};
+        next unless $v;
+        #print "$k\t$v\n";
+    }
+
+    for my $i (0 .. $BUCKS){
+        my $c = $DB{"$key/c $i"};
+        my $d = $DB{"$key/d $i"};
+        next unless $c && $d;
+
+        # print "$i c: $c, d: $d\n";
+        print "$i $d\n";
+    }
+}

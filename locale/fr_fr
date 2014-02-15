@@ -1,0 +1,230 @@
+
+#french translation
+
+# set the character set that the language uses
+
+charset		"iso-8859-1"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"fr_FR"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days	Dim Lun Mar Mer Jeu Vend Sam
+months	Jan Fev Mar Avr Mai Jun Jul Aou Sep Oct Nov Dec
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Aujourd'hui"
+
+msgid "This Month"
+msgstr "Ce mois"
+
+msgid "This Year"
+msgstr "Cette Annee"
+
+msgid "Yesterday"
+msgstr "Hiers"
+
+msgid "Last Month"
+msgstr "Mois précédent"
+
+msgid "Last Year"
+msgstr "Annee précédente"
+
+msgid "2 Days Ago"
+msgstr "Avant hiers"
+
+msgid "2 Months Ago"
+msgstr "Il y a 2 mois"
+
+msgid "3 Days Ago"
+msgstr "Il y a 3 jours"
+
+msgid "3 Months Ago"
+msgstr "Il y a trois mois"
+
+msgid "Annotate"
+msgstr "Annoter"
+
+msgid "Annotation"
+msgstr "Annotation"
+
+msgid "Comment"
+msgstr "Commentaire"
+
+msgid "Debugging"
+msgstr "Tracer"
+
+msgid "Display Config"
+msgstr "Afficher la config"
+
+msgid "Down"
+msgstr "Stoppé"
+
+msgid "Error Log"
+msgstr "Erreur Log"
+
+msgid "Expires"
+msgstr "Expiré"
+
+msgid "Flush Cache"
+msgstr "Vide le cache"
+
+msgstr "Alarm"
+msgid "Alarme"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "Logout"
+msgstr "Déconnexion"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Notifies"
+msgstr "Notifications"
+
+msgid "Override"
+msgstr "Outrepassé"
+
+msgid "Password"
+msgstr "Mot de passe"
+
+msgid "Please log in"
+msgstr "Connectez vous SVP"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Un-Acked Notifies"
+msgstr "Enlever les acquitement des notifications"
+
+msgi  "Up"
+msgstr "Ok"
+
+msgid "User"
+msgstr "Utilisateur"
+
+msgid "Username"
+msgstr "Nom"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "auto mode - ne pas outrepasser quand le status revient a ok"
+
+msgid "because"
+msgstr "cause"
+
+msgid "command"
+msgstr "commande"
+
+msgid "down since"
+msgstr "tombé depuis"
+
+msgid "down"
+msgstr "tombé"
+
+msgid "elapsed time"
+msgstr "période"
+
+msgid "flags"
+msgstr "drapeau"
+
+msgid "hostname"
+msgstr "hostname"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "mode manuel - il faut enlever le mode outrepasser"
+
+msgid "name"
+msgstr "Nom"
+
+msgid "override"
+msgstr "outrepassé"
+
+msgid "port"
+msgstr "Port"
+
+msgid "start"
+msgstr "Début"
+
+msgid "status"
+msgstr "Status"
+
+msgid "times down"
+msgstr "Durée arrêté"
+
+msgid "up since"
+msgstr "Fonctionne depuis"
+
+msgid "up"
+msgstr "Ok"
+
+msgid "Authentication Failed"
+msgstr "L'authentification a échouée"
+
+msgid "ERROR"
+msgstr "ERREUR"
+
+msgid "Ack Checked"
+msgstr "Accusé de reception marqué"
+
+msgid "Ack All"
+msgstr "Accuser tous"
+
+msgid "There are no un-acked notifications"
+msgstr "Il n'y a pas de notification non accusée"
+
+msgid "There are no notifications"
+msgstr "Il n'y a pas de notifications"
+
+msgid "Unacked Notifications"
+msgstr "Notifications non accusées"
+
+msgid "Broken Alias"
+msgstr "Alias cassé"
+
+msgid "is down"
+msgstr "est tombé"
+
+msgid "zone"
+msgstr "Zone"
+
+msgid "info"
+msgstr "Information"
+
+msgid "note"
+msgstr "Note"
+
+msgid "comment"
+msgstr "commentaire"
+
+msgid "annotation"
+msgstr "annotation"
+
+msgid "details"
+msgstr "details"
+

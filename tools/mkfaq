@@ -1,0 +1,87 @@
+#!/usr/local/bin/perl
+# -*- perl -*-
+
+# Copyright (c) 2002 by Jeff Weisberg
+# Author: Jeff Weisberg <jaw @ tcp4me.com>
+# Date: 2002-Sep-12 20:46 (EDT)
+# Function: 
+#
+# $Id: mkfaq,v 1.10 2004/01/23 02:23:13 jaw Exp $
+
+
+print <<EOH;
+<HTML>
+<HEAD><TITLE>Argus FAQ</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Frequently Asked Questions (with Answers)</H1>
+<TABLE BORDER=0 CLASS=SMALLTEXT>
+EOH
+    ;
+
+$qn = 1;
+$nh = 0;
+while(<>){
+    
+    if( /^Section:\s*(.*)/ ){
+	print "<TR><TD COLSPAN=2><B>$1</B></TD></TR>\n";
+	next;
+    }
+    
+    if( /^Q/ ){
+	my $a;
+	if( /^Q:\s*(.*)/ ){
+	    $a = $1;
+	    $a =~ s/^://;
+	    $a =~ s/^\s*//;
+	    $a =~ s/\s*$//;
+	    $a = "<A NAME=\"$a\">$qn.</A>";
+	}else{
+	    $a = "$qn.";
+	}
+	print "<TR><TD>&nbsp;&nbsp;</TD><TD>";
+	print "<P>$a <B>\n";
+	while(<>){
+	    chop;
+	    last if /^A/ || /^--/;
+	    xlat_print($_);
+	}
+	print "</B></P>\n";
+	redo if $_;
+    }
+    if( /^A/ ){
+	print "<P>\n";
+	while(<>){
+	    chop;
+	    last if /^Q/ || /^--/;
+	    xlat_print($_);
+	}
+	print "</P>\n";
+	redo if $_;
+    }
+
+    if( /^--/ ){
+	print "<HR>\n</TD></TR>\n";
+	$qn++;
+	next;
+    }
+
+}
+
+print <<EOH;
+</TABLE>
+<!--#include file="bottom.shtml" -->
+</HTML>
+EOH
+    ;
+
+
+sub xlat_print {
+    my $l = shift;
+
+    $l =~ s/<CONFIG>/<FONT COLOR=blue><PRE>/g;
+    $l =~ s/<\/CONFIG>/<\/PRE><\/FONT>/g;
+    $l =~ s/<EXAMPLE>/<FONT COLOR=blue>/g;
+    $l =~ s/<\/EXAMPLE>/<\/FONT>/g;
+    print "$l\n";
+}

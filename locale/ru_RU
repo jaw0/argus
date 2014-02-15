@@ -1,0 +1,242 @@
+
+# set the character set that the language uses
+
+charset		"KOI8-R"
+
+# set the value of the language code, these are normally
+# 2 letters for the language, and 2 letters for the country
+# for example: "de_at" is the german (de) language, as spoken in austria (at)
+
+lang		"ru_RU"
+
+
+# set the abbreviated names of the days and months
+# for example:
+# days    Sun Mon Tue Wed Thu Fri Sat
+# months  Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+days Вс Пн Вт Ср Чт Пт Сб
+months	Янв Фев Мар Апр Май Июн Июл Авг Сен Окт Ноя Дек	
+
+# translations of various words and phrases
+# each phrase consist of 2 lines, one with the english (msgid)
+# and one with the translation (msgstr)
+# for example:
+# msgid    "the english phrase"
+# msgstr   "the translated phrase"
+
+# leave the "msgid" (english) lines as is, and add lines
+# for the translations (msgstr)
+
+msgid "Today"
+msgstr "Сегодня"
+
+msgid "This Month"
+msgstr "За месяц"
+
+msgid "This Year"
+msgstr "За год"
+
+msgid "Yesterday"
+msgstr "Вчера"
+
+msgid "Last Month"
+msgstr "Прошлый месяц"
+
+msgid "Last Year"
+msgstr "Прошлый год"
+
+msgid "2 Days Ago"
+msgstr "Два дня назад"
+
+msgid "2 Months Ago"
+msgstr "2 месяца назад"
+
+msgid "2 Years Ago"
+msgstr "2 года назад"
+
+msgid "3 Days Ago"
+msgstr "3 дня назад"
+
+msgid "3 Months Ago"
+msgstr "3 месяца назад"
+
+msgid "3 Years Ago"
+msgstr "3 года назад"
+
+msgid "Annotate"
+msgstr "Примечание"
+
+msgid "Annotation"
+msgstr "Примечание"
+
+msgid "Remove Annotation"
+msgstr "Удалить примечание"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Debugging"
+msgstr "Отладка"
+
+msgid "Display Config"
+msgstr "Показать конфигурацию"
+
+msgid "Down"
+msgstr "Выкл"
+
+msgid "Error Log"
+msgstr "Журнал сбоев"
+
+msgid "Expires"
+msgstr "Истекает"
+
+msgid "Flush Cache"
+msgstr "Очистить кэш"
+
+msgid "Hush Siren"
+msgstr "Отключить сирену"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Logout"
+msgstr "Выход"
+
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Name"
+msgstr "Имя"
+
+msgid "Notifications"
+msgstr "Уведомления"
+
+msgid "Notifies"
+msgstr "Уведомления"
+
+msgid "Override"
+msgstr "Заглушить"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Please log in"
+msgstr "Пожалуйста представьтесь"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Un-Acked Notifies"
+msgstr "Невостребованные уведомления"
+
+msgid "Up"
+msgstr "Вкл"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "auto mode - disengage override when status returns to up"
+msgstr "Автоматический режим - убрать заглушку после смены статуса на Вкл"
+
+msgid "because"
+msgstr "так как"
+
+msgid "command"
+msgstr "команда"
+
+msgid "down since"
+msgstr "Выкл с"
+
+msgid "down"
+msgstr "Выкл"
+
+msgid "elapsed time"
+msgstr "прошло времени"
+
+msgid "flags"
+msgid "флаги"
+
+msgid "hostname"
+msgid "имя хоста"
+
+msgid "manual mode - require override be disengaged manually"
+msgstr "Ручной режим - заглушка должна быть убрана вручную"
+
+msgid "name"
+msgstr "имя"
+
+msgid "override"
+msgstr "заглушка"
+
+msgid "port"
+msgstr "порт"
+
+msgid "start"
+msgstr "запуск"
+
+msgid "status"
+msgstr "статус"
+
+msgid "times down"
+msgstr "раз Выкл"
+
+msgid "up since"
+msgstr "Вкл с"
+
+msgid "up"
+msgstr "Вкл"
+
+msgid "Authentication Failed"
+msgstr "Авторизация не удалась"
+
+msgid "ERROR"
+msgstr "ОШИБКА"
+
+msgid "Ack Checked"
+msgstr "Запрос проверен"
+
+msgid "Ack All"
+msgstr "Востребовать все"
+
+msgid "There are no un-acked notifications"
+msgstr "Нет невостребованных уведомлений"
+
+msgid "There are no notifications"
+msgstr "Нет уведомлений"
+
+msgid "Unacked Notifications"
+msgstr "Невостребованные уведомления"
+
+msgid "Broken Alias"
+msgstr "Несуществующий алиас"
+
+msgid "is down"
+msgstr "выключен"
+
+msgid "zone"
+msgstr "зона"
+
+msgid "info"
+msgstr "инфо"
+
+msgid "note"
+msgstr "заметка"
+
+msgid "comment"
+msgstr "комментарий"
+
+msgid "annotation"
+msgstr "примечание"
+
+msgid "details"
+msgstr "детали"
+
+msgid "TRANSITION"
+msgstr "ПЕРЕХОД"
+
+msgid "Check Now"
+msgstr "Проверить"

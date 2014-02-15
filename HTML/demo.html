@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Demo</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Argus Demo</H1>
+
+The following is a live system, actively monitoring roughly 1000 items.
+</P>
+<P>
+While the author recommends installing on a nice quick modern system,
+for demonstration and comparison purposes, this demo is installed on
+<strike>an old, slow,
+single processor Sparc 20 (125 MHz, 128M RAM)</strike>
+a virtual server of unknown type.
+<A HREF="#foot_1">[1]</A>.
+</P>
+<P>
+To demonstrate the user-views, and access-control features, there are several
+users set up, each with different permissions, and/or different views.
+</P>
+<UL>
+<LI>	<A HREF="http://www.tcp4me.com/cgi-bin/argus?func=login&name=anonymous&passwd=xxx">
+		Read-Only Full View</A>
+<LI>	<A HREF="http://www.tcp4me.com/cgi-bin/argus?func=login&name=joe-bob&passwd=xxx">
+		Limited Read/Write Access, with Restricted View</A>
+<LI>	<A HREF="http://www.tcp4me.com/cgi-bin/argus?func=login&name=manager&passwd=xxx">
+		Full Access to everything</A>
+<LI>	<A HREF="http://www.tcp4me.com/cgi-bin/argus?func=login&name=zorba&passwd=xxx">
+		Foreign Language View</A>
+</UL>
+
+<HR>
+<P><A NAME="foot_1">[1]</A> - Except for the several days following
+a <A HREF="http://freshmeat.net/projects/argus-tas/">freshmeat</A>
+announcement, when the load on this poor little server
+goes through the roof.</P>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: demo.html,v 1.8 2012/10/12 02:17:20 jaw Exp $ -->
+</HTML>

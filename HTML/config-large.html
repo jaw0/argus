@@ -1,0 +1,4834 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software - Example Config</TITLE>
+<!--#include file="top.shtml" -->
+
+<H1>Example Config</H1>
+<P>This is (roughly) the config used on the <A HREF="demo.html">demo website</A></P>
+
+<PRE>
+
+
+# common definitions
+
+syslog:		local1
+notify:		none
+frequency:	60
+community:	public
+
+header_all:	&lt;H2&gt;Argus Example Configuration&lt;/H2&gt;&lt;BR&gt;&lt;A HREF="http://www.tcp4me.com/code/argus/"&gt;Argus Website&lt;/A&gt;&lt;P&gt;
+footer_all:	&lt;P&gt;&lt;A HREF="http://www.tcp4me.com/code/argus/"&gt;Argus Website&lt;/A&gt;
+
+sirensong:	/sound/whoopwhoop.wav
+bkgimage:	/img/argus.logo.gif
+icon:		/img/smile.gif
+icon_down:	/img/sad.gif
+nospkr_icon:	/img/nospkr.gif
+style_sheet:	/argus.css
+javascript:	/argus.js
+
+Resolv {
+	frequency:	60
+	timeout:	20
+}
+
+Method "sms" {
+	command:	/usr/local/bin/sendsms %R
+	send:		%M
+}
+
+Group "Routers" {
+	overridable!:	no
+	Group "Ambler" {
+		overridable!:	no
+		Host "gw-amb1" {
+			hostname:	gw-amb1.example.com
+			Service Ping
+		}
+		Host "gw-amb11" {
+			hostname:	gw-amb11.example.com
+			Service Ping
+		}
+		Host "gw-amb2" {
+			hostname:	gw-amb2.example.com
+			Service Ping
+		}
+		Host "gw-amb3" {
+			hostname:	gw-amb3.example.com
+			Service Ping
+		}
+		Host "gw-amb4" {
+			hostname:	gw-amb4.example.com
+			Service Ping
+		}
+		Host "gw-amb5" {
+			hostname:	gw-amb5.example.com
+			Service Ping
+		}
+		Host "gw-amb6" {
+			hostname:	gw-amb6.example.com
+			Service Ping
+		}
+		Host "gw-amb7" {
+			hostname:	gw-amb7.example.com
+			Service Ping
+		}
+		Host "gw-amb8" {
+			hostname:	gw-amb8.example.com
+			Service Ping
+		}
+		Host "gw-amb10" {
+			hostname:	gw-amb10.example.com
+			Service Ping
+		}
+	}
+	Group "Bryn Mawr" {
+		overridable!:	no
+		Host "gw-bm2" {
+			hostname:	gw-bm2.example.com
+			Service Ping
+		}
+		Host "gw-bm3" {
+			hostname:	gw-bm3.example.com
+			Service Ping
+		}
+	}
+	Group "Phlwlf" {
+		overridable!:	no
+		Host "gw-phlwlf1" {
+			hostname:	gw-phlwlf1.example.com
+			Service Ping
+		}
+	}
+}
+
+############################################################
+
+
+Group "Switches" {
+	overridable!:		no
+
+	Host "sw-amb1" {
+		hostname:	sw-amb1.example.com
+		note:		switch - foundry
+		info:		internal
+		Service	Ping
+	}
+	Host "sw-amb2" {
+		hostname:	sw-amb2.example.com
+		note:		switch - HP4000
+		info:		colo
+		Service	Ping
+	}
+	Host "sw-amb3" {
+		hostname:	sw-amb3.example.com
+		note:		switch - HP4000
+		info:		internal
+		Service	Ping
+	}
+	Host "sw-amb4" {
+		hostname:	sw-amb4.example.com
+		note:		switch - HP4000
+		info:		internal
+		Service	Ping
+	}
+	Host "sw-amb5" {
+		hostname:	sw-amb5.example.com
+		note:		switch - HP4000
+		info:		colo
+		Service	Ping
+	}
+	Host "sw-amb6" {
+		hostname:	sw-amb6.example.com
+		note:		switch - HP4000
+		info:		phone closet
+		Service	Ping
+	}
+	Host "sw-amb7" {
+		hostname:	sw-amb7.example.com
+		note:		switch - HP4000
+		info:		phone closet
+		Service	Ping
+	}
+	Host "sw-amb8" {
+		hostname:	sw-amb8.example.com
+		note:		cisco
+		Service	Ping
+	}
+	Host "sw-amb9" {
+		hostname:	sw-amb9.example.com
+                note:           cisco
+                Service Ping
+        }
+	Host "sw-amb10" {
+		hostname:	sw-amb10.example.com
+		note:		cisco
+		comment:	handles indraweb servers
+		Service	Ping
+	}
+	Host "sw-noc1" {
+		hostname:	sw-noc1.example.com
+		note:		switch - 3com SuperStack II
+		info:		NOC - jkister
+		Service	Ping
+	}
+
+	Host "lb-amb1" {
+		hostname:	lb-amb1-mgt.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	management interface on lb-amb1 - only reachable from server network
+		Service	Ping
+	}
+	Host "lb-amb2" {
+		hostname:	lb-amb2-mgt.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	management interface on lb-amb2 - only reachable from server network
+		Service	Ping
+	}
+
+	Host "lb-vip-outside" {
+		hostname:	lb-amb1.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	outside virtual address - floats between the 2 load balancers
+		Service	Ping
+	}
+	Host "lb-vip-inside"
+		hostname:	lb-amb1-e2.example.com
+		note:		cisco CSS-11000 load balancers
+		comment:	inside virtual address - floats between the 2 load balancers
+		Service	Ping
+	}
+}
+
+Group "Essential Services" {
+	overridable!:	no
+	Service TCP/SMTP {
+		label_left:	a.mx.example.com
+		hostname:	a.mx.example.com
+	}
+	Service TCP/SMTP {
+		label_left:	b.mx.example.com
+		hostname:	b.mx.example.com
+	}
+	Service TCP/SMTP {
+		label_left:	c.mx.example.com
+		hostname:	c.mx.example.com
+	}
+	Service TCP/SMTP {
+		label_left:	exchange (dequeuing)
+		hostname:	exchange.example.com
+	}
+	Service TCP/SMTP {
+		label_left:	exchange (old dequeuing)
+		hostname:	10.197.101.17
+	}
+	Group "Internal Exchange" {
+		Alias "POP" "Top:NT_Servers:lanai:POP_lanai.example.com"
+		Alias "SMTP" "Top:NT_Servers:lanai:SMTP_lanai.example.com"
+	}
+	Service TCP/POP {
+		label_left:	mail1 (pop3)
+		hostname:	mail1.example.com
+	}
+	Alias "ns.example.com" "Top:Unix_Servers:capri:DNS_capri.example.com"
+	Service UDP/DNS {
+		label_left:	ns1.example.com
+		hostname:	ns1.example.com
+	}
+	Alias "ns1.example.com" "Top:Unix_Servers:renoir:DNS_renoir.example.com"
+	Service UDP/DNS {
+		label_left:	ns2.example.com
+		hostname:	ns2.example.com
+	}
+	Alias "ns2.example.com" "Top:Unix_Servers:pisarro:DNS_pisarro.example.com"
+	Alias "ns3.example.com" "Top:NT_Servers:motu:DNS_motu.example.com"
+	Service UDP/DNS {
+		label_left:	old-ns1.example.com
+		hostname:	old-ns1.example.com
+	}
+	Service UDP/DNS {
+		label_left:	old-ns2.example.com
+		hostname:	old-ns2.example.com
+	}
+	Alias "radius1" "Top:Unix_Servers:capri:RADIUS_capri.example.com"
+	Alias "radius2" "Top:Unix_Servers:ithaca:RADIUS_ithaca.example.com"
+	Service TCP/SMTP {
+		label_left:	smtp
+		hostname:	smtp.example.com
+	}
+	Group "mail2.example.com" {
+		Alias "POP" "Top:Unix_Servers:fatuka:POP_mail2.example.com"
+		Alias "SMTP" "Top:Unix_Servers:fatuka:SMTP_mail2.example.com"
+	}
+}
+
+############################################################
+
+Group "Web Servers" {
+	overridable!:	no
+	Host "virtual-tarawa" {
+		hostname:	virtual-tarawa.example.com
+		Service TCP/HTTP
+	}
+	Host "virtual-threemile" {
+		hostname:	virtual-threemile.example.com
+		Service TCP/HTTP
+	}
+	Host "matagi" {
+		hostname:	10.29.194.36
+		Service TCP/HTTP
+	}
+}
+
+############################################################
+
+#### DO NOT EDIT
+#### This file is generated automagically from the database
+
+Group "NT Servers" {
+	overridable!:	no
+	autogenerated:	yes
+		Host "ant" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2313&parent=noc/client/"&gt;ant.example.com in NOC-DB&lt;/A&gt;
+			info:	win2k
+			note:	Windows Media Services
+			hostname:	ant.example.com
+			Service Ping {
+				hostname:	ant.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2313&parent=noc/client/"&gt;ant.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "catalina" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2353&parent=noc/client/"&gt;catalina.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	Site Server Commerce Edition, Commerce Enabled Web Sites
+			hostname:	catalina.example.com
+			Service Ping {
+				hostname:	catalina.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2353&parent=noc/client/"&gt;catalina.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	catalina.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2353&parent=noc/client/"&gt;catalina.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	virtual-catalina.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2353&parent=noc/client/"&gt;catalina.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	virtual-catalina.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2353&parent=noc/client/"&gt;catalina.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "fatuhiva" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2329&parent=noc/client/"&gt;fatuhiva.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	LDAP Server for Site Server
+			hostname:	fatuhiva.example.com
+			Service Ping {
+				hostname:	fatuhiva.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2329&parent=noc/client/"&gt;fatuhiva.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "guam" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2319&parent=noc/client/"&gt;guam.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT Server 4.0
+			note:	GameServer
+			hostname:	guam.example.com
+			Service Ping {
+				hostname:	10.29.194.182
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2319&parent=noc/client/"&gt;guam.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "koro" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2321&parent=noc/client/"&gt;koro.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	NR DC, IIS for plat
+			hostname:	koro.example.com
+			Service Ping {
+				hostname:	koro.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2321&parent=noc/client/"&gt;koro.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	koro.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2321&parent=noc/client/"&gt;koro.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	koro.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2321&parent=noc/client/"&gt;koro.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "kosrae" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2323&parent=noc/client/"&gt;kosrae.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	SQL 6.5, www
+			hostname:	kosrae.example.com
+			Service Ping {
+				hostname:	kosrae.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2323&parent=noc/client/"&gt;kosrae.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "lanai" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2325&parent=noc/client/"&gt;lanai.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0 SP6a
+			note:	DC, exchange, NAV
+			hostname:	lanai.example.com
+			Service Ping {
+				hostname:	lanai.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2325&parent=noc/client/"&gt;lanai.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	lanai.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2325&parent=noc/client/"&gt;lanai.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	lanai.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2325&parent=noc/client/"&gt;lanai.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	lanai.example.com
+note: Tony uses the web interface to read his mail
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2325&parent=noc/client/"&gt;lanai.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "makin" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4240&parent=noc/client/"&gt;makin.netreach.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 / Perl
+			showstats: no
+			note:	Webserver in Active Directory (status is &lt;B&gt;pending install&lt;/B&gt;)
+			hostname:	makin.netreach.com
+			Service Ping {
+				hostname:	makin.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4240&parent=noc/client/"&gt;makin.netreach.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;pending install&lt;/B&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	makin.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4240&parent=noc/client/"&gt;makin.netreach.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;pending install&lt;/B&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	makin.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4240&parent=noc/client/"&gt;makin.netreach.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;pending install&lt;/B&gt;
+			}
+			Service TCP/FTP {
+				hostname:	makin.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4240&parent=noc/client/"&gt;makin.netreach.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;pending install&lt;/B&gt;
+			}
+	}
+		Host "matagi" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server
+			note:	Web Server w/Cold Fusion and ASP for production serving customer webs
+			hostname:	matagi.example.com
+			Service TCP/SMTP {
+				hostname:	matagi.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	matagi.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	matagi.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	matagi.example.com
+uname: cold_fusion_test1
+url: http://matagi.example.com/cold_fusion_test1.cfm
+expect: Success
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	matagi.example.com
+uname: cold_fusion_test2
+url: http://matagi.example.com/cold_fusion_test2.cfm
+expect: 1,3,4,3.2,6
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SSL {
+				hostname:	secure.example.com
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3659&parent=noc/client/"&gt;matagi.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "motu" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3952&parent=noc/client/"&gt;motu.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Netreach.com Active Directory Controller
+			hostname:	motu.example.com
+			Service Ping {
+				hostname:	motu.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3952&parent=noc/client/"&gt;motu.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	motu.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3952&parent=noc/client/"&gt;motu.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "muko" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000/Exchange 2000
+			note:	Exchange Server, ns4
+			hostname:	muko.netreach.com
+			Service Ping {
+				hostname:	muko.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	10.29.194.114
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	muko.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	muko.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	muko.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/NNTP {
+				hostname:	muko.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4188&parent=noc/client/"&gt;muko.netreach.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "nadi" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2333&parent=noc/client/"&gt;nadi.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0 SP6a
+			note:	DC
+			hostname:	nadi.example.com
+			Service Ping {
+				hostname:	nadi.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2333&parent=noc/client/"&gt;nadi.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "palawan" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3490&parent=noc/client/"&gt;palawan.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k/Commerce server
+			note:	Temp server  for Eagles web site
+			hostname:	palawan.example.com
+			Service Ping {
+				hostname:	palawan.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3490&parent=noc/client/"&gt;palawan.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.195.244
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3490&parent=noc/client/"&gt;palawan.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "pingelap" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2567&parent=noc/client/"&gt;pingelap.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 AS, Site Server Commerce
+			note:	Shared Commerce Server
+			hostname:	pingelap.example.com
+			Service Ping {
+				hostname:	pingelap.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2567&parent=noc/client/"&gt;pingelap.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	pingelap.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2567&parent=noc/client/"&gt;pingelap.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	pingelap.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2567&parent=noc/client/"&gt;pingelap.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	pingelap.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2567&parent=noc/client/"&gt;pingelap.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "prima" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2337&parent=noc/client/"&gt;prima.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	pptp, Services for Unix Portal
+			hostname:	prima.example.com
+			Service Ping {
+				hostname:	prima.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2337&parent=noc/client/"&gt;prima.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "rapa" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3814&parent=noc/client/"&gt;rapa.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/SQL Server 7
+			note:	Temporary SQL server for housing ASI's database
+			hostname:	rapa.example.com
+			Service Ping {
+				hostname:	rapa.example.com
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3814&parent=noc/client/"&gt;rapa.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "sili" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3820&parent=noc/client/"&gt;sili.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows2000 Server, WebTrends/Media House
+			note:	Statistics Server
+			hostname:	sili.example.com
+			Service Ping {
+				hostname:	sili.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3820&parent=noc/client/"&gt;sili.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	sili.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3820&parent=noc/client/"&gt;sili.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "solo" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4191&parent=noc/client/"&gt;solo.netreach.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	NetReach Direct Mailing Manager
+			hostname:	solo.netreach.com
+			Service Ping {
+				hostname:	10.29.194.204
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4191&parent=noc/client/"&gt;solo.netreach.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	solo.netreach.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4191&parent=noc/client/"&gt;solo.netreach.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "statisti" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4287&parent=noc/client/"&gt;statisti.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	Statistics Server
+			hostname:	statisti.example.com
+			Service Ping {
+				hostname:	10.29.195.219
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4287&parent=noc/client/"&gt;statisti.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	statisti.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4287&parent=noc/client/"&gt;statisti.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "sumatra" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4344&parent=noc/client/"&gt;sumatra.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT 4.0 Altiware
+			note:	NetReach Phone System/Voice Mail System
+			hostname:	sumatra.example.com
+			Service Ping {
+				hostname:	sumatra.example.com
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4344&parent=noc/client/"&gt;sumatra.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	sumatra.example.com
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4344&parent=noc/client/"&gt;sumatra.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "tarawa" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2341&parent=noc/client/"&gt;tarawa.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	www, serv-u
+			hostname:	tarawa.example.com
+			Service Ping {
+				hostname:	tarawa.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2341&parent=noc/client/"&gt;tarawa.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	tarawa.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2341&parent=noc/client/"&gt;tarawa.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	tarawa.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2341&parent=noc/client/"&gt;tarawa.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	tarawa.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2341&parent=noc/client/"&gt;tarawa.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "tasmania" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2364&parent=noc/client/"&gt;tasmania.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	NetReach fileserver
+			hostname:	tasmania.example.com
+			Service Ping {
+				hostname:	tasmania.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2364&parent=noc/client/"&gt;tasmania.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "udot" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	Web Server
+			hostname:	udot.example.com
+			Service Ping {
+				hostname:	udot.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	udot.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	udot.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	udot.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	virtual-udot.example.com
+uname:  virtual-udot id
+expect: udot
+url: http://virtual-udot.example.com/whoami.html
+retries: 2
+sendnotify: no
+hostname: virtual-udot.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SSL {
+				hostname:	secure2.example.com
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	udot.example.com
+uname:  udot id
+expect: udot
+url: http://udot.example.com/whoami.html
+retries: 2
+sendnotify: no
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2415&parent=noc/client/"&gt;udot.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "vanikolo" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2345&parent=noc/client/"&gt;vanikolo.example.com in NOC-DB&lt;/A&gt;
+			info:	NT 4.0
+			note:	tape backups
+			hostname:	vanikolo.example.com
+			Service Ping {
+				hostname:	vanikolo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2345&parent=noc/client/"&gt;vanikolo.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "wallis" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2347&parent=noc/client/"&gt;wallis.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0 SP6a
+			note:	DC, WINS
+			hostname:	wallis.example.com
+			Service Ping {
+				hostname:	wallis.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2347&parent=noc/client/"&gt;wallis.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "weno" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3928&parent=noc/client/"&gt;weno.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k/SQL2k
+			note:	Shared SQL 2000 DB server
+			hostname:	weno.example.com
+			Service Ping {
+				hostname:	weno.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3928&parent=noc/client/"&gt;weno.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "yap" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2349&parent=noc/client/"&gt;yap.example.com in NOC-DB&lt;/A&gt;
+			info:	NT Server 4.0
+			note:	DC, SQL 7.0 - plat, acuity, noc
+			hostname:	yap.example.com
+			Service Ping {
+				hostname:	yap.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2349&parent=noc/client/"&gt;yap.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+}
+### End
+
+Group "Unix Servers" {
+	overridable!:	no
+	autogenerated:	yes
+		Host "borneo" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2358&parent=noc/client/"&gt;borneo.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	customer shell access
+			hostname:	borneo.example.com
+			Service Ping {
+				hostname:	borneo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2358&parent=noc/client/"&gt;borneo.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	borneo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2358&parent=noc/client/"&gt;borneo.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/Telnet {
+				hostname:	borneo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2358&parent=noc/client/"&gt;borneo.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "capri" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1141&parent=noc/client/"&gt;capri.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	radius, yp, DNS
+			hostname:	capri.example.com
+			Service Ping {
+				hostname:	capri.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1141&parent=noc/client/"&gt;capri.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	capri.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1141&parent=noc/client/"&gt;capri.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/Telnet {
+				hostname:	capri.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1141&parent=noc/client/"&gt;capri.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/RADIUS {
+				hostname:	capri.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1141&parent=noc/client/"&gt;capri.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "cassat" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1119&parent=noc/client/"&gt;cassat.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	www
+			hostname:	cassat.op.net
+			Service Ping {
+				hostname:	cassat.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1119&parent=noc/client/"&gt;cassat.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	cassat.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1119&parent=noc/client/"&gt;cassat.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "corfu" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1139&parent=noc/client/"&gt;corfu.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	ftp
+			hostname:	corfu.example.com
+			Service Ping {
+				hostname:	corfu.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1139&parent=noc/client/"&gt;corfu.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	corfu.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1139&parent=noc/client/"&gt;corfu.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "corsica" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1135&parent=noc/client/"&gt;corsica.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	whassup, noc
+			hostname:	corsica.example.com
+			Service Ping {
+				hostname:	corsica.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1135&parent=noc/client/"&gt;corsica.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	corsica.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1135&parent=noc/client/"&gt;corsica.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	corsica.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1135&parent=noc/client/"&gt;corsica.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "crete" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1133&parent=noc/client/"&gt;crete.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	mail
+			hostname:	crete.example.com
+			Service Ping {
+				hostname:	crete.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1133&parent=noc/client/"&gt;crete.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	crete.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1133&parent=noc/client/"&gt;crete.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	crete.example.com
+retries: 5
+timeout: 90
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1133&parent=noc/client/"&gt;crete.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	crete.example.com
+port: 8111
+uname: Test to Rawaki NFS
+label: NFS Test
+expect: Rawaki NFS Test Seems OK
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1133&parent=noc/client/"&gt;crete.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "degas" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1117&parent=noc/client/"&gt;degas.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	www
+			hostname:	degas.op.net
+			Service Ping {
+				hostname:	degas.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1117&parent=noc/client/"&gt;degas.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	degas.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1117&parent=noc/client/"&gt;degas.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "delacroix" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1115&parent=noc/client/"&gt;delacroix.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	cgi web server
+			hostname:	delacroix.op.net
+			Service Ping {
+				hostname:	delacroix.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1115&parent=noc/client/"&gt;delacroix.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "elmo" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1123&parent=noc/client/"&gt;elmo.op.net in NOC-DB&lt;/A&gt;
+			info:	NetBSD 1.4
+			note:	syslog
+			hostname:	elmo.op.net
+			Service Ping {
+				hostname:	elmo.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1123&parent=noc/client/"&gt;elmo.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "fantasy" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2360&parent=noc/client/"&gt;fantasy.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 5.6
+			note:	mail
+			hostname:	fantasy.example.com
+			Service Ping {
+				hostname:	fantasy.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2360&parent=noc/client/"&gt;fantasy.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	fantasy.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2360&parent=noc/client/"&gt;fantasy.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "fatuka" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2331&parent=noc/client/"&gt;fatuka.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	smtp
+			hostname:	fatuka.example.com
+			Service TCP/SMTP {
+				hostname:	mail2.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2331&parent=noc/client/"&gt;fatuka.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	mail2.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2331&parent=noc/client/"&gt;fatuka.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "gozo" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1127&parent=noc/client/"&gt;gozo.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	DNS
+			hostname:	gozo.example.com
+			Service Ping {
+				hostname:	gozo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1127&parent=noc/client/"&gt;gozo.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	gozo.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1127&parent=noc/client/"&gt;gozo.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "ithaca" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1137&parent=noc/client/"&gt;ithaca.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	radius, yp
+			hostname:	ithaca.example.com
+			Service Ping {
+				hostname:	ithaca.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1137&parent=noc/client/"&gt;ithaca.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/RADIUS {
+				hostname:	ithaca.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1137&parent=noc/client/"&gt;ithaca.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "laie" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4185&parent=noc/client/"&gt;laie.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	mail services (running qmail)
+			hostname:	laie.example.com
+			Service TCP/SMTP {
+				hostname:	laie.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4185&parent=noc/client/"&gt;laie.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	laie.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4185&parent=noc/client/"&gt;laie.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	laie.example.com
+uname: Test to Rawaki NFS
+port: 8111
+label: NFS Test
+expect: Rawaki NFS Test Seems OK
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4185&parent=noc/client/"&gt;laie.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "malta" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1129&parent=noc/client/"&gt;malta.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	DNS
+			hostname:	malta.example.com
+			Service Ping {
+				hostname:	malta.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1129&parent=noc/client/"&gt;malta.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	malta.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1129&parent=noc/client/"&gt;malta.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "monet" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1111&parent=noc/client/"&gt;monet.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	OpNet Shell
+			hostname:	monet.op.net
+			Service Ping {
+				hostname:	monet.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1111&parent=noc/client/"&gt;monet.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/Telnet {
+				hostname:	monet.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1111&parent=noc/client/"&gt;monet.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	monet.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1111&parent=noc/client/"&gt;monet.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "morisot" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1121&parent=noc/client/"&gt;morisot.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	www
+			hostname:	morisot.op.net
+			Service Ping {
+				hostname:	morisot.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1121&parent=noc/client/"&gt;morisot.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	morisot.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1121&parent=noc/client/"&gt;morisot.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "mykonos" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1125&parent=noc/client/"&gt;mykonos.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	personal www
+			hostname:	mykonos.example.com
+			Service TCP/HTTP {
+				hostname:	www.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1125&parent=noc/client/"&gt;mykonos.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	mykonos.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1125&parent=noc/client/"&gt;mykonos.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "nomanisan" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2335&parent=noc/client/"&gt;nomanisan.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	cricket
+			hostname:	nomanisan.example.com
+			Service Ping {
+				hostname:	nomanisan.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2335&parent=noc/client/"&gt;nomanisan.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "nui" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4439&parent=noc/client/"&gt;nui.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris
+			note:	php/perl Webserver
+			hostname:	nui.example.com
+			Service Ping {
+				hostname:	10.29.194.9
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4439&parent=noc/client/"&gt;nui.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "okinawa" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4213&parent=noc/client/"&gt;okinawa.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 2.7 / Samba
+			note:	NetBios interface to unix servers (RO)
+			hostname:	okinawa.example.com
+			Service Ping {
+				hostname:	okinawa.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4213&parent=noc/client/"&gt;okinawa.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "pisarro" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1109&parent=noc/client/"&gt;pisarro.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	NFS, backups, ftp, MX
+			hostname:	pisarro.op.net
+			Service Ping {
+				hostname:	pisarro.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1109&parent=noc/client/"&gt;pisarro.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	pisarro.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1109&parent=noc/client/"&gt;pisarro.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	pisarro.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1109&parent=noc/client/"&gt;pisarro.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "rawaki" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1143&parent=noc/client/"&gt;rawaki.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	mailspool
+			hostname:	rawaki.example.com
+			Service Ping {
+				hostname:	rawaki.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1143&parent=noc/client/"&gt;rawaki.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	rawaki.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1143&parent=noc/client/"&gt;rawaki.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	rawaki.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1143&parent=noc/client/"&gt;rawaki.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "renoir" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1113&parent=noc/client/"&gt;renoir.op.net in NOC-DB&lt;/A&gt;
+			info:	SunOS 4.1.4
+			note:	mail, yp, plat
+			hostname:	renoir.op.net
+			Service Ping {
+				hostname:	renoir.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1113&parent=noc/client/"&gt;renoir.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	renoir.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1113&parent=noc/client/"&gt;renoir.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	renoir.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1113&parent=noc/client/"&gt;renoir.op.net in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	renoir.op.net
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1113&parent=noc/client/"&gt;renoir.op.net in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "sardinia" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1131&parent=noc/client/"&gt;sardinia.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	mail
+			hostname:	sardinia.example.com
+			Service Ping {
+				hostname:	sardinia.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1131&parent=noc/client/"&gt;sardinia.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	sardinia.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1131&parent=noc/client/"&gt;sardinia.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	sardinia.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1131&parent=noc/client/"&gt;sardinia.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	sardinia.example.com
+port: 8111
+uname: Test to Rawaki NFS
+label: NFS Test
+expect: Rawaki NFS Test Seems OK
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1131&parent=noc/client/"&gt;sardinia.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "sicily" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2572&parent=noc/client/"&gt;sicily.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			showstats: no
+			note:	legacy webs from OpNet (status is &lt;B&gt;non-production&lt;/B&gt;)
+			hostname:	sicily.example.com
+			Service Ping {
+				hostname:	sicily.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2572&parent=noc/client/"&gt;sicily.example.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	sicily.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2572&parent=noc/client/"&gt;sicily.example.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+	}
+		Host "tench" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2382&parent=noc/client/"&gt;tench.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	mailing lists
+			hostname:	tench.example.com
+			Service Ping {
+				hostname:	tench.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2382&parent=noc/client/"&gt;tench.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	tench.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2382&parent=noc/client/"&gt;tench.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+		Host "threemile" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 7
+			note:	www
+			hostname:	threemile.example.com
+			Service Ping {
+				hostname:	threemile.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	threemile.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	threemile.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	threemile.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	threemile.example.com
+uname: threemile id
+expect: threemile
+url: http://virtual-threemile.example.com/whoami.html
+retries: 2
+hostname: virtual-threemile.example.com
+sendnotify: no
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/1145&parent=noc/client/"&gt;threemile.example.com in NOC-DB&lt;/A&gt;
+			}
+	}
+}
+### End
+
+Group "Colo" {
+	overridable!:	no
+	autogenerated:	yes
+	Group "Micro Endeavors" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/401"&gt;Micro Endeavors in NOC DB&lt;/A&gt;
+		Host "Micro Endeavors 1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4022&parent=noc/client/401"&gt;itsmwebboard.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	sits in a rack - processes information
+			hostname:	itsmwebboard.example.com
+			Service Ping {
+				hostname:	10.29.192.175
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4022&parent=noc/client/401"&gt;itsmwebboard.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Silicon East Consulting" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/168"&gt;Silicon East Consulting in NOC DB&lt;/A&gt;
+		Host "Siliconeast" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3151&parent=noc/client/168"&gt;siliconeast.net in NOC-DB&lt;/A&gt;
+			info:	Unix
+			note:	Serving Webs
+			hostname:	siliconeast.net
+			Service Ping {
+				hostname:	10.29.192.157
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3151&parent=noc/client/168"&gt;siliconeast.net in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Intuitive Solutions, Inc." {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/224"&gt;Intuitive Solutions, Inc. in NOC DB&lt;/A&gt;
+		Host "eunson" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3268&parent=noc/client/224"&gt;mail.eunson.com in NOC-DB&lt;/A&gt;
+			info:	unknown
+			showstats: no
+			note:	unknown (status is &lt;B&gt;being serviced&lt;/B&gt;)
+			hostname:	mail.eunson.com
+			Service Ping {
+				hostname:	10.29.192.63
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3268&parent=noc/client/224"&gt;mail.eunson.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;being serviced&lt;/B&gt;
+			}
+		}
+	}
+	Group "The Learning Greenhouse" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/222"&gt;The Learning Greenhouse in NOC DB&lt;/A&gt;
+		Host "tlg-db" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3220&parent=noc/client/222"&gt;tlg-db.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	Database
+			hostname:	tlg-db.learninggreenhouse.com
+			Service Ping {
+				hostname:	10.29.192.111
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3220&parent=noc/client/222"&gt;tlg-db.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "tlq-lms" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3224&parent=noc/client/222"&gt;tlg-lms.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	LMS
+			hostname:	tlg-lms.learninggreenhouse.com
+			Service Ping {
+				hostname:	10.29.192.112
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3224&parent=noc/client/222"&gt;tlg-lms.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "tlg-web" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3222&parent=noc/client/222"&gt;tlg-web.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	Webserver
+			hostname:	tlg-web.learninggreenhouse.com
+			Service Ping {
+				hostname:	10.29.192.112
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3222&parent=noc/client/222"&gt;tlg-web.learninggreenhouse.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "BMI - Beyond Media" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/222"&gt;BMI - Beyond Media in NOC DB&lt;/A&gt;
+		Host "nt1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3211&parent=noc/client/222"&gt;nt1.beyondmedia.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	Webserver
+			hostname:	nt1.beyondmedia.com
+			Service Ping {
+				hostname:	10.29.195.217
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3211&parent=noc/client/222"&gt;nt1.beyondmedia.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	nt1.beyondmedia.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3211&parent=noc/client/222"&gt;nt1.beyondmedia.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "web1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4037&parent=noc/client/222"&gt;web1.beyondmedia.com in NOC-DB&lt;/A&gt;
+			info:	linux
+			note:	web server
+			hostname:	web1.beyondmedia.com
+			Service Ping {
+				hostname:	10.29.192.190
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4037&parent=noc/client/222"&gt;web1.beyondmedia.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "eBreeze, Inc" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/223"&gt;eBreeze, Inc in NOC DB&lt;/A&gt;
+		Host "ebreeze1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4272&parent=noc/client/223"&gt;ebreeze1.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	Webserver
+			hostname:	ebreeze1.example.com
+			Service Ping {
+				hostname:	10.29.192.250
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4272&parent=noc/client/223"&gt;ebreeze1.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "ebreeze2" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4274&parent=noc/client/223"&gt;ebreeze2.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	Database Server
+			hostname:	ebreeze2.example.com
+			Service Ping {
+				hostname:	10.29.192.251
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4274&parent=noc/client/223"&gt;ebreeze2.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Brett Hill" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/436"&gt;Brett Hill in NOC DB&lt;/A&gt;
+		Host "iisanswers" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4363&parent=noc/client/436"&gt;iisanswers.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	Web Server
+			hostname:	iisanswers.example.com
+			Service TCP/HTTP {
+				hostname:	iisanswers.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4363&parent=noc/client/436"&gt;iisanswers.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Highway to Health" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/223"&gt;Highway to Health in NOC DB&lt;/A&gt;
+		Host "hth application server" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3246&parent=noc/client/223"&gt;highwaytohealth1.example.com in NOC-DB&lt;/A&gt;
+			info:	nt
+			note:	application server
+			hostname:	highwaytohealth1.example.com
+			Service TCP/HTTP {
+				hostname:	highwaytohealth1.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3246&parent=noc/client/223"&gt;highwaytohealth1.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Scudder Finan Comm-scudder2" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/224"&gt;Scudder Finan Comm-scudder2 in NOC DB&lt;/A&gt;
+		Host "scudder" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3248&parent=noc/client/224"&gt;enrollmentwizard.com in NOC-DB&lt;/A&gt;
+			info:	unknown
+			note:	unknown
+			hostname:	enrollmentwizard.com
+			Service Ping {
+				hostname:	10.29.192.49
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3248&parent=noc/client/224"&gt;enrollmentwizard.com in NOC-DB&lt;/A&gt;
+			}
+			Service Ping {
+				hostname:	10.29.192.50
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3248&parent=noc/client/224"&gt;enrollmentwizard.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.192.49
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3248&parent=noc/client/224"&gt;enrollmentwizard.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Togos" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/331"&gt;Togos in NOC DB&lt;/A&gt;
+		Host "Togos-Comms" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3322&parent=noc/client/331"&gt;togos-comms.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT 4 Server SP6
+			note:	Communications server for Togos web site. This machine relys on 12 POTS lines.
+			hostname:	togos-comms.example.com
+			Service Ping {
+				hostname:	togos-comms.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3322&parent=noc/client/331"&gt;togos-comms.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	togos-comms.example.com
+port: 6000
+uname: predelivery
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3322&parent=noc/client/331"&gt;togos-comms.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	togos-comms.example.com
+port:  6002
+uname: postdelivery
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3322&parent=noc/client/331"&gt;togos-comms.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "Togos-SQL" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3326&parent=noc/client/331"&gt;togos-sql.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server SP1
+			note:	SQL 2000 Database server for Togos web site
+			hostname:	togos-sql.example.com
+			Service Ping {
+				hostname:	togos-sql.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3326&parent=noc/client/331"&gt;togos-sql.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "Togos-Web" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server SP1
+			note:	Web/Commerce Server for Togo's.com
+			hostname:	togos-web.example.com
+			Service Ping {
+				hostname:	togos-web.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	togos-web.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	togos-web.example.com
+uname: Broadcast Sys
+url: http://www.togosspeedlunch.com/TOGOsOnLine/Defaulttest.asp
+expect: ThisIsATestOfTheEmergencyBroadcastSystem
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	togos-web.example.com
+uname: ASP test
+url: http://www.togosspeedlunch.com/togosonline/monitor.asp
+expect: success
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	togos-web.example.com
+uname: SQL Test
+url: http://www.togosspeedlunch.com/togosonline/select_check.asp
+expect: success
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	togos-web.example.com
+uname: Site
+url: http://www.togosspeedlunch.com/togosonline/include_test.asp
+expect: Success
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3320&parent=noc/client/331"&gt;togos-web.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Petfood Direct" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/166"&gt;Petfood Direct in NOC DB&lt;/A&gt;
+		Host "gw1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4434&parent=noc/client/166"&gt;gw1.petfooddirect.com in NOC-DB&lt;/A&gt;
+			info:	IOS
+			note:	it is a router.
+			hostname:	gw1.petfooddirect.com
+			Service Ping {
+				hostname:	gw1.petfooddirect.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4434&parent=noc/client/166"&gt;gw1.petfooddirect.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfd-db-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4181&parent=noc/client/166"&gt;pfd-db-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/SQL Server 7
+			note:	Database server for PetfoodDirect
+			hostname:	pfd-db-01.example.com
+			Service Ping {
+				hostname:	pfd-db-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4181&parent=noc/client/166"&gt;pfd-db-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfd-stage-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4389&parent=noc/client/166"&gt;pfd-stage-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Site Server 3.0/MS SQL 7.0
+			note:	Stageing server for www.petfooddirect.com
+			hostname:	pfd-stage-01.example.com
+			Service Ping {
+				hostname:	pfd-stage-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4389&parent=noc/client/166"&gt;pfd-stage-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfd-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Commerce Server 3.0
+			note:	Commerce Server
+			hostname:	pfd-www-01.example.com
+			Service TCP/HTTP {
+				hostname:	www.petfooddirect.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	pfd-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	pfd-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service Ping {
+				hostname:	www.petfooddirect.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	pfd-www-01.example.com
+uname: Order-Test
+url: http://www.petfooddirect.com/store/ordertest_Express.asp
+expect: success
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2436&parent=noc/client/166"&gt;pfd-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfd-www-02" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3808&parent=noc/client/166"&gt;pfd-www-02.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Commerce Server 3.0
+			showstats: no
+			note:	Second web server for PFD (status is &lt;B&gt;being serviced&lt;/B&gt;)
+			hostname:	pfd-www-02.example.com
+			Service Ping {
+				hostname:	pfd-www-02.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3808&parent=noc/client/166"&gt;pfd-www-02.example.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;being serviced&lt;/B&gt;
+			}
+		}
+	}
+	Group "pffcuweb" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/426"&gt;pffcuweb in NOC DB&lt;/A&gt;
+		Host "pffcu-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4264&parent=noc/client/426"&gt;pffcu-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	pffcu-www-01.example.com
+			Service Ping {
+				hostname:	10.29.192.107
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4264&parent=noc/client/426"&gt;pffcu-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	pffcu-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4264&parent=noc/client/426"&gt;pffcu-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	pffcu-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4264&parent=noc/client/426"&gt;pffcu-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "IWPC" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/225"&gt;IWPC in NOC DB&lt;/A&gt;
+		Host "machine" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3288&parent=noc/client/225"&gt;machine.iwpc.org in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	webserver
+			hostname:	machine.iwpc.org
+			Service Ping {
+				hostname:	machine.iwpc.org
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3288&parent=noc/client/225"&gt;machine.iwpc.org in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	www.iwpc.org
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3288&parent=noc/client/225"&gt;machine.iwpc.org in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Business Logic Inc" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/342"&gt;Business Logic Inc in NOC DB&lt;/A&gt;
+		Host "blwebserver1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3424&parent=noc/client/342"&gt;blwebserver1.bus-logic.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	Webserver
+			hostname:	blwebserver1.bus-logic.com
+			Service Ping {
+				hostname:	10.29.192.82
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3424&parent=noc/client/342"&gt;blwebserver1.bus-logic.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Lumbermens Merchandising Corp." {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/310"&gt;Lumbermens Merchandising Corp. in NOC DB&lt;/A&gt;
+		Host "lmc-gw-01-e0" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3806&parent=noc/client/310"&gt;lmc-gw-01-e0.example.com in NOC-DB&lt;/A&gt;
+			info:	IOS 12.0(15)
+			note:	Router/Firewall
+			hostname:	lmc-gw-01-e0.example.com
+			Service Ping {
+				hostname:	lmc-gw-01-e0.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3806&parent=noc/client/310"&gt;lmc-gw-01-e0.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "LMC" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3106&parent=noc/client/310"&gt;lmc-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Microsoft Windows NT 4.0
+			note:	web server
+			hostname:	lmc-www-01.example.com
+			Service Ping {
+				hostname:	lmc-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3106&parent=noc/client/310"&gt;lmc-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	lmc-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3106&parent=noc/client/310"&gt;lmc-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "The Tasty Baking Company" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/342"&gt;The Tasty Baking Company in NOC DB&lt;/A&gt;
+		Host "tastykake" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3427&parent=noc/client/342"&gt;tastykake.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	Webserver
+			hostname:	tastykake.example.com
+			Service Ping {
+				hostname:	10.29.195.196
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3427&parent=noc/client/342"&gt;tastykake.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	tastykake.example.com
+uname: site_test
+url: http://www.tastykake.com/shop/PressReleaseMenu.asp
+expect: Daily News
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3427&parent=noc/client/342"&gt;tastykake.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "InterNetEx, Inc." {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/224"&gt;InterNetEx, Inc. in NOC DB&lt;/A&gt;
+		Host "associate1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3272&parent=noc/client/224"&gt;associate1.legalnetex.com in NOC-DB&lt;/A&gt;
+			info:	nt
+			note:	unknown
+			hostname:	associate1.legalnetex.com
+			Service Ping {
+				hostname:	10.29.192.26
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3272&parent=noc/client/224"&gt;associate1.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "associate2" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3270&parent=noc/client/224"&gt;associate2.legalnetex.com in NOC-DB&lt;/A&gt;
+			info:	nt
+			note:	unknown
+			hostname:	associate2.legalnetex.com
+			Service Ping {
+				hostname:	10.29.192.31
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3270&parent=noc/client/224"&gt;associate2.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "Burrups1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3229&parent=noc/client/224"&gt;burrups1.internetex.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			showstats: no
+			note:	web and mail server (status is &lt;B&gt;non-production&lt;/B&gt;)
+			hostname:	burrups1.internetex.com
+			Service Ping {
+				hostname:	10.29.192.127
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3229&parent=noc/client/224"&gt;burrups1.internetex.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	burrups1.internetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3229&parent=noc/client/224"&gt;burrups1.internetex.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	burrups1.internetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3229&parent=noc/client/224"&gt;burrups1.internetex.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+		}
+		Host "partner1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3276&parent=noc/client/224"&gt;partner1.legalnetex.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	unknown
+			hostname:	partner1.legalnetex.com
+			Service Ping {
+				hostname:	partner1.legalnetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3276&parent=noc/client/224"&gt;partner1.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	partner1.legalnetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3276&parent=noc/client/224"&gt;partner1.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	partner1.legalnetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3276&parent=noc/client/224"&gt;partner1.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "partner2" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3274&parent=noc/client/224"&gt;partner2.legalnetex.com in NOC-DB&lt;/A&gt;
+			info:	nt
+			note:	unknown
+			hostname:	partner2.legalnetex.com
+			Service Ping {
+				hostname:	partner2.legalnetex.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3274&parent=noc/client/224"&gt;partner2.legalnetex.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Sober24 Inc" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/432"&gt;Sober24 Inc in NOC DB&lt;/A&gt;
+		Host "sober24-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4325&parent=noc/client/432"&gt;sober24-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Web server
+			hostname:	sober24-www-01.example.com
+			Service Ping {
+				hostname:	sober24-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4325&parent=noc/client/432"&gt;sober24-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	sober24-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4325&parent=noc/client/432"&gt;sober24-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Funderstanding" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/318"&gt;Funderstanding in NOC DB&lt;/A&gt;
+		Host "zpodz" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3182&parent=noc/client/318"&gt;zpodz.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	WebSever
+			hostname:	zpodz.com
+			Service Ping {
+				hostname:	10.29.192.97
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3182&parent=noc/client/318"&gt;zpodz.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "ChemicalNet" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/224"&gt;ChemicalNet in NOC DB&lt;/A&gt;
+		Host "db" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3280&parent=noc/client/224"&gt;chemical-db.example.com in NOC-DB&lt;/A&gt;
+			info:	unknown
+			note:	database server
+			hostname:	chemical-db.example.com
+			Service Ping {
+				hostname:	10.29.195.192
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3280&parent=noc/client/224"&gt;chemical-db.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "web" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3278&parent=noc/client/224"&gt;www.chemical.net in NOC-DB&lt;/A&gt;
+			info:	unkown
+			note:	webserver
+			hostname:	www.chemical.net
+			Service Ping {
+				hostname:	10.29.194.57
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3278&parent=noc/client/224"&gt;www.chemical.net in NOC-DB&lt;/A&gt;
+			}
+			Service Ping {
+				hostname:	10.29.194.202
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3278&parent=noc/client/224"&gt;www.chemical.net in NOC-DB&lt;/A&gt;
+			}
+			Service Ping {
+				hostname:	10.29.194.242
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3278&parent=noc/client/224"&gt;www.chemical.net in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Prism eSolutions" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/442"&gt;Prism eSolutions in NOC DB&lt;/A&gt;
+		Host "pes-db-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4422&parent=noc/client/442"&gt;pes-db-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Oracle/Veritas
+			note:	DB server for www.prismesolutions.net
+			hostname:	pes-db-01.example.com
+			Service Ping {
+				hostname:	pes-db-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4422&parent=noc/client/442"&gt;pes-db-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pes-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4428&parent=noc/client/442"&gt;pes-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Cold Fusion
+			note:	First of two load balanced web servers for www.prismesolutions.net
+			hostname:	pes-www-01.example.com
+			Service Ping {
+				hostname:	pes-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4428&parent=noc/client/442"&gt;pes-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	pes-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4428&parent=noc/client/442"&gt;pes-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pes-www-02" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4430&parent=noc/client/442"&gt;pes-www-02.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Cold Fusion
+			note:	Second of two web servers for www.prismesolutions.net
+			hostname:	pes-www-02.example.com
+			Service Ping {
+				hostname:	pes-www-02.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4430&parent=noc/client/442"&gt;pes-www-02.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	pes-www-02.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4430&parent=noc/client/442"&gt;pes-www-02.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Virtual Farm Creative" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/222"&gt;Virtual Farm Creative in NOC DB&lt;/A&gt;
+		Host "virtualfarm" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3167&parent=noc/client/222"&gt;virtualfarm.example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	Webserver
+			hostname:	virtualfarm.example.com
+			Service Ping {
+				hostname:	10.29.192.32
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3167&parent=noc/client/222"&gt;virtualfarm.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.192.32
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3167&parent=noc/client/222"&gt;virtualfarm.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Desitown, Inc." {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/223"&gt;Desitown, Inc. in NOC DB&lt;/A&gt;
+		Host "mail" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2405&parent=noc/client/223"&gt;mail.desitown.com in NOC-DB&lt;/A&gt;
+			info:	Cobalt/Linux
+			note:	server
+			hostname:	mail.desitown.com
+			Service Ping {
+				hostname:	mail.desitown.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2405&parent=noc/client/223"&gt;mail.desitown.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	mail.desitown.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2405&parent=noc/client/223"&gt;mail.desitown.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	mail.desitown.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2405&parent=noc/client/223"&gt;mail.desitown.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "www1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2407&parent=noc/client/223"&gt;www1.desitown.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	web server
+			hostname:	www1.desitown.com
+			Service Ping {
+				hostname:	www1.desitown.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2407&parent=noc/client/223"&gt;www1.desitown.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "ILN" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/243"&gt;ILN in NOC DB&lt;/A&gt;
+		Host "ads" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2933&parent=noc/client/243"&gt;ad.iln.net in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	unknown
+			hostname:	ad.iln.net
+			Service Ping {
+				hostname:	10.29.192.15
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2933&parent=noc/client/243"&gt;ad.iln.net in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "postoffice" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2931&parent=noc/client/243"&gt;postoffice.iln.net in NOC-DB&lt;/A&gt;
+			info:	unix
+			note:	unknown
+			hostname:	postoffice.iln.net
+			Service Ping {
+				hostname:	10.29.192.227
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/2931&parent=noc/client/243"&gt;postoffice.iln.net in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Risk Management Associates" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/431"&gt;Risk Management Associates in NOC DB&lt;/A&gt;
+		Host "rma-db-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4320&parent=noc/client/431"&gt;rma-db-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/SQL Server 2K
+			note:	Database sever for rma-ementor.org
+			hostname:	rma-db-01.example.com
+			Service Ping {
+				hostname:	rma-db-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4320&parent=noc/client/431"&gt;rma-db-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "rma-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4314&parent=noc/client/431"&gt;rma-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Commerce Server 3.0
+			note:	Web server for rma-ementor.org
+			hostname:	rma-www-01.example.com
+			Service Ping {
+				hostname:	rma-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4314&parent=noc/client/431"&gt;rma-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	rma-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4314&parent=noc/client/431"&gt;rma-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "rma-www-02" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4317&parent=noc/client/431"&gt;rma-www-02.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/Commerce Server 3.0
+			note:	Web server for rma-ementor.com
+			hostname:	rma-www-02.example.com
+			Service Ping {
+				hostname:	rma-www-02.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4317&parent=noc/client/431"&gt;rma-www-02.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	rma-www-02.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4317&parent=noc/client/431"&gt;rma-www-02.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Unbound Studios" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/395"&gt;Unbound Studios in NOC DB&lt;/A&gt;
+		Host "unbound-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3959&parent=noc/client/395"&gt;example.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Server
+			note:	Web Server
+			hostname:	example.com
+			Service Ping {
+				hostname:	10.29.192.143
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3959&parent=noc/client/395"&gt;example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Private Family Network" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/345"&gt;Private Family Network in NOC DB&lt;/A&gt;
+		Host "exchange" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3454&parent=noc/client/345"&gt;exchange.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k/Exchange 2k/GFI Fax server
+			note:	E-mail/Fax/Web server.  This machine has a 56k modem attached (215-371-8300) and an intel SSL accelerator.
+			hostname:	exchange.privatefamilynetworks.com
+			Service Ping {
+				hostname:	exchange.privatefamilynetworks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3454&parent=noc/client/345"&gt;exchange.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	exchange.privatefamilynetworks.com
+url: http://pfn-secure.com/Doc/TestWebRunning.asp
+uname: Web Test
+expect: SUCCESS
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3454&parent=noc/client/345"&gt;exchange.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	exchange.privatefamilynetworks.com
+url: http://pfn-secure.com/Doc/TestSQLConnect.asp
+uname: SQL Test
+expect: SUCCESS
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3454&parent=noc/client/345"&gt;exchange.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfn-dev" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4338&parent=noc/client/345"&gt;pfn-dev.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			showstats: no
+			note:	Dev Server (status is &lt;B&gt;non-production&lt;/B&gt;)
+			hostname:	pfn-dev.privatefamilynetworks.com
+			Service Ping {
+				hostname:	pfn-dev.privatefamilynetworks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4338&parent=noc/client/345"&gt;pfn-dev.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+		}
+		Host "pfn-sql" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3456&parent=noc/client/345"&gt;pfn-sql.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k/SQL 2k
+			note:	Database server/Development Server for PFN
+			hostname:	pfn-sql.privatefamilynetworks.com
+			Service Ping {
+				hostname:	pfn-sql.privatefamilynetworks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3456&parent=noc/client/345"&gt;pfn-sql.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pfn-stage" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4336&parent=noc/client/345"&gt;pfn-stage.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			showstats: no
+			note:	Staging Server (status is &lt;B&gt;non-production&lt;/B&gt;)
+			hostname:	pfn-stage.privatefamilynetworks.com
+			Service Ping {
+				hostname:	pfn-stage.privatefamilynetworks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4336&parent=noc/client/345"&gt;pfn-stage.privatefamilynetworks.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;non-production&lt;/B&gt;
+			}
+		}
+	}
+	Group "Alex Jushchyshyn" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/223"&gt;Alex Jushchyshyn in NOC DB&lt;/A&gt;
+		Host "alexj" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3242&parent=noc/client/223"&gt;alexj.example.com in NOC-DB&lt;/A&gt;
+			info:	unknown
+			note:	unknown
+			hostname:	alexj.example.com
+			Service Ping {
+				hostname:	alexj.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3242&parent=noc/client/223"&gt;alexj.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Splash" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/222"&gt;Splash in NOC DB&lt;/A&gt;
+		Host "splashweb1" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3165&parent=noc/client/222"&gt;splashweb1.desitown.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000
+			note:	Webserver
+			hostname:	splashweb1.desitown.com
+			Service Ping {
+				hostname:	10.29.192.78
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3165&parent=noc/client/222"&gt;splashweb1.desitown.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.192.78
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3165&parent=noc/client/222"&gt;splashweb1.desitown.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	10.29.192.78
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3165&parent=noc/client/222"&gt;splashweb1.desitown.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Tim Bateman or Mark Petravic" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/322"&gt;Tim Bateman or Mark Petravic in NOC DB&lt;/A&gt;
+		Host "bitblender" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3227&parent=noc/client/322"&gt;bitblender.madavegroup.com in NOC-DB&lt;/A&gt;
+			info:	Unix
+			note:	Webserver
+			hostname:	bitblender.madavegroup.com
+			Service Ping {
+				hostname:	10.29.192.28
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3227&parent=noc/client/322"&gt;bitblender.madavegroup.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Eagles" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/372"&gt;Eagles in NOC DB&lt;/A&gt;
+		Host "eagles-chat-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3725&parent=noc/client/372"&gt;eagles-chat-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Chat server for Eagles web site
+			hostname:	eagles-chat-01.example.com
+			Service Ping {
+				hostname:	eagles-chat-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3725&parent=noc/client/372"&gt;eagles-chat-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/URL {
+				hostname:	eagles-chat-01.example.com
+uname: Chat Page
+url: http://10.29.194.123:8000/?savenick=true&server=/107-0121-035&exp=false
+expect: Philadelphia Eagles Chat
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3725&parent=noc/client/372"&gt;eagles-chat-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP {
+				hostname:	eagles-chat-01.example.com
+uname: Chat Space
+port: 8000
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3725&parent=noc/client/372"&gt;eagles-chat-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "eagles-db-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3794&parent=noc/client/372"&gt;eagles-db-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/SQL Server 7
+			showstats: no
+			note:	Eagles Database Server (status is &lt;B&gt;pending&lt;/B&gt;)
+			hostname:	eagles-db-01.example.com
+			Service Ping {
+				hostname:	eagles-db-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3794&parent=noc/client/372"&gt;eagles-db-01.example.com in NOC-DB&lt;/A&gt;
+				siren: no
+				sendnotify: no
+				showstats: no
+				nostatus: yes
+				note: status is &lt;B&gt;pending&lt;/B&gt;
+			}
+		}
+		Host "eagles-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3727&parent=noc/client/372"&gt;eagles-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k, Commerce Server
+			note:	Eagles Web server
+			hostname:	eagles-www-01.example.com
+			Service Ping {
+				hostname:	eagles-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3727&parent=noc/client/372"&gt;eagles-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.195.244
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3727&parent=noc/client/372"&gt;eagles-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Family Escape" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/224"&gt;Family Escape in NOC DB&lt;/A&gt;
+		Host "www" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3284&parent=noc/client/224"&gt;www.familyescape.com in NOC-DB&lt;/A&gt;
+			info:	unknown
+			note:	webserver
+			hostname:	www.familyescape.com
+			Service Ping {
+				hostname:	www.familyescape.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3284&parent=noc/client/224"&gt;www.familyescape.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "TuHorn Enterprises" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/363"&gt;TuHorn Enterprises in NOC DB&lt;/A&gt;
+		Host "tuhorn.com" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3637&parent=noc/client/363"&gt;tuhorn.com in NOC-DB&lt;/A&gt;
+			info:	server
+			note:	server
+			hostname:	tuhorn.com
+			Service Ping {
+				hostname:	10.29.192.77
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3637&parent=noc/client/363"&gt;tuhorn.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "New Forum Publishers, Inc. (beyond books)" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/421"&gt;New Forum Publishers, Inc. (beyond books) in NOC DB&lt;/A&gt;
+		Host "fw-amb" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4220&parent=noc/client/421"&gt;fw-amb.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	Windows 2000 Advanced Server
+			note:	Web Server
+			hostname:	fw-amb.beyondbooks.com
+			Service Ping {
+				hostname:	10.29.192.201
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4220&parent=noc/client/421"&gt;fw-amb.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "fw-amb2" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4301&parent=noc/client/421"&gt;fw-amb2.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	none
+			note:	Firewall
+			hostname:	fw-amb2.beyondbooks.com
+			Service Ping {
+				hostname:	fw-amb2.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4301&parent=noc/client/421"&gt;fw-amb2.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "london" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4297&parent=noc/client/421"&gt;london.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server
+			note:	Web Server for Beyondbooks.com
+			hostname:	london.beyondbooks.com
+			Service Ping {
+				hostname:	london.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4297&parent=noc/client/421"&gt;london.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	london.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4297&parent=noc/client/421"&gt;london.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "longfellow" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4303&parent=noc/client/421"&gt;longfellow.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server
+			note:	Temp Web Server for eyondbooks.com
+			hostname:	longfellow.beyondbooks.com
+			Service Ping {
+				hostname:	longfellow.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4303&parent=noc/client/421"&gt;longfellow.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	longfellow.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4303&parent=noc/client/421"&gt;longfellow.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "paris" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4295&parent=noc/client/421"&gt;paris.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server
+			note:	Web server for Beyondbooks.com
+			hostname:	paris.beyondbooks.com
+			Service Ping {
+				hostname:	paris.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4295&parent=noc/client/421"&gt;paris.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "rome" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4293&parent=noc/client/421"&gt;rome.beyondbooks.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server/SQL Server/Veritas
+			note:	Database server for beyondbooks.com
+			hostname:	rome.beyondbooks.com
+			Service Ping {
+				hostname:	rome.beyondbooks.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4293&parent=noc/client/421"&gt;rome.beyondbooks.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "PVS" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/166"&gt;PVS in NOC DB&lt;/A&gt;
+		Host "demosthenes" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3300&parent=noc/client/166"&gt;demosthenes.verifies.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	unknown
+			hostname:	demosthenes.verifies.com
+			Service TCP/HTTP {
+				hostname:	demosthenes.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3300&parent=noc/client/166"&gt;demosthenes.verifies.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	demosthenes.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3300&parent=noc/client/166"&gt;demosthenes.verifies.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "hippocrates" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3304&parent=noc/client/166"&gt;hippocrates.verifies.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	unknown
+			hostname:	hippocrates.verifies.com
+			Service Ping {
+				hostname:	hippocrates.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3304&parent=noc/client/166"&gt;hippocrates.verifies.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	hippocrates.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3304&parent=noc/client/166"&gt;hippocrates.verifies.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "mail" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3302&parent=noc/client/166"&gt;mail.verifies.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	mail server
+			hostname:	mail.verifies.com
+			Service TCP/SMTP {
+				hostname:	mail.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3302&parent=noc/client/166"&gt;mail.verifies.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	mail.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3302&parent=noc/client/166"&gt;mail.verifies.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "plato" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3306&parent=noc/client/166"&gt;plato.verifies.com in NOC-DB&lt;/A&gt;
+			info:	NT
+			note:	unknown
+			hostname:	plato.verifies.com
+			Service Ping {
+				hostname:	plato.verifies.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3306&parent=noc/client/166"&gt;plato.verifies.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Stratton Management" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/168"&gt;Stratton Management in NOC DB&lt;/A&gt;
+		Host "stratton-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3185&parent=noc/client/168"&gt;www.strattonmgt.com in NOC-DB&lt;/A&gt;
+			info:	Win2k Server
+			note:	Webserver
+			hostname:	www.strattonmgt.com
+			Service Ping {
+				hostname:	10.29.192.17
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3185&parent=noc/client/168"&gt;www.strattonmgt.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	www.two-five.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3185&parent=noc/client/168"&gt;www.strattonmgt.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	www.strattonmgt.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3185&parent=noc/client/168"&gt;www.strattonmgt.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Eastern-e-Commerce" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/317"&gt;Eastern-e-Commerce in NOC DB&lt;/A&gt;
+		Host "Eastern-e-Commerce" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			info:	Solaris 2.7
+			note:	ISP-In-A-Box
+			hostname:	www-01.eastern-e-commerce.com
+			Service Ping {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/POP {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/FTP {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+			Service UDP/DNS {
+				hostname:	10.29.192.29
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3172&parent=noc/client/317"&gt;www-01.eastern-e-commerce.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "LinuxForce (i21)" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/362"&gt;LinuxForce (i21) in NOC DB&lt;/A&gt;
+		Host "linux00" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3626&parent=noc/client/362"&gt;linux00.linuxforce.net in NOC-DB&lt;/A&gt;
+			info:	linux
+			note:	web server
+			hostname:	linux00.linuxforce.net
+			Service Ping {
+				hostname:	10.29.192.142
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3626&parent=noc/client/362"&gt;linux00.linuxforce.net in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Milliman USA" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/419"&gt;Milliman USA in NOC DB&lt;/A&gt;
+		Host "milliman-www-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4199&parent=noc/client/419"&gt;milliman-www-01.example.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	milliman-www-01.example.com
+			Service Ping {
+				hostname:	10.29.194.110
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4199&parent=noc/client/419"&gt;milliman-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	milliman-www-01.example.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/4199&parent=noc/client/419"&gt;milliman-www-01.example.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "World At My Door, LLC" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/222"&gt;World At My Door, LLC in NOC DB&lt;/A&gt;
+		Host "coyote-01" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3562&parent=noc/client/222"&gt;coyote-01.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	equalizer
+			note:	load balancer
+			hostname:	coyote-01.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.103
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3562&parent=noc/client/222"&gt;coyote-01.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "jigglypuff" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3159&parent=noc/client/222"&gt;jigglypuff.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	Webserver
+			hostname:	jigglypuff.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.47
+sendnotify: no
+siren: no
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3159&parent=noc/client/222"&gt;jigglypuff.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "pikachu" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3153&parent=noc/client/222"&gt;pikachu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	pikachu.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.137
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3153&parent=noc/client/222"&gt;pikachu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	pikachu.worldatmydoor.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3153&parent=noc/client/222"&gt;pikachu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "psyduck" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3163&parent=noc/client/222"&gt;psyduck.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	psyduck.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.85
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3163&parent=noc/client/222"&gt;psyduck.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/SMTP {
+				hostname:	psyduck.worldatmydoor.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3163&parent=noc/client/222"&gt;psyduck.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "raichu" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3161&parent=noc/client/222"&gt;raichu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	raichu.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.73
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3161&parent=noc/client/222"&gt;raichu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+			Service TCP/HTTP {
+				hostname:	raichu.worldatmydoor.com
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3161&parent=noc/client/222"&gt;raichu.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "slowpoke" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3157&parent=noc/client/222"&gt;slowpoke.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Win2k
+			note:	Webserver
+			hostname:	slowpoke.worldatmydoor.com
+			Service Ping {
+				hostname:	slowpoke.worldatmydoor.com
+sendnotify: no
+siren: no
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3157&parent=noc/client/222"&gt;slowpoke.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+		Host "squirtle" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3155&parent=noc/client/222"&gt;squirtle.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	WebServer
+			hostname:	squirtle.worldatmydoor.com
+			Service Ping {
+				hostname:	10.29.192.139
+sendnotify: no
+siren: no
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3155&parent=noc/client/222"&gt;squirtle.worldatmydoor.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+	Group "Business Intelligence" {
+		details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/160"&gt;Business Intelligence in NOC DB&lt;/A&gt;
+		Host "dspeed" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3179&parent=noc/client/160"&gt;business-intelligence.com in NOC-DB&lt;/A&gt;
+			info:	Windows NT
+			note:	Webserver
+			hostname:	business-intelligence.com
+			Service Ping {
+				hostname:	10.29.192.76
+
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/host/3179&parent=noc/client/160"&gt;business-intelligence.com in NOC-DB&lt;/A&gt;
+			}
+		}
+	}
+}
+### End
+Group "Termservers" {
+	overridable!:	no
+	Group "Ambler" {
+		Host "ts-amb1.example.com" {
+			Service Ping
+		}
+		Host "ts-amb10.example.com" {
+			Service Ping
+		}
+		Host "ts-amb11.example.com" {
+			Service Ping
+		}
+		Host "ts-amb12.example.com" {
+			Service Ping
+		}
+		Host "ts-amb13.example.com" {
+			Service Ping
+		}
+		Host "ts-amb14.example.com" {
+			info:	PM2
+			Service Ping
+		}
+		Host "ts-amb2.example.com" {
+			Service Ping
+		}
+		Host "ts-amb23.example.com" {
+			Service Ping
+		}
+		Host "ts-amb3.example.com" {
+			Service Ping
+		}
+		Host "ts-amb4.example.com" {
+			Service Ping
+		}
+		Host "ts-amb5.example.com" {
+			Service Ping
+		}
+		Host "ts-amb6.example.com" {
+			Service Ping
+		}
+		Host "ts-amb7.example.com" {
+			Service Ping
+		}
+		Host "ts-amb8.example.com" {
+			Service Ping
+		}
+		Host "ts-amb9.example.com" {
+			Service Ping
+		}
+		Host "ts-amb18.example.com" {
+			Service Ping
+		}
+		Host "ts-amb19.example.com" {
+			Service Ping
+		}
+		Host "ts-amb20.example.com" {
+			Service Ping
+		}
+		Host "ts-amb21.example.com" {
+			Service Ping
+		}
+		Host "ts-amb22.example.com" {
+			Service Ping
+		}
+	}
+	Group "Phl Wlf" {
+		Host "ts-phlwlf1.example.com" {
+			Service Ping
+		}
+		Host "ts-phlwlf2.example.com" {
+			Service Ping
+		}
+	}
+}
+
+############################################################
+
+
+Group "Upstream Connections" {
+	overridable!:		no
+
+	Group "T3 SMDS - NetAXS" {
+		Service Ping {
+			hostname:	10.106.2.89
+		}
+		Service UDP/SNMP {
+			hostname:	gw-amb1.example.com
+			oid:		.1.3.6.1.2.1.15.3.1.2.10.106.2.89
+			eqvalue:	6
+			label:		BGP
+			uname:		BGP
+		}
+	}
+
+
+	Group "T3 - Sprint" {
+		Service Ping {
+			hostname:	10.228.116.9
+		}
+		Service UDP/SNMP {
+			hostname:	gw-amb3.example.com
+			oid:		.1.3.6.1.2.1.15.3.1.2.10.228.116.9
+			eqvalue:	6
+			label:		BGP
+			uname:		BGP
+		}
+	}
+}
+
+
+Group "Internal Connections" {
+	overridable!:		no
+	# Ping both ends
+	Group "T1 Amb - Wlf" {
+		Service Ping {
+			hostname:	10.29.198.21
+		}
+		Service Ping {
+			hostname:	10.29.198.22
+		}
+	}
+	Group "T1 Amb - BM" {
+		Service Ping {
+			hostname:	10.152.192.69
+		}
+		Service Ping {
+			hostname:	10.152.192.70
+		}
+	}
+}
+
+###########################################################
+##  This file is generated automagically -- DO NOT EDIT  ##
+###########################################################
+Group "Customer Connectivity" {
+	overridable!:	no
+	autogenerated:	yes
+	Group "56K FR" {
+		Service Ping {
+			hostname: 10.29.198.74
+			label: Gemini Bakery
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2152&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+	}
+	Group "802.11 (BreezeNet)" {
+		Service Ping {
+			hostname: 10.29.192.104
+			label: Cornerstone Media
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3124&parent=noc/client/312"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.192.56
+			label: LTK Engineering Services
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3116&parent=noc/client/311"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.192.89
+			label: Moberg
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3120&parent=noc/client/311"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+	}
+	Group "Centrex ISDN" {
+		Service Ping {
+			hostname: 10.152.215.66
+			label: Fluid Power - fluidisdn
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3640&parent=noc/client/363"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.215.3
+			label: Swartley Brothers Engineers, Inc.
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3644&parent=noc/client/364"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+	}
+	Group "L2 DSL" {
+		pagermsg:       ALL L2 DSL
+		gravity:        up
+		sendpage:       yes
+		Service Ping {
+			hostname: 10.152.211.210
+			label: 1031 Corp., Inc, pic1031.com
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4407&parent=noc/client/440"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.138
+			label: Adaptive Intelligence
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1741&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.190
+			label: Alliance Organizing Project
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4368&parent=noc/client/436"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.114
+			label: Ambler Borough
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1750&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.18
+			label: Ampro
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1757&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.118
+			label: BLM Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4378&parent=noc/client/437"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.193
+			label: Biff Sturla
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4394&parent=noc/client/439"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.174
+			label: Blackney Hayes
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1770&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.98
+			label: Bosha Design
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2841&parent=noc/client/283"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.46
+			label: Business Intelligence
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1773&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.182
+			label: Carrol Engineering
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4413&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.78
+			label: Casaccio Architects
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4209&parent=noc/client/420"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.98
+			label: Cecil Baker
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1783&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.186
+			label: Central Metals
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1786&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.66
+			label: Chestnut Hill Academy
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1789&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.121
+			label: Clark & Madara
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4225&parent=noc/client/422"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.194
+			label: Coelescence
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1792&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.54
+			label: Collaborative Design
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1796&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Group "Communication Media" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/161"&gt;Customer in NOC-DB&lt;/A&gt;
+			Service Ping {
+				hostname: 10.29.198.202
+				label: 384k SDSL [1799]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1799&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+			Service Ping {
+				hostname: 10.29.198.146
+				label: 192k SDSL [1806]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1806&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+		}
+		Service Ping {
+			hostname: 10.29.198.218
+			label: Compass
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1812&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.174
+			label: Continental Paper Box
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1819&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.182
+			label: Dagit Saylor
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1823&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.102
+			label: Damiano-Long
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1827&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.74
+			label: Delran Builders Co. Inc.
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1834&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.230
+			label: Design Build Affiliates
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4484&parent=noc/client/448"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.206
+			label: Design Studio, Inc.
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4385&parent=noc/client/438"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.30
+			label: Ed Madara
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1846&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.162
+			label: Executive Financial
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4204&parent=noc/client/420"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.202
+			label: First State Financial
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1853&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.214
+			label: Fortune Personnel
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1860&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.178
+			label: GGA Design
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1864&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.166
+			label: George Carey
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1872&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.78
+			label: Gorca
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1876&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Group "Grand Sport Auto" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/163"&gt;Customer in NOC-DB&lt;/A&gt;
+			Service Ping {
+				hostname: 10.29.196.158
+				label: 192k SDSL [1879]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1879&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+			Service Ping {
+				hostname: 10.29.198.62
+				label: 192k SDSL [1882]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1882&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+		}
+		Service Ping {
+			hostname: 10.29.196.218
+			label: Greater Media
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1885&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.174
+			label: Gural Associates
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4247&parent=noc/client/424"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.82
+			label: Guy M. Cooper, Inc
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1888&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.62
+			label: Health Works Alliance
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1898&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.142
+			label: Imagemax
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1901&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.93
+			label: J. S. Cornell
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1905&parent=noc/client/163"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.46
+			label: Jowitt & Rodgers
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1911&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.162
+			label: KEH Insurance
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1914&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.106
+			label: KTH Architects
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1917&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.178
+			label: Lauersen Agency
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4269&parent=noc/client/426"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.150
+			label: Lazerware
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1920&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.250
+			label: Liberty Bell Agency
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1923&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.242
+			label: Lincoln Benifits Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1926&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.134
+			label: Local Union 1201
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1929&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.146
+			label: Lyman Perry
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1936&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.142
+			label: MGA Partners -mgadsl
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3459&parent=noc/client/345"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.50
+			label: Marguerite Rodgers
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1946&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.126
+			label: Momenee & Associates
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1962&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.102
+			label: Movies Unlimited
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1965&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.26
+			label: Never Limited
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1971&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.154
+			label: PIL - Philadelphia Investors
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3982&parent=noc/client/398"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.110
+			label: PVS
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1984&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.18
+			label: Parallel Edge
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1987&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.114
+			label: PennCat
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1993&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.201.114
+			label: Philadelphia Financial Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2002&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.230
+			label: Planlogic
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2008&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.14
+			label: Printfold
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2015&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.198
+			label: Realen Properties
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4373&parent=noc/client/437"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.218
+			label: Research By Design-Hyde Park
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4488&parent=noc/client/448"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.110
+			label: Resnick Amsterdam Leshner
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2019&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.226
+			label: Rolf Sauer & Partners
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4495&parent=noc/client/449"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.82
+			label: Running Press
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2022&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.150
+			label: SRS Marketing
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2025&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.166
+			label: STWK
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4399&parent=noc/client/439"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.198.86
+			label: Saxco
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2034&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.158
+			label: Senior Management Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2037&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.70
+			label: Sommar, Tracey and Sommar
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2053&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Group "Sos Metal" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/168"&gt;Customer in NOC-DB&lt;/A&gt;
+			Service Ping {
+				hostname: 10.29.199.22
+				label: 144k SDSL [2056]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2056&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+			Service Ping {
+				hostname: 10.152.211.37
+				label: 144k SDSL [2059]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2059&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+		}
+		Service Ping {
+			hostname: 10.29.196.198
+			label: St. Peter School
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2062&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.202
+			label: Strategic Eye
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2065&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.102
+			label: Stratton Management
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2068&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.42
+			label: Susan Maxman Partners
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2074&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.150
+			label: TC Services
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2077&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.206
+			label: Tactix
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2084&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.186
+			label: Tescor
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2090&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.122
+			label: Thomas E. Hall
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2093&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.118
+			label: Tozour Energy Systems
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2099&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.50
+			label: USA Spring Break
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2102&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.2
+			label: United Fabrics
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2108&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.154
+			label: Videotek
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2111&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.210
+			label: WXPN - University of Pennsylvania
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2114&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.196.170
+			label: Wagman Primus Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2117&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.126
+			label: Wherry Doors and Hardware Co.
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3548&parent=noc/client/354"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.29.199.74
+			label: White Dog
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2120&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.170
+			label: Workgroup Consultants, Inc.
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4010&parent=noc/client/400"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Group "Wyndcroft School" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/170"&gt;Customer in NOC-DB&lt;/A&gt;
+			Service Ping {
+				hostname: 10.29.196.214
+				label: 144k SDSL [2123]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2123&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+			Service Ping {
+				hostname: 10.29.196.213
+				label: 144k SDSL [2446]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2446&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+							siren:	no
+			sendpage:	no
+
+			}
+		}
+		Service Ping {
+			hostname: 10.152.211.146
+			label: Youth Build Philadelphia
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4425&parent=noc/client/442"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 10.152.211.234
+			label: gmledsl
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4522&parent=noc/client/452"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+	}
+	Group "L3 DSL" {
+		pagermsg:       ALL L3 DSL
+		gravity:        up
+		sendpage:       yes
+		Service Ping {
+			hostname: 63.220.248.156
+			label: Aegis Property Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1744&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.29.81
+			label: Charlestown Software
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3799&parent=noc/client/379"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.192.25
+			label: Cooper Center
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3897&parent=noc/client/389"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.14.2
+			label: Field Operations
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3601&parent=noc/client/359"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.220.248.1
+			label: Flynn, Horlacher, & Parker
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3631&parent=noc/client/363"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.14.161
+			label: GPSC
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3515&parent=noc/client/351"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.219.121.97
+			label: Lilly Pulitzer
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3613&parent=noc/client/333"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.222.177.41
+			label: MPO Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3519&parent=noc/client/351"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.195.73
+			label: McClausland, Keen & Buckman
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3891&parent=noc/client/388"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.220.39.193
+			label: Newtown Office
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3507&parent=noc/client/350"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.15.17
+			label: Petsis Financial
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3903&parent=noc/client/390"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.198.233
+			label: Pharm Force
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3941&parent=noc/client/393"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.220.6.1
+			label: Reads Van Service
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3909&parent=noc/client/390"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 209.9.254.1
+			label: SRS Marketing
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3862&parent=noc/client/167"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.220.6.209
+			label: Strategic Eye
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3868&parent=noc/client/168"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.220.36.249
+			label: Summers Labratories
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3732&parent=noc/client/373"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.222.178.1
+			label: Surgical Monitoring Associates
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3441&parent=noc/client/344"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+		Service Ping {
+			hostname: 63.221.27.49
+			label: The Gentle Cat Doctor
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3710&parent=noc/client/370"&gt;Circuit in NOC-DB&lt;/A&gt;
+						siren:	no
+			sendpage:	no
+
+		}
+	}
+	Group "Other" {
+		Group "NetReach" {
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/client/"&gt;Customer in NOC-DB&lt;/A&gt;
+			Service UDP/SNMP {
+				hostname: ts-amb23.example.com
+				label: ts-amb23 PRI0 [4085]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4085&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb23.example.com
+				label: ts-amb23 PRI1 [4088]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4088&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb1.example.com
+				label: ts-amb1 PRI0 [4091]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4091&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb1.example.com
+				label: ts-amb1 PRI1 [4094]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4094&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb2.example.com
+				label: ts-amb2 PRI0 [4097]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4097&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb2.example.com
+				label: ts-amb2 PRI1 [4100]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4100&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb3.example.com
+				label: ts-amb3 PRI0 [4103]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4103&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb3.example.com
+				label: ts-amb3 PRI1 [4106]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4106&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb4.example.com
+				label: ts-amb4 PRI0 [4109]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4109&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb4.example.com
+				label: ts-amb4 PRI1 [4112]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4112&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb5.example.com
+				label: ts-amb5 PRI0 [4118]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4118&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb5.example.com
+				label: ts-amb5 PRI1 [4121]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4121&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb6.example.com
+				label: ts-amb6 PRI0 [4124]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4124&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb6.example.com
+				label: ts-amb6 PRI1 [4127]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4127&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb7.example.com
+				label: ts-amb7 PRI0 [4130]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4130&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb7.example.com
+				label: ts-amb7 PRI1 [4133]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4133&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb8.example.com
+				label: ts-amb8 PRI0 [4136]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4136&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb8.example.com
+				label: ts-amb8 PRI1 [4139]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4139&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb9.example.com
+				label: ts-amb9 PRI0 [4142]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4142&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb9.example.com
+				label: ts-amb9 PRI1 [4145]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4145&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb10.example.com
+				label: ts-amb10 PRI0 [4148]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4148&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb10.example.com
+				label: ts-amb10 PRI1 [4151]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4151&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb11.example.com
+				label: ts-amb11 PRI0 [4154]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4154&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb11.example.com
+				label: ts-amb11 PRI1 [4157]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4157&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb12.example.com
+				label: ts-amb12 PRI0 [4160]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4160&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb12.example.com
+				label: ts-amb12 PRI1 [4163]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4163&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb13.example.com
+				label: ts-amb13 PRI0 [4166]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4166&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.1
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+			Service UDP/SNMP {
+				hostname: ts-amb13.example.com
+				label: ts-amb13 PRI1 [4169]
+				details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4169&parent=noc/client/"&gt;Circuit in NOC-DB&lt;/A&gt;
+				oid: .1.3.6.1.4.1.307.3.2.2.1.1.4.2
+eqvalue: 1
+			siren:	no
+			sendpage:	no
+			retries:	10
+			timeout:	10
+
+			}
+		}
+	}
+	Group "T1" {
+		Service Ping {
+			hostname: 10.29.203.230
+			label: AMCO
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1735&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.196.222
+			label: Airsure
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1747&parent=noc/client/159"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.42
+			label: Binary Research
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1764&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.196.226
+			label: Carrol Engineering
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1780&parent=noc/client/160"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.26
+			label: Cedar Fresh
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2534&parent=noc/client/252"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.186
+			label: Computer Hardware Systems
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2537&parent=noc/client/252"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.118
+			label: Computer Software Inc
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1816&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.152.209.30
+			label: Davlyn
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1831&parent=noc/client/161"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.246
+			label: Delaware County Christian School
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2138&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.5
+			label: Fishbein
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1856&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.218
+			label: Jeremy Kister
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4467&parent=noc/client/445"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.18
+			label: Longbow
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1933&parent=noc/client/164"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.34
+			label: Madison Bank
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1943&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.196.138
+			label: Marketing Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1949&parent=noc/client/165"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.230
+			label: Parec
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1990&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.126
+			label: Petfood Direct
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1999&parent=noc/client/166"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.237
+			label: TGI Interactive
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2206&parent=noc/client/173"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.154
+			label: USWATS
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2540&parent=noc/client/251"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+	}
+	Group "T1 FR" {
+		Service Ping {
+			hostname: 10.29.203.158
+			label: Beasley
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2129&parent=noc/client/170"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.70
+			label: Decision Group
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2135&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.182
+			label: Drexelbrook Engineering
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2141&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.200.14
+			label: Eastern Poultry
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/1843&parent=noc/client/162"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.194
+			label: Fort Washington Expo Center
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2148&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.196.238
+			label: Germantown Settlement (Housing Development)
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2155&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.226
+			label: Maron, Marvel and Wilkes
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2168&parent=noc/client/172"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.152.192.82
+			label: Mt Laurel Nursing Home
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/3651&parent=noc/client/252"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.152.209.90
+			label: Northstar Assett Management
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/4256&parent=noc/client/425"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.198.198
+			label: Police and Fire Federal Credit Union
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2183&parent=noc/client/172"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.174
+			label: Prosort LLC
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2186&parent=noc/client/172"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.196.174
+			label: Sicom Systems
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2192&parent=noc/client/172"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.137
+			label: Syncro Technologies
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2202&parent=noc/client/173"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.152.209.86
+			label: Thomas J. Paul
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2096&parent=noc/client/169"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+		Service Ping {
+			hostname: 10.29.203.126
+			label: Universal Spacenet
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2195&parent=noc/client/172"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+	}
+	Group "T3 SMDS" {
+		Service Ping {
+			hostname: 10.29.200.10
+			label: GMAC
+			details:	&lt;A HREF="http://nocdb.example.com/cgi-bin/nocdb/dbi?func=show&what=noc/circuit/2158&parent=noc/client/171"&gt;Circuit in NOC-DB&lt;/A&gt;
+		}
+	}
+}
+
+
+Group "eCommerce Sites" {
+	overridable!:		no
+	frequency:	3600
+	retries:	2
+	timeout:	45
+
+	Host "www.example.com" {
+		Service TCP/URL {
+			uname:		SQL
+			url:		http://www.example.com/store/dept.asp?dept%5Fid=9999
+			expect:		Netreach Test
+		}
+
+		Service TCP/URL {
+			uname:		AFFILIATE
+			url:		http://www.example.com/store/affiliate.asp?affiliatecode=netreachtest&jumppage=affiliate_monitor.asp
+			expect:		success
+		}
+
+		Service TCP/URL {
+			uname:		LINKSHARE
+			url:		http://www.example.com/store/linkshare_monitor.asp?mscssid=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+			expect:		success
+		}
+	}
+
+	Host "www.example2.com" {
+		Service TCP/URL {
+			uname:		SQL
+			url:		http://www.example2.com/bookstore/whatsup.asp
+			expect:		Success
+		}
+	}
+}
+
+Group "Other" {
+	nostats:	true
+	overridable!:	no
+
+	Host "UPS" {
+		hostname:	connectups-amb1.example.com
+		Service	UDP/SNMP {
+			sendnotify:	no
+			siren:		no
+			oid:	.1.3.6.1.2.1.33.1.4.1.0
+			eqvalue:	3
+			uname:	Output Source
+			label:	Output Source
+		}
+		Service	UDP/SNMP {
+			sendnotify:	no
+			siren:		no
+			oid:	.1.3.6.1.2.1.33.1.2.1.0
+			eqvalue:	2
+			uname:	Battery Status
+			label:	Battery Status
+		}
+	}
+
+	Service TCP/URL {
+		uname:		Server Disk Space
+		label:		Server Disk Space
+		url:            http://diskmon.example.com/cgi-bin/ds.cgi
+		expect:         no problems
+		frequency:      1800
+		retries:        1
+		pagermsg:	Check http://diskmon.example.com
+		sendnotify:	no
+	}
+	Group "Employee Connections" {
+		Service Ping {
+			label_left:	Chris's cable
+			hostname:	10.9.235.105
+			sendnotify:	no
+			siren:		no
+		}
+		Service Ping {
+			label_left:	Greg's cable
+			hostname:	10.9.193.81
+			sendnotify:	no
+			siren:		no
+		}
+		Service Ping {
+			siren:		no
+			label_left:	Jeff's DSL
+			hostname:	10.1.2.3
+			sendnotify:	no
+			retries:	1
+		}
+	}
+	Service TCP/URL {
+		uname:		CyberCash Payment Server
+		expect:		CyberCash Payment Server  &lt;/FONT&gt;&lt;/A&gt;&lt;/TD&gt;
+		frequency:	3600
+		url:		http://merchant.example.com/cgi-bin/status/cyber/status.cgi
+		label:	CyberCash Payment Server
+		retries:	2
+		sendnotify:	no
+	}
+
+	Group "PM3 Test" {
+		# only notify if these are *all* down - indicating a serious problem
+		countstop:	yes
+		frequency:	3600
+		gravity:	up
+		messagedn:	PM3 OSPF or RADIUS or TELCO Problem
+		sendnotify:	yes
+		Service Ping {
+			info:	john hubickeys isdn
+			hostname:	10.29.204.2
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	davidd
+			hostname:	10.152.220.25
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	baw
+			hostname:	10.29.206.0
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	waynepres1
+			hostname:	10.152.220.93
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	row51
+			hostname:	10.29.196.51
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	vfcisdn
+			hostname:	10.29.206.86
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	static-jcox
+			hostname:	10.29.204.44
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	static-greggk
+			hostname:	10.152.215.81
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	plumstead1
+			hostname:	10.152.215.75
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	edge
+			hostname:	10.29.196.2
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	sorbeemodem1
+			hostname:	10.152.220.164
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	static-nicholst
+			hostname:	10.29.204.26
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	audiocare
+			hostname:	10.152.215.9
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	static-evans
+			hostname:	10.152.215.74
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	ldcomputing
+			hostname:	10.152.215.12
+			sendnotify:	no
+		}
+		Service Ping {
+			info:	bcwsa
+			hostname:	10.152.215.22
+			sendnotify:	no
+		}
+	}
+	Group "Temperature" {
+		Group "Ambler" {
+			Service UDP/SNMP {
+				label:	inlet-1
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb1 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb1.example.com
+			}
+			Service UDP/SNMP {
+				label:	inlet-2
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb2 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb2.example.com
+			}
+			Service UDP/SNMP {
+				label:	inlet-3
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb3 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb3.example.com
+			}
+			Service UDP/SNMP {
+				label:	inlet-4
+				maxvalue:	27
+				oid:	.1.3.6.1.4.1.9.9.13.1.3.1.3.1
+				comment:	gw-amb4 inlet temp
+				messagedn:	server room is too hot
+				hostname:	gw-amb4.example.com
+			}
+		}
+	}
+	Group "World Reachability" {
+		# check lots of things, only page if *everything* is down
+		countstop:	yes
+		frequency:	600
+		messagedn:	external reachability problems
+		sendnotify:	yes
+		Group "Root Servers" {
+			gravity:	up
+			sendnotify:	no
+			Service Ping {
+				label:	A
+				hostname:	a.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	B
+				hostname:	b.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	C
+				hostname:	c.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	D
+				hostname:	d.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	E
+				hostname:	e.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	F
+				hostname:	f.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	G
+				hostname:	g.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	H
+				hostname:	h.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	I
+				hostname:	i.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	J
+				hostname:	j.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	K
+				hostname:	k.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	L
+				hostname:	l.root-servers.net
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	M
+				hostname:	m.root-servers.net
+				sendnotify:	no
+			}
+		}
+		Group "Yahoo" {
+			gravity:	up
+			sendnotify:	no
+			Service Ping {
+				label:	www
+				hostname:	www.yahoo.com
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	www1
+				hostname:	www1.yahoo.com
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	www3
+				hostname:	www3.yahoo.com
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	www4
+				hostname:	www4.yahoo.com
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	www7
+				hostname:	www7.yahoo.com
+				sendnotify:	no
+			}
+			Service Ping {
+				label:	www9
+				hostname:	www9.yahoo.com
+				sendnotify:	no
+			}
+		}
+	}
+	Group "Bandwidth Use" {
+		# check that usage is sane
+		Group "Sprint T3" {
+			Service UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb3.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.1
+				maxval:		20000000
+			}
+			Service UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb3.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.1
+				maxval:		20000000
+			}
+		}
+		Group "SMDS" {
+			Service UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb1.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.3
+				maxval:		20000000
+			}
+			Service UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb1.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.3
+				maxval:		20000000
+			}
+		}
+		Group "Colo Net" {
+			Service UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb2.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.2
+				maxval:		20000000
+			}
+			Service UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb2.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.2
+				maxval:		20000000
+			}
+		}
+		Group "Internal Net" {
+			Service UDP/SNMP {
+				label:		Out
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb4.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.16.4
+				maxval:		20000000
+			}
+			Service UDP/SNMP {
+				label:		In
+				snmphow:	ave-rate-bits
+				hostname:       gw-amb4.example.com
+				oid:		.1.3.6.1.2.1.2.2.1.10.4
+				maxval:		20000000
+			}
+		}
+	}
+
+}
+
+############################################################
+
+Group "Test" {
+
+	Host "rfc2100.example.com" {
+		type:	w2k workstation
+		Service Ping {
+			sendpage:	no
+		}
+	}
+	Host "rfc1178.example.com" {
+		type:	NetBSD workstation
+		Service Ping {
+			sendpage:	no
+		}
+	}
+	Host "rocher.example.com"
+		type:	Win2k Dev Server
+		Service UDP/DNS {
+			sendpage:	no
+		}
+	}
+
+	Host "ns.example.com" {
+		Service	UDP/Domain/example.com
+		Service	UDP/Domain/example.net
+		Service	UDP/Domain/example.org
+	}
+		
+}
+
+############################################################
+
+</PRE>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: config-large.html,v 1.3 2007/01/17 05:48:54 jaw Exp $ -->
+</HTML>

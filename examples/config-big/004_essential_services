@@ -1,0 +1,64 @@
+Group "Essential Services" {
+	overridable:	no
+	service: TCP/SMTP {
+		label_left:	a.mx.example.com
+		hostname:	a.mx.example.com
+	}
+	service: TCP/SMTP {
+		label_left:	b.mx.example.com
+		hostname:	b.mx.example.com
+	}
+	service: TCP/SMTP {
+		label_left:	c.mx.example.com
+		hostname:	c.mx.example.com
+	}
+	service: TCP/SMTP {
+		label_left:	exchange (dequeuing)
+		hostname:	exchange.example.com
+	}
+	service: TCP/SMTP {
+		label_left:	exchange (old dequeuing)
+		hostname:	10.197.101.17
+	}
+	Group "Internal Exchange" {
+		Alias "POP" "Top:NT_Servers:lanai:POP_lanai.example.com"
+		Alias "SMTP" "Top:NT_Servers:lanai:SMTP_lanai.example.com"
+	}
+	service: TCP/POP {
+		label_left:	mail1 (pop3)
+		hostname:	mail1.example.com
+	}
+	Alias "ns.example.com" "Top:Unix_Servers:capri:DNS_capri.example.com"
+	service: UDP/DNS {
+		label_left:	ns1.example.com
+		hostname:	ns1.example.com
+	}
+	Alias "ns1.example.com" "Top:Unix_Servers:renoir:DNS_renoir.example.com"
+	service: UDP/DNS {
+		label_left:	ns2.example.com
+		hostname:	ns2.example.com
+	}
+	Alias "ns2.example.com" "Top:Unix_Servers:pisarro:DNS_pisarro.example.com"
+	Alias "ns3.example.com" "Top:NT_Servers:motu:DNS_motu.example.com"
+	service: UDP/DNS {
+		label_left:	old-ns1.example.com
+		hostname:	old-ns1.example.com
+	}
+	service: UDP/DNS {
+		label_left:	old-ns2.example.com
+		hostname:	old-ns2.example.com
+	}
+	Alias "radius1" "Top:Unix_Servers:capri:RADIUS_capri.example.com"
+	Alias "radius2" "Top:Unix_Servers:ithaca:RADIUS_ithaca.example.com"
+	service: TCP/SMTP {
+		label_left:	smtp
+		hostname:	smtp.example.com
+	}
+	Group "mail2.example.com" {
+		Alias "POP" "Top:Unix_Servers:fatuka:POP_mail2.example.com"
+		Alias "SMTP" "Top:Unix_Servers:fatuka:SMTP_mail2.example.com"
+	}
+}
+
+############################################################
+

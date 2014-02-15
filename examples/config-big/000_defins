@@ -1,0 +1,17 @@
+
+# common definitions
+
+syslog:		local1
+notify:		none
+frequency:	60
+community:	public
+
+header_all:	<H2>Argus Example Configuration</H2><BR><A HREF="http://www.tcp4me.com/code/argus/">Argus Website</A><P>
+footer_all:	<P><A HREF="http://www.tcp4me.com/code/argus/">Argus Website</A>
+
+sirensong:	/sound/whoopwhoop.wav
+bkgimage:	/img/argus.logo.gif
+icon:		/img/smile.gif
+icon_down:	/img/sad.gif
+nospkr_icon:	/img/nospkr.gif
+

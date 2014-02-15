@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Argus - System and Network Monitoring Software</TITLE>
+<!--#include file="top.shtml" -->
+
+<style>
+	pre {
+		font-size:	10px;
+	}
+</style>
+
+<h2>Argus Performance Testing</h2>
+
+<p>How many services can argus monitor? The following table
+shows <tt>argusctl status</tt> results for various types
+of services on various systems.</p>
+
+<table border=1>
+<tr><th>System</th><th>Ping</th><th>DNS</th><th>TCP (banner)</th></tr>
+<tr>
+<td>Pentium 3.0GHz<br>
+</td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 i386
+objects:   51735
+services:  50916
+idle:      41.20% 41.86% 40.61%
+monrate:   848.86 844.38 842.20
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 i386
+objects:   26135
+services:  25516
+idle:      58.15% 58.48% 57.71%
+monrate:   415.68 418.11 418.35
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 i386
+objects:   21315
+services:  20756
+idle:      51.03% 50.96% 53.00%
+monrate:   339.79 339.78 339.80
+</pre></td>
+</tr>
+<!-- **************************************************************** -->
+
+<tr><td>Sun v100 - 550MHz</td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 sparc64
+objects:   10557
+services:  10235
+idle:      56.59% 58.14% 56.79%
+monrate:   171.67 171.21 170.85
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 sparc64
+objects:   8417
+services:  8125
+idle:      59.46% 59.85% 59.72%
+monrate:   135.30 135.72 135.62
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.8.8
+osinfo:    NetBSD 3.0.1 sparc64
+objects:   6767
+services:  6505
+idle:      30.60% 29.47% 33.73%
+monrate:   108.50 108.73 108.63
+</pre></td>
+</tr>
+
+<!-- **************************************************************** -->
+
+<tr><td>Sun SS10 - 75MHz</td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.6.1
+osinfo:    NetBSD 1.5.2 sparc
+objects:   5297
+services:  5065
+idle:      36.89% 39.65% 34.76%
+monrate:   85.24 84.96 84.63
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.6.1
+osinfo:    NetBSD 1.5.2 sparc
+objects:   2717
+services:  2555
+idle:      47.32% 48.43% 45.68%
+monrate:   42.65 43.01 42.98
+</pre></td>
+<td><pre>
+version:   dev-20070303
+perlver:   5.6.1
+osinfo:    NetBSD 1.5.2 sparc
+objects:   2257
+services:  2105
+idle:      22.22% 21.57% 20.67%
+monrate:   35.80 35.60 35.44
+</pre></td>
+
+</table>
+
+<p><b>Notes:</b><br>
+All tests were performed with 0.1% of all services down.<br>
+All tests were run once per minute.<br>
+
+</p>
+
+<!--#include file="bottom.shtml" -->
+<!-- $Id: perftests.html,v 1.2 2007/03/04 21:02:22 jaw Exp $ -->
+</HTML>

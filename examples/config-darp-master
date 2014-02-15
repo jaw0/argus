@@ -1,0 +1,102 @@
+
+# example DARP master config
+
+# locations of various items on web pages
+sirensong:	/sound/whoopwhoop.wav
+bkgimage:	/img/argus.logo.gif
+icon:		/img/smile.gif
+icon_down:	/img/sad.gif
+nospkr_icon:	/img/nospkr.gif
+style_sheet:	/argus.css
+
+# send messages to syslog
+syslog:		daemon
+
+# who should be notified when things break?
+notify:		mail:support@example.com
+
+# don't summarize notifications
+nolotsmsgs:	yes
+
+# enable built in tcp test port
+test_port:	3074
+
+# display darp name on web pages
+footer_all:     <P>DARP Server: master
+
+# what sort of darping?
+darp_mode:	redundant
+
+
+# configure mail notifications
+Method "mail" {
+	# command:	/lib/sendmail -t
+	# add/edit headers?
+	send:		To: %R\n\
+	From: %F\n\
+	Content-Type: text/plain; charset=utf-8\n\
+	Subject: Argus%E\n\n\
+	%M\n
+}
+
+
+# enable built in resolver
+Resolv
+
+# configure DARP as master with 2 slaves
+DARP "master" {
+
+        slave "slave1" {
+                hostname:       argus-slave1.example.com
+                secret:         hush!
+                remote_url:     http://www.example.com/argus
+        }
+
+        slave "slave2" {
+                hostname:       argus-slave2.example.com
+                secret:         hush!
+        }
+
+}
+
+Group "Example" {
+	Group "Servers" {
+		frequency: 60
+		Host "eury" {
+			hostname: eury.example.com
+			Service TCP/HTTP
+			Service UDP/DNS
+			Service UDP/Domain/example.com
+			Service UDP/NFS
+			Service Ping
+			Service TCP/URL {
+				label:	SQL
+				url:	http://www.example.com/cgi-bin/dbtest.pl
+				expect:	DATABASE OK
+			}
+		}
+		Host "pen" {
+			hostname: pen.example.com
+			Service TCP/SMTP
+			Service UDP/DNS
+			Service UDP/NFS
+			Service Ping
+		}
+		Host "gw" {
+			hostname: 192.168.200.1
+			community: public
+			Service Ping
+			Service UDP/SNMP {
+				label:	foo
+				oid:	.1.3.6.1.2.1.2.2.1.7.2
+				eqvalue: 1
+			}
+			Service UDP/SNMP/OperStatus.2 {
+				eqvalue: 1
+			}
+		}
+
+	}
+
+}
+
