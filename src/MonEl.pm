@@ -452,6 +452,14 @@ $doc = {
 	  versn => '3.2',
       },
 
+      notify::truncval => {
+	  descr => 'truncate messageup/messagedn value to 40 characters',
+	  attrs => ['config', 'inherit'],
+	  versn => '3.7',
+	  default => 'yes',
+	  html  => 'notif',
+      },
+
       notify::list => {
 	  descr => 'list of all outstanding notifications',
       },
