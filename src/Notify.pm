@@ -697,7 +697,7 @@ sub expand {
 
     # pretify value
     my $v = $obj->{srvc} ? $obj->{srvc}{result} : undef;
-	if( length($v) > 40 && $me->{truncval} eq 'yes' ){
+    if( length($v) > 40 && $me->{truncval} eq 'yes' ){
 	$v = substr($v,0,40);
 	$v .= ' [...]';
     }
