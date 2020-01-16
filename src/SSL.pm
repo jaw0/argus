@@ -139,7 +139,7 @@ sub writable {
     if( $me->{tcp}{wbuffer} ){
 	$me->debug( "SSL writing" );
 	my $ssl = $me->{tcp}{ssldata}{ssl};
-	my $i = Net::SSLeay::write( $ssl, $me->{tcp}{wbuffer} );
+	my $i = Net::SSLeay::ssl_write_CRLF( $ssl, $me->{tcp}{wbuffer} );
 	my $e = Net::SSLeay::ERR_get_error();
 	my $es = Net::SSLeay::ERR_error_string($e);
 	# $me->debug( "SSL wrote $i/$e" );
