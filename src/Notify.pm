@@ -89,6 +89,7 @@ sub new {
 	detail      => $param{detail},
 	severity    => $obj->{currseverity},
 	reason      => $obj->{srvc}{reason},
+	truncval    => $obj->{notify}{truncval},
     };
     bless $me; # gesundheit
 
@@ -696,7 +697,7 @@ sub expand {
 
     # pretify value
     my $v = $obj->{srvc} ? $obj->{srvc}{result} : undef;
-    if( length($v) > 40 ){
+    if( length($v) > 40 && $me->{truncval} eq 'yes' ){
 	$v = substr($v,0,40);
 	$v .= ' [...]';
     }
